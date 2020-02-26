@@ -734,52 +734,6 @@
                         <DObject>
                          <base-DElement>
                           <DElement>
-                           <uid>{2b7d1070-3c7b-488c-8729-c6cfbf1aae1a}</uid>
-                          </DElement>
-                         </base-DElement>
-                         <object>{89224a5f-daff-4219-aa6d-0685a272d5da}</object>
-                         <name>Licit lemondás</name>
-                         <pos>x:1105;y:270</pos>
-                         <rect>x:-45;y:-15;w:90;h:30</rect>
-                         <visual-role>0</visual-role>
-                        </DObject>
-                       </base-DObject>
-                       <variety>usecase</variety>
-                       <shape-editable>false</shape-editable>
-                      </DItem>
-                     </instance>
-                    </item>
-                    <item>
-                     <instance type="DConnection">
-                      <DConnection>
-                       <base-DRelation>
-                        <DRelation>
-                         <base-DElement>
-                          <DElement>
-                           <uid>{41be54cb-14ff-4ec3-8305-29016930c32d}</uid>
-                          </DElement>
-                         </base-DElement>
-                         <object>{aaf4cd05-d8c9-4992-b06c-ee40aad40179}</object>
-                         <a>{63cc0195-5d56-4ba2-9b5a-9db756586afe}</a>
-                         <b>{2b7d1070-3c7b-488c-8729-c6cfbf1aae1a}</b>
-                        </DRelation>
-                       </base-DRelation>
-                       <custom-relation>Communication</custom-relation>
-                       <a>
-                        <DConnectionEnd>
-                         <navigable>true</navigable>
-                        </DConnectionEnd>
-                       </a>
-                      </DConnection>
-                     </instance>
-                    </item>
-                    <item>
-                     <instance type="DItem">
-                      <DItem>
-                       <base-DObject>
-                        <DObject>
-                         <base-DElement>
-                          <DElement>
                            <uid>{756dbe53-3576-4d06-a3d3-43b4c8d63264}</uid>
                           </DElement>
                          </base-DElement>
@@ -841,25 +795,6 @@
                         </DConnectionEnd>
                        </a>
                       </DConnection>
-                     </instance>
-                    </item>
-                    <item>
-                     <instance type="DDependency">
-                      <DDependency>
-                       <base-DRelation>
-                        <DRelation>
-                         <base-DElement>
-                          <DElement>
-                           <uid>{889f4305-50b2-42e7-94a2-be05d32a4295}</uid>
-                          </DElement>
-                         </base-DElement>
-                         <object>{2d19859e-d5c8-4095-b7a2-e728e083c761}</object>
-                         <a>{2b7d1070-3c7b-488c-8729-c6cfbf1aae1a}</a>
-                         <b>{756dbe53-3576-4d06-a3d3-43b4c8d63264}</b>
-                         <name>&lt;&lt;extend&gt;&gt;</name>
-                        </DRelation>
-                       </base-DRelation>
-                      </DDependency>
                      </instance>
                     </item>
                     <item>
@@ -975,7 +910,7 @@
                     </item>
                    </qlist>
                   </elements>
-                  <last-modified>1582296121560</last-modified>
+                  <last-modified>1582749336275</last-modified>
                   <toolbarid>UseCases</toolbarid>
                  </MDiagram>
                 </base-MDiagram>
