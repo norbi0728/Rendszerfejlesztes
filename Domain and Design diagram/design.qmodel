@@ -343,10 +343,11 @@
                          <object>{136fb69f-9ba7-49be-b014-67a8c4036896}</object>
                          <name>Marketplace</name>
                          <pos>x:705;y:75</pos>
-                         <rect>x:-40;y:-30;w:80;h:60</rect>
+                         <rect>x:-50;y:-55;w:100;h:110</rect>
                          <visual-role>0</visual-role>
                         </DObject>
                        </base-DObject>
+                       <show-all-members>true</show-all-members>
                       </DClass>
                      </instance>
                     </item>
@@ -745,7 +746,7 @@
                          <object>{5473e28b-7c28-4f56-89ee-70a0ed35630b}</object>
                          <name>LoginService</name>
                          <pos>x:1050;y:685</pos>
-                         <rect>x:-95;y:-35;w:190;h:70</rect>
+                         <rect>x:-95;y:-45;w:190;h:90</rect>
                          <visual-role>0</visual-role>
                         </DObject>
                        </base-DObject>
@@ -1008,7 +1009,7 @@
                     </item>
                    </qlist>
                   </elements>
-                  <last-modified>1583220695864</last-modified>
+                  <last-modified>1583229344385</last-modified>
                   <toolbarid>Classes</toolbarid>
                  </MDiagram>
                 </base-MDiagram>
@@ -2198,6 +2199,38 @@
                   </relations>
                  </MObject>
                 </base-MObject>
+                <members>
+                 <qlist>
+                  <item>
+                   <MClassMember>
+                    <uid>{bf84521d-eb9c-401e-98f0-c8c09defb48a}</uid>
+                    <type>2</type>
+                    <declaration>addListing()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{86a565b2-33e7-4532-bc39-3c7e2d025a1b}</uid>
+                    <type>2</type>
+                    <declaration>removeListing()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{33e53d48-abb8-4673-8c10-d556adf311e3}</uid>
+                    <type>2</type>
+                    <declaration>addUser()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{ffaeb3f2-bd5c-42b3-abbe-735cb0402824}</uid>
+                    <type>2</type>
+                    <declaration>removeUser()</declaration>
+                   </MClassMember>
+                  </item>
+                 </qlist>
+                </members>
                </MClass>
               </instance>
              </target>
@@ -2564,9 +2597,16 @@
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{9f583570-c377-4893-85ff-7743adc15f12}</uid>
+                    <uid>{99e6a3f4-d23a-44c4-b637-234f0f2f8d9d}</uid>
                     <type>2</type>
                     <declaration>authenticate(userName, password)</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{0c0e9c0f-cdc6-458a-a324-05b724e7d853}</uid>
+                    <type>2</type>
+                    <declaration>registration(User, password)</declaration>
                    </MClassMember>
                   </item>
                  </qlist>
