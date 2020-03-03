@@ -395,7 +395,6 @@
                        <a>
                         <DAssociationEnd>
                          <cradinality>*</cradinality>
-                         <navigable>true</navigable>
                         </DAssociationEnd>
                        </a>
                        <b>
@@ -1671,7 +1670,6 @@
                            <a>
                             <MAssociationEnd>
                              <cardinality>*</cardinality>
-                             <navigable>true</navigable>
                             </MAssociationEnd>
                            </a>
                            <b>

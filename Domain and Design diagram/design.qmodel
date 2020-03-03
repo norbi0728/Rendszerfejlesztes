@@ -398,7 +398,6 @@
                        <a>
                         <DAssociationEnd>
                          <cradinality>*</cradinality>
-                         <navigable>true</navigable>
                         </DAssociationEnd>
                        </a>
                        <b>
@@ -939,7 +938,6 @@
                        <a>
                         <DAssociationEnd>
                          <cradinality>*</cradinality>
-                         <navigable>true</navigable>
                         </DAssociationEnd>
                        </a>
                        <b>
@@ -998,7 +996,6 @@
                        <a>
                         <DAssociationEnd>
                          <cradinality>1</cradinality>
-                         <navigable>true</navigable>
                         </DAssociationEnd>
                        </a>
                        <b>
@@ -1813,7 +1810,6 @@
                            <a>
                             <MAssociationEnd>
                              <cardinality>*</cardinality>
-                             <navigable>true</navigable>
                             </MAssociationEnd>
                            </a>
                            <b>
@@ -2118,7 +2114,6 @@
                            <a>
                             <MAssociationEnd>
                              <cardinality>*</cardinality>
-                             <navigable>true</navigable>
                             </MAssociationEnd>
                            </a>
                            <b>
@@ -2340,7 +2335,6 @@
                            <a>
                             <MAssociationEnd>
                              <cardinality>1</cardinality>
-                             <navigable>true</navigable>
                             </MAssociationEnd>
                            </a>
                            <b>
