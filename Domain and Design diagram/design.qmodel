@@ -693,7 +693,7 @@
                        </base-DRelation>
                        <a>
                         <DAssociationEnd>
-                         <cradinality>*</cradinality>
+                         <cradinality>6</cradinality>
                         </DAssociationEnd>
                        </a>
                        <b>
@@ -920,9 +920,98 @@
                       </DAssociation>
                      </instance>
                     </item>
+                    <item>
+                     <instance type="DAssociation">
+                      <DAssociation>
+                       <base-DRelation>
+                        <DRelation>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{459504fd-7f3a-4958-97e7-7a2b3f84d266}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{2aee0d9c-cc78-40c7-964a-3148311fc2e7}</object>
+                         <a>{383349e5-0d8a-4e8b-8c53-8f3e0c85bdcd}</a>
+                         <b>{afee98a9-4afe-4af6-a061-ed4b4eaa95bf}</b>
+                         <name>displays</name>
+                        </DRelation>
+                       </base-DRelation>
+                       <a>
+                        <DAssociationEnd>
+                         <cradinality>*</cradinality>
+                         <navigable>true</navigable>
+                        </DAssociationEnd>
+                       </a>
+                       <b>
+                        <DAssociationEnd>
+                         <cradinality>1</cradinality>
+                        </DAssociationEnd>
+                       </b>
+                      </DAssociation>
+                     </instance>
+                    </item>
+                    <item>
+                     <instance type="DAssociation">
+                      <DAssociation>
+                       <base-DRelation>
+                        <DRelation>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{61909a21-5306-4a0e-851e-ac173808d437}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{51b95a15-5bd5-49db-9176-e33c352df002}</object>
+                         <a>{61153cbb-9c22-43c3-b609-c30745097aa0}</a>
+                         <b>{383349e5-0d8a-4e8b-8c53-8f3e0c85bdcd}</b>
+                         <name>get</name>
+                        </DRelation>
+                       </base-DRelation>
+                       <a>
+                        <DAssociationEnd>
+                         <cradinality>1</cradinality>
+                        </DAssociationEnd>
+                       </a>
+                       <b>
+                        <DAssociationEnd>
+                         <cradinality>1</cradinality>
+                        </DAssociationEnd>
+                       </b>
+                      </DAssociation>
+                     </instance>
+                    </item>
+                    <item>
+                     <instance type="DAssociation">
+                      <DAssociation>
+                       <base-DRelation>
+                        <DRelation>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{31bf1dbe-1139-4ecb-b1f4-ca2f7aa9de85}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{2d242dc5-dd8c-4e26-9bcb-26f8b1fa5d06}</object>
+                         <a>{cebb2141-11f1-4480-95f1-3bd793d26f14}</a>
+                         <b>{afee98a9-4afe-4af6-a061-ed4b4eaa95bf}</b>
+                         <name>sold</name>
+                        </DRelation>
+                       </base-DRelation>
+                       <a>
+                        <DAssociationEnd>
+                         <cradinality>1</cradinality>
+                         <navigable>true</navigable>
+                        </DAssociationEnd>
+                       </a>
+                       <b>
+                        <DAssociationEnd>
+                         <cradinality>1</cradinality>
+                        </DAssociationEnd>
+                       </b>
+                      </DAssociation>
+                     </instance>
+                    </item>
                    </qlist>
                   </elements>
-                  <last-modified>1582915842373</last-modified>
+                  <last-modified>1583220695864</last-modified>
                   <toolbarid>Classes</toolbarid>
                  </MDiagram>
                 </base-MDiagram>
@@ -1114,6 +1203,39 @@
                         </target>
                        </handle>
                       </item>
+                      <item>
+                       <handle>
+                        <uid>{51b95a15-5bd5-49db-9176-e33c352df002}</uid>
+                        <target>
+                         <instance type="MAssociation">
+                          <MAssociation>
+                           <base-MRelation>
+                            <MRelation>
+                             <base-MElement>
+                              <MElement>
+                               <uid>{51b95a15-5bd5-49db-9176-e33c352df002}</uid>
+                              </MElement>
+                             </base-MElement>
+                             <name>get</name>
+                             <a>{93839b46-f7ba-4632-89d6-68af8a3dd63d}</a>
+                             <b>{b532f7e3-9a58-481a-bb04-849deef0fcf3}</b>
+                            </MRelation>
+                           </base-MRelation>
+                           <a>
+                            <MAssociationEnd>
+                             <cardinality>1</cardinality>
+                            </MAssociationEnd>
+                           </a>
+                           <b>
+                            <MAssociationEnd>
+                             <cardinality>1</cardinality>
+                            </MAssociationEnd>
+                           </b>
+                          </MAssociation>
+                         </instance>
+                        </target>
+                       </handle>
+                      </item>
                      </qlist>
                     </handles>
                    </handles>
@@ -1124,42 +1246,42 @@
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{67479e8d-264e-4a7d-bb8e-878b762ac5aa}</uid>
+                    <uid>{78e7ff85-b3a4-4d59-a3b0-d7223721cead}</uid>
                     <type>2</type>
                     <declaration>modifyPersonalInformation()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{26a8a84e-7dd1-4b4b-b571-a406e8aa4c25}</uid>
+                    <uid>{f0f38788-e937-44d2-a7e1-bf2c53176512}</uid>
                     <type>2</type>
                     <declaration>deleteAccount()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{fe5e3499-5b9c-4c62-9bf3-20aa028ee81d}</uid>
+                    <uid>{f48f9f1d-5c54-45bf-9c16-04afd8d55e44}</uid>
                     <type>2</type>
                     <declaration>removeListing()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{44096234-5a5d-4ae7-827c-e50c3354caae}</uid>
+                    <uid>{8de81c5d-941e-4307-8373-3cd00f87bd1a}</uid>
                     <type>2</type>
                     <declaration>newListing()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{b9d83b8e-9564-4e86-a4b4-98226ac626f5}</uid>
+                    <uid>{349222b9-dfcf-4580-80c3-e57f9084241d}</uid>
                     <type>2</type>
                     <declaration>listOngoingAuctions()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{84bb41e2-d454-44a2-bcdb-bd58b13e0372}</uid>
+                    <uid>{3aeb2422-486a-4046-aa88-354084c4b11b}</uid>
                     <type>2</type>
                     <declaration>search()</declaration>
                    </MClassMember>
@@ -1666,13 +1788,55 @@
                    </MElement>
                   </base-MElement>
                   <name>SearchResults</name>
+                  <relations>
+                   <handles>
+                    <handles>
+                     <qlist>
+                      <item>
+                       <handle>
+                        <uid>{2aee0d9c-cc78-40c7-964a-3148311fc2e7}</uid>
+                        <target>
+                         <instance type="MAssociation">
+                          <MAssociation>
+                           <base-MRelation>
+                            <MRelation>
+                             <base-MElement>
+                              <MElement>
+                               <uid>{2aee0d9c-cc78-40c7-964a-3148311fc2e7}</uid>
+                              </MElement>
+                             </base-MElement>
+                             <name>displays</name>
+                             <a>{b532f7e3-9a58-481a-bb04-849deef0fcf3}</a>
+                             <b>{325c4e87-d01f-4137-8153-9f57a75a552b}</b>
+                            </MRelation>
+                           </base-MRelation>
+                           <a>
+                            <MAssociationEnd>
+                             <cardinality>*</cardinality>
+                             <navigable>true</navigable>
+                            </MAssociationEnd>
+                           </a>
+                           <b>
+                            <MAssociationEnd>
+                             <cardinality>1</cardinality>
+                            </MAssociationEnd>
+                           </b>
+                          </MAssociation>
+                         </instance>
+                        </target>
+                       </handle>
+                      </item>
+                     </qlist>
+                    </handles>
+                   </handles>
+                  </relations>
                  </MObject>
                 </base-MObject>
                 <members>
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{6177a0bd-d07e-4634-9c1c-f8af2f87bfdc}</uid>
+                    <uid>{ea721e52-0c43-42bb-85c9-130103720ac1}</uid>
                     <type>2</type>
                     <declaration>display()</declaration>
                    </MClassMember>
@@ -2155,6 +2319,40 @@
                         </target>
                        </handle>
                       </item>
+                      <item>
+                       <handle>
+                        <uid>{2d242dc5-dd8c-4e26-9bcb-26f8b1fa5d06}</uid>
+                        <target>
+                         <instance type="MAssociation">
+                          <MAssociation>
+                           <base-MRelation>
+                            <MRelation>
+                             <base-MElement>
+                              <MElement>
+                               <uid>{2d242dc5-dd8c-4e26-9bcb-26f8b1fa5d06}</uid>
+                              </MElement>
+                             </base-MElement>
+                             <name>sold</name>
+                             <a>{19813bce-7471-4f9c-8048-b183af19f27f}</a>
+                             <b>{325c4e87-d01f-4137-8153-9f57a75a552b}</b>
+                            </MRelation>
+                           </base-MRelation>
+                           <a>
+                            <MAssociationEnd>
+                             <cardinality>1</cardinality>
+                             <navigable>true</navigable>
+                            </MAssociationEnd>
+                           </a>
+                           <b>
+                            <MAssociationEnd>
+                             <cardinality>1</cardinality>
+                            </MAssociationEnd>
+                           </b>
+                          </MAssociation>
+                         </instance>
+                        </target>
+                       </handle>
+                      </item>
                      </qlist>
                     </handles>
                    </handles>
@@ -2165,28 +2363,28 @@
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{afcceadf-bb95-4c69-85d2-74623eb9d993}</uid>
+                    <uid>{5854a519-19ae-4ff4-8728-c0cbf558e1bb}</uid>
                     <type>1</type>
                     <declaration>date</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{8e224847-53b7-4837-98c8-020d85a75cd7}</uid>
+                    <uid>{af088f13-114f-4b27-8b98-63220792f986}</uid>
                     <type>2</type>
                     <declaration>getPrice()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{eebf2d68-7b9d-4d80-b6ca-8885696c0a83}</uid>
+                    <uid>{ef0ee529-2d31-4781-99be-d1491517a1b0}</uid>
                     <type>2</type>
                     <declaration>getBuyer()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{1842ac77-6fc7-4aa7-aff2-e7a06ce15b57}</uid>
+                    <uid>{d1d2831a-8ad9-43ff-a398-3e1ee4a70cf0}</uid>
                     <type>2</type>
                     <declaration>getSeller()</declaration>
                    </MClassMember>
@@ -2269,7 +2467,7 @@
                            </base-MRelation>
                            <a>
                             <MAssociationEnd>
-                             <cardinality>*</cardinality>
+                             <cardinality>6</cardinality>
                             </MAssociationEnd>
                            </a>
                            <b>
@@ -2372,7 +2570,7 @@
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{6422bc31-c139-4614-bf42-607a721e3a7a}</uid>
+                    <uid>{9f583570-c377-4893-85ff-7743adc15f12}</uid>
                     <type>2</type>
                     <declaration>authenticate(userName, password)</declaration>
                    </MClassMember>
