@@ -607,25 +607,6 @@
                      </instance>
                     </item>
                     <item>
-                     <instance type="DDependency">
-                      <DDependency>
-                       <base-DRelation>
-                        <DRelation>
-                         <base-DElement>
-                          <DElement>
-                           <uid>{45ba4e2f-b690-4fd8-8460-a3fec6daa592}</uid>
-                          </DElement>
-                         </base-DElement>
-                         <object>{037a603b-56cd-4f92-bbb7-af4ceed4329b}</object>
-                         <a>{a1335ee4-68a3-4a35-8492-d165503abc76}</a>
-                         <b>{2d77fe07-9c05-4347-880c-c451b30d1fee}</b>
-                         <name>&lt;&lt;extend&gt;&gt;</name>
-                        </DRelation>
-                       </base-DRelation>
-                      </DDependency>
-                     </instance>
-                    </item>
-                    <item>
                      <instance type="DItem">
                       <DItem>
                        <base-DObject>
@@ -910,7 +891,7 @@
                     </item>
                    </qlist>
                   </elements>
-                  <last-modified>1582749336275</last-modified>
+                  <last-modified>1583221396559</last-modified>
                   <toolbarid>UseCases</toolbarid>
                  </MDiagram>
                 </base-MDiagram>
