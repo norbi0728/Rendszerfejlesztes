@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="getDispersionDemo:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="7119b4f3-31bf-40be-94fb-e91bba832acf" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,12 +35,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../jax-rs" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JAR Application.getDispersionDemo.jar">
     <configuration name="GetDispersionDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GetDispersionDemo" />
       <module name="getDispersionDemo" />
@@ -43,8 +48,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="getDispersionDemo.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/getDispersionDemo_jar/getDispersionDemo.jar" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JAR Application.getDispersionDemo.jar" />
         <item itemvalue="Application.GetDispersionDemo" />
       </list>
     </recent_temporary>
@@ -59,10 +69,19 @@
       <workItem from="1583848007829" duration="9518000" />
       <workItem from="1583860390341" duration="1487000" />
       <workItem from="1583864140613" duration="175000" />
+      <workItem from="1583918157623" duration="82000" />
+      <workItem from="1583919264009" duration="552000" />
+      <workItem from="1583921745956" duration="15000" />
+      <workItem from="1583934060698" duration="639000" />
+      <workItem from="1583936570196" duration="2033000" />
     </task>
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="361" y="70" key="#Deployment" timestamp="1583936162114">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="70" key="#Deployment/0.0.1536.824@0.0.1536.824" timestamp="1583936162114" />
     <state x="361" y="70" key="#Project_Structure" timestamp="1583848337831">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -71,25 +90,38 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583848294353" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1583850537117">
+    <state x="499" y="196" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1583938184076">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583850537117" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1583864314666">
+    <state x="499" y="196" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938184076" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1583938205134">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583864314666" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1583864314666">
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938205134" />
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1583921757985" />
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1583938606502">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583864314666" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1583864314666">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938606502" />
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583919816060" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1583938606502">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583864314666" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1583864314666">
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938606502" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1583919816060" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1583938606502">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583864314666" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938606502" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1583919816060" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1583938606502">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938606502" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583919816060" />
+    <state x="249" y="0" key="SettingsEditor" timestamp="1583938217104">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938217104" />
   </component>
 </project>
