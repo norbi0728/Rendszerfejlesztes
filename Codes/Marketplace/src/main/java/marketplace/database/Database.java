@@ -29,12 +29,19 @@ public class Database {
         );
     }
 
-    public void addUser(String name, String password) {
+    public boolean userExists(String name) {
+        return (getPasswordHash(name) != null);
+    }
+
+    /**
+     * You need to make sure that no such user exists yet.
+     */
+    public void addUser(String name, String passwordHash) {
         try {
-            String sql = "INSERT INTO USERS (NAME, PASSWORD) VALUES(?, ?)";
+            String sql = "INSERT INTO USERS (NAME, PASSWORD_HASH) VALUES(?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, passwordHash);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -42,17 +49,21 @@ public class Database {
         }
     }
 
-    public void getUser(String name) {
+    /**
+     * @return null, if no such user
+     */
+    public String getPasswordHash(String userName) {
+        String result;
         try {
             ResultSet resultSet = connection.createStatement().executeQuery(
-                    "SELECT * FROM USERS WHERE NAME='" + name + "'"
+                    "SELECT * FROM USERS WHERE NAME='" + userName + "'"
             );
             resultSet.first();
-            System.out.println("name: " + resultSet.getString("NAME"));
-            System.out.println("password: " + resultSet.getString("PASSWORD"));
+            result = resultSet.getString("PASSWORD_HASH");
         } catch (SQLException e) {
-            System.err.println("Hiba");;
+            return null;
         }
+        return result;
     }
 
     private final void createTablesIfNotExists() throws SQLException {
@@ -60,25 +71,16 @@ public class Database {
                 "CREATE TABLE IF NOT EXISTS USERS("
                         + "ID INT AUTO_INCREMENT, "
                         + "NAME VARCHAR, "
-                        + "PASSWORD VARCHAR, "
+                        + "PASSWORD_HASH VARCHAR, "
                         + "PRIMARY KEY (ID))"
         );
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello world");
         Database database = getDatabase();
-        try {
-            //database.clearTables();
-            database.createTablesIfNotExists();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
-        //database.addUser("János", "12345");
-        //database.addUser("Péter", "54321");
-        //database.getUser("János");
-        database.getUser("Péter");
-        database.getUser("Sarolta");
+//        database.addUser("János", "12345");
+//        database.addUser("Péter", "54321");
+        System.out.println(database.getPasswordHash("Jánoss"));
     }
 }
