@@ -2,22 +2,26 @@ package marketplace.service;
 
 import io.javalin.Javalin;
 import marketplace.logic.Logic;
+import marketplace.security.AuthenticationService;
 
 public class Service {
-    private static Logic logic;
+    private Logic logic;
+    private AuthenticationService authenticationService;
 
     public Service() {
         this.logic = new Logic();
+        this.authenticationService = new AuthenticationService();
     }
-    //###############USE####################
-    //localhost:7000/login?username=Lajos1&passwordHash=1234
-    //localhost:7000/registration?username=Lajos1&passwordHash=1234
+
     private void start() {
         Javalin app = Javalin.create().start(7000);
 
-        app.post("/login", ctx ->
-           ctx.result(logic.login(ctx.queryParam("username"), ctx.queryParam("passwordHash"))));
-
+        app.post("/login", ctx -> {
+            String securityKey = authenticationService.createNewSecurityKey(10, 2);
+            ctx.header("Server-Response",logic.login(ctx.queryParam("username"), ctx.queryParam("passwordHash")));
+            ctx.result(securityKey);
+                }
+           );
 
         app.post("/registration", ctx ->
                 ctx.result(logic.registration(ctx.queryParam("username"), ctx.queryParam("passwordHash"))));
