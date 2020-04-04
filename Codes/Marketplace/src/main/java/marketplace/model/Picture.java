@@ -20,4 +20,8 @@ public class Picture {
         this.id = id;
        this.data = data;
     }
+
+    public byte[] getData() {
+        return data;
+    }
 }

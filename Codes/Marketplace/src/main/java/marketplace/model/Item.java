@@ -2,6 +2,7 @@ package marketplace.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Item {
     private int id;
@@ -12,6 +13,11 @@ public class Item {
 
     public Item() {
     }
+
+    public String getName() {
+        return name;
+    }
+
     //if it's read from the database
     public Item(int id, String name, Map<String, String> features, List<Picture> pictures, String category) {
         this.id = id;
@@ -21,8 +27,10 @@ public class Item {
         this.category = category;
     }
 
-    //if it comes from the client
+    //if it comes from the client nested in a listing
+    //we need to generate it's own id, because other way we cannot bind it to the listing in the database
     public Item(String name, Map<String, String> features, List<Picture> pictures, String category) {
+        this.id = new Random().nextInt(Integer.MAX_VALUE);
         this.name = name;
         this.features = features;
         this.pictures = pictures;
