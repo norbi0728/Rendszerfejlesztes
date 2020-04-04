@@ -554,9 +554,12 @@ public class Database {
 //                500, 600, 100, 0,
 //                new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()),
 //                new Date(System.currentTimeMillis()), "cash", "personal"));
+<<<<<<< HEAD
 //
 //        for (Listing listing : database.getListings("testUser")) {
 //            System.out.println(listing.getItem().getCategory());
 //        }
+=======
+>>>>>>> master
     }
 }
