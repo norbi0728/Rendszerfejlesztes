@@ -67,14 +67,14 @@ public class Logic {
         }
     }
 
-    public String registration(String userName, String passwordHash){
-        if(Database.getDatabase().userExists(userName)){
-            return "Existing username";
-        } else {
-            Database.getDatabase().addUser(userName, passwordHash);
-            return "Done";
-        }
-    }
+//    public String registration(String userName, String passwordHash){
+//        if(Database.getDatabase().userExists(userName)){
+//            return "Existing username";
+//        } else {
+//            Database.getDatabase().addUser(userName, passwordHash);
+//            return "Done";
+//        }
+//    }
 
     public static void main(String[] args) throws InterruptedException {
         Logic logic = new Logic();

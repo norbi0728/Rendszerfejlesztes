@@ -23,8 +23,10 @@ public class Service {
                 }
            );
 
-        app.post("/registration", ctx ->
-                ctx.result(logic.registration(ctx.queryParam("username"), ctx.queryParam("passwordHash"))));
+//        app.post("/registration", ctx ->
+//                ctx.result(logic.registration(ctx.queryParam("username"), ctx.queryParam("passwordHash"),
+//                        ctx.queryParam("firstName"), ctx.queryParam("lastName"), ctx.queryParam("firstName"),
+//                        ctx.queryParam("address"), ctx.queryParam("phone"), ctx.queryParam("email"))));
     }
 
     public static void main(String[] args) {

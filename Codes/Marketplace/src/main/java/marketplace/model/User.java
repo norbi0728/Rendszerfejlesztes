@@ -20,12 +20,11 @@ public class User {
         this.statistics = statistics;
         this.listings = listings;
     }
-
+    //use when it comes from registration
     public User(String name, String passwordHash, PersonalInformation personalInformation) {
         this.name = name;
         this.passwordHash = passwordHash;
         this.personalInformation = personalInformation;
-        this.statistics = new Statistics();
     }
 
     public String getName() {
