@@ -1,12 +1,13 @@
 package marketplace.logic;
 
 import marketplace.database.Database;
+import marketplace.model.PersonalInformation;
+import marketplace.model.User;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-public class Logic {
+public class LoginReg {
     private Map<String, Integer> loginsTries = new HashMap<>();
     private Map<String, Long> firstTry = new HashMap<>();
     private Map<String, Long> blocked = new HashMap<>();
@@ -67,31 +68,33 @@ public class Logic {
         }
     }
 
-//    public String registration(String userName, String passwordHash){
-//        if(Database.getDatabase().userExists(userName)){
-//            return "Existing username";
-//        } else {
-//            Database.getDatabase().addUser(userName, passwordHash);
-//            return "Done";
-//        }
-//    }
+    public String registration(String userName, String passHash, String firstName, String lastName, String address, String phone, String email){
+        PersonalInformation personalInformation = new PersonalInformation(firstName, lastName, address, phone, email);
+        User user = new User(userName, passHash, personalInformation);
+        if(Database.getDatabase().userExists(user.getName())){
+            return "Existing username";
+        } else {
+            Database.getDatabase().addUser(user);
+            return "Done";
+        }
+    }
 
     public static void main(String[] args) throws InterruptedException {
-        Logic logic = new Logic();
-        ki(logic.login("János", "12345"));
-//        ki(logic.login("János", "1234"));
-//        ki(logic.login("János", "1234"));
-//        ki(logic.login("János", "1234"));
-//        ki(logic.login("János", "1234"));
-//        ki(logic.login("János", "1234"));
+        LoginReg loginReg = new LoginReg();
+        ki(loginReg.login("János", "12345"));
+//        ki(loginReg.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
 //        Integer i = 4;
 //        Long t = i.toUnsignedLong(31);
 //        ki(t);
 //        TimeUnit.SECONDS.sleep(t);
-//        ki(logic.login("János", "1234"));
-//        ki(logic.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
 //        TimeUnit.SECONDS.sleep(t);
-//        ki(logic.login("János", "1234"));
-//        ki(logic.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
+//        ki(loginReg.login("János", "1234"));
     }
 }
