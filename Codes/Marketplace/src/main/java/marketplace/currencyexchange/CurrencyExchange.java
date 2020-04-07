@@ -2,6 +2,8 @@ package marketplace.currencyexchange;
 
 import java.io.IOException;
 import java.net.URI;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.incubator.http.HttpClient;
 import jdk.incubator.http.HttpRequest;
@@ -9,8 +11,7 @@ import jdk.incubator.http.HttpResponse;
 
 public class CurrencyExchange
 {
-    public double getExchangeRates(int price, String currency) throws IOException, InterruptedException
-    {
+    public double getExchangeRates(int price, String currency) throws IOException, InterruptedException, JsonMappingException {
         double newPrice = 0;
 
         HttpClient client = HttpClient.newHttpClient();

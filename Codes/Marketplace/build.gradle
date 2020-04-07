@@ -16,4 +16,9 @@ dependencies {
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     compile 'io.javalin:javalin:3.8.0'
     compile "org.slf4j:slf4j-simple:1.8.0-beta4"
+    compile (
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3']
+    )
 }
