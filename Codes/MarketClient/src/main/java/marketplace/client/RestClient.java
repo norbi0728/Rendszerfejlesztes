@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 public class RestClient {
     private Client client = ClientBuilder.newClient();
     WebTarget webTarget = client.target("http://localhost:7000");
+    private String token;
 
     public String login(String name, String passwordHash) {
         Invocation.Builder invocationBuilder
@@ -18,7 +19,8 @@ public class RestClient {
                 .request(MediaType.TEXT_PLAIN_TYPE);
 
         Response response = invocationBuilder.post(null);
-        return response.readEntity(String.class);
+        token = response.readEntity(String.class);
+        return (String) response.getHeaders().get("Server-Response").get(0);
     }
 
     public String register(String name, String passwordHash) {

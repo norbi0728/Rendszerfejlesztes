@@ -1,7 +1,11 @@
 package marketplace.client;
 
 import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class LoginController {
     private LoginScreen loginScreen;
@@ -21,6 +25,10 @@ public class LoginController {
             String result = restClient.login(name, passwordHash);
             Platform.runLater(() -> {
                 new Alert(Alert.AlertType.INFORMATION, result).show();
+                //if (result.equals("Correct"))
+                {
+                    startMainWindow();
+                }
             });
         }).start();
     }
@@ -36,6 +44,11 @@ public class LoginController {
                 new Alert(Alert.AlertType.INFORMATION, result).show();
             });
         }).start();
+    }
+
+    private void startMainWindow() {
+        new MainWindow().start();
+        loginScreen.scene.getWindow().hide();
     }
 
     private String hash(String s) {
