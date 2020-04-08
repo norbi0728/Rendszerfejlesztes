@@ -40,6 +40,16 @@ public class Database {
     /**
      * You need to make sure that no such user exists yet.
      */
+    public void removeListing(int id){
+        try {
+            String sql = "DELETE FROM LISTINGS WHERE ID = " + id;
+            connection.createStatement().execute(sql);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+    }
     public void addUser(User user) {
         try {
             String sql = "INSERT INTO USERS (NAME, PASSWORD_HASH) VALUES(?, ?);"
@@ -61,6 +71,7 @@ public class Database {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -559,6 +570,6 @@ public class Database {
 //        for (Listing listing : database.getListings("testUser")) {
 //            System.out.println(listing.getItem().getCategory());
 //        }
-
+        //database.removeListing(2);
     }
 }
