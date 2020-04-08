@@ -25,4 +25,8 @@ public class Picture {
     public byte[] getData() {
         return data;
     }
+
+    public int getId() {
+        return id;
+    }
 }

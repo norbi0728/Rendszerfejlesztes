@@ -2,6 +2,10 @@ package marketplace.database;
 
 import marketplace.model.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -41,14 +45,40 @@ public class Database {
      * You need to make sure that no such user exists yet.
      */
     public void removeListing(int id){
+        Item item = getListingByID(id).getItem();
+        List<Picture> itemPictures = item.getPictures();
         try {
-            String sql = "DELETE FROM LISTINGS WHERE ID = " + id;
-            connection.createStatement().execute(sql);
+            for (Picture picture: itemPictures){
+                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
+                connection.createStatement().execute(sql);
+            }
+            String sqlListing = "DELETE FROM LISTINGS WHERE ID = " + id;
+            String sqlItem = "DELETE FROM ITEMS WHERE ID = " + item.getId();
+            connection.createStatement().execute(sqlListing);
+            connection.createStatement().execute(sqlItem);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
 
+    }
+    public Listing getListingByID(int id){
+        String userName;
+        try {
+            String sql = "SELECT USER_NAME FROM LISTINGS WHERE ID = " + id;
+            ResultSet listingResultSet = connection.createStatement().executeQuery(sql);
+            listingResultSet.first();
+            userName = listingResultSet.getString("USER_NAME");
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        for (Listing listing: getListings(userName)){
+            if(listing.getId() == id)
+                return listing;
+        }
+        return null;
     }
     public void addUser(User user) {
         try {
@@ -179,6 +209,7 @@ public class Database {
             addItemPictures(item);
 
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -228,6 +259,7 @@ public class Database {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -571,5 +603,47 @@ public class Database {
 //            System.out.println(listing.getItem().getCategory());
 //        }
         //database.removeListing(2);
+//        File pic1 = new File("test.png");
+//        File pic2 = new File("test2.png");
+//        byte[] data1 = new byte[1000];
+//        byte[] data2 = new byte[1000];
+//        try {
+//            data1 = Files.readAllBytes(pic1.toPath());
+//            data2 = Files.readAllBytes(pic2.toPath());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+//        Picture picture1 = new Picture(data1);
+//        Picture picture2 = new Picture(data2);
+//
+//        Map<String, String> features = new HashMap<>();
+//        features.put("testFeatureName", "testFeatureValue");
+//
+//        List<Picture> pictures = new ArrayList<>();
+//        pictures.add(picture1);
+//        pictures.add(picture2);
+//
+//        Item item = new Item("testItemWithPicture2", features, pictures, "Electrical");
+//        database.addListing(new Listing("testTitle2", "testDescription2",
+//                3, item, "testUser",
+//                500, 600, 100, 0,
+//                new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()),
+//                new Date(System.currentTimeMillis()), "cash", "personal"));
+//
+//        for (Listing listing : database.getListings("testUser")) {
+//            for(Picture picture: listing.getItem().getPictures()){
+//                byte[] dataToWrite = picture.getData();
+//                try (FileOutputStream stream = new FileOutputStream("testWrittenBack"+picture.getId()+".png")){
+//                    stream.write(dataToWrite);
+//                }
+//                catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+
+        database.removeListing(7);
+        database.removeListing(8);
     }
 }
