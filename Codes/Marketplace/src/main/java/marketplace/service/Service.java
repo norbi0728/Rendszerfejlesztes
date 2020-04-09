@@ -30,6 +30,13 @@ public class Service {
     }
 
     public static void main(String[] args) {
+        //uncomment if you want to test the personalised offer function
+//        try {
+//            Process process = new ProcessBuilder("clusterService.exe").start();
+//            Thread.sleep(40000); //cluster service needs time to start
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
         new Service().start();
     }
 }
