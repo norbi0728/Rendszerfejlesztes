@@ -8,12 +8,13 @@ public class Picture {
     private byte[] data;
 
     //if it comes from the client
-    public Picture(File pictureFile){
-        try {
-            this.data = Files.readAllBytes(pictureFile.toPath());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public Picture(byte[] picturedata){
+//        try {
+//            this.data = Files.readAllBytes(pictureFile.toPath());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+        this.data = picturedata;
     }
     //if it's read from the database
     public Picture(int id, byte[] data){
@@ -23,5 +24,9 @@ public class Picture {
 
     public byte[] getData() {
         return data;
+    }
+
+    public int getId() {
+        return id;
     }
 }

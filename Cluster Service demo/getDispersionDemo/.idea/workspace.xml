@@ -7,8 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7119b4f3-31bf-40be-94fb-e91bba832acf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/service/PersonalisedOfferServiceClient.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Codes/Marketplace/clusterService.exe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/service/PersonalisedOfferServiceClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Codes/Marketplace/working_knn_classifier.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../clusterService.py" beforeDir="false" afterPath="$PROJECT_DIR$/../clusterService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
@@ -16,12 +19,20 @@
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/database/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/database/Database.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/model/Statistics.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/model/Statistics.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/service/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/build/classes/java/main/marketplace/service/Service.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/mydatabase.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/mydatabase.mv.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/mydatabase.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/mydatabase.trace.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/database/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/model/Statistics.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/model/Statistics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Codes/Marketplace/src/main/java/marketplace/service/Service.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +66,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Codes/Marketplace" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -95,6 +106,8 @@
       <workItem from="1583934060698" duration="639000" />
       <workItem from="1583936570196" duration="2033000" />
       <workItem from="1585898358298" duration="550000" />
+      <workItem from="1586414564433" duration="4898000" />
+      <workItem from="1586435306623" duration="10000" />
     </task>
     <servers />
   </component>
@@ -115,10 +128,11 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="196" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938184076" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1583938205134">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="2606" y="211" key="FileChooserDialogImpl" timestamp="1586435314475">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1583938205134" />
+    <state x="2606" y="211" key="FileChooserDialogImpl/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1586435314475" />
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1583921757985" />
     <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1583938606502">
       <screen x="0" y="0" width="1536" height="824" />

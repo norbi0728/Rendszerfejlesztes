@@ -2,16 +2,33 @@ package marketplace.client;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainWindow {
     MainController controller = new MainController(this);
     BorderPane root;
+    TextField titleField;
 
     public void openNewListingForm() {
+        GridPane gridPane = new GridPane();
 
+        Label header = new Label("Új hirdetés");
+        gridPane.add(header, 1, 0, 2, 1);
+        gridPane.add(new Label("Cím:"), 0, 1);
+        gridPane.add(titleField, 1, 1);
+
+        GridPane featureGridPane = new GridPane();
+
+        //jellemz?k
+        gridPane.add(featureGridPane, 0,2,2,1);
+
+
+        root.setCenter(gridPane);
     }
 
     private void setUp() {

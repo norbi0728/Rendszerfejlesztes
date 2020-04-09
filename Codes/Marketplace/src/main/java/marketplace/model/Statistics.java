@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class Statistics {
     private List<String> categories;
-    private Map<String, Double> stats;
+    private Map<String, Double> stat;
 
     public Statistics() {
-        stats = new HashMap<>();
+        stat = new HashMap<>();
         categories = new ArrayList<>();
         categories.add("Electrical");
         categories.add("Sport");
@@ -21,12 +21,16 @@ public class Statistics {
         categories.add("Gathering");
 
         for (String cat: categories){
-            stats.put(cat, 0.0);
+            stat.put(cat, 0.0);
         }
     }
 
     public Map<String, Double> getStats() {
-        return stats;
+        return stat;
+    }
+
+    public void setStat(Map<String, Double> stat) {
+        this.stat = stat;
     }
 
 }

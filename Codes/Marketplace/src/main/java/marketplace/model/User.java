@@ -9,6 +9,7 @@ public class User {
     private PersonalInformation personalInformation;
     private Statistics statistics;
     private List<Listing> listings;
+
     public User() {
     }
 
@@ -25,6 +26,7 @@ public class User {
         this.name = name;
         this.passwordHash = passwordHash;
         this.personalInformation = personalInformation;
+        this.statistics = new Statistics();
     }
 
     public String getName() {
@@ -49,5 +51,9 @@ public class User {
 
     public void setPersonalInformation(PersonalInformation personalInformation) {
         this.personalInformation = personalInformation;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
     }
 }
