@@ -7,6 +7,10 @@ public class Picture {
     private int id;
     private byte[] data;
 
+    //must have because of seralization
+    public Picture() {
+    }
+
     //if it comes from the client
     public Picture(byte[] picturedata){
 //        try {

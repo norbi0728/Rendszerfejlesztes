@@ -19,6 +19,9 @@ public class Listing {
     private String paymentMethod;
     private String shippingMethod;
 
+    public Listing() {
+    }
+
     public Listing(int id, String title, String description,
                    int quantity, Item item, String advertiser,
                    int increment, int maximumBid, int startingBid,
