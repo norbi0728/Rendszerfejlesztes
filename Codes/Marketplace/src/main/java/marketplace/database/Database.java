@@ -3,11 +3,14 @@ package marketplace.database;
 import marketplace.model.*;
 import marketplace.service.PersonalisedOfferServiceClient;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 
 public class Database {
     public static Database database = null;
@@ -287,9 +290,9 @@ public class Database {
             preparedStatement.setInt(7, listing.getMaximumBid());
             preparedStatement.setInt(8, listing.getStartingBid());
             preparedStatement.setInt(9, listing.getFixedPrice());
-            preparedStatement.setDate(10, (Date) listing.getExpirationDate());
-            preparedStatement.setDate(11, (Date) listing.getCreationDate());
-            preparedStatement.setDate(12, (Date) listing.getRemoveDate());
+            preparedStatement.setDate(10, new java.sql.Date(listing.getExpirationDate().getTime()));
+            preparedStatement.setDate(11, new java.sql.Date(listing.getCreationDate().getTime()));
+            preparedStatement.setDate(12, new java.sql.Date(listing.getRemoveDate().getTime()));
             preparedStatement.setString(13, listing.getPaymentMethod());
             preparedStatement.setString(14, listing.getShippingMethod());
 
@@ -549,6 +552,7 @@ public class Database {
         }
         return statistics;
     }
+
     public User getUser(String userName){
         User user = null;
         try {
@@ -727,11 +731,11 @@ public class Database {
 //
 //        Item item = new Item("testItemWithPicture2", features, pictures, "Electrical");
 //        database.addListing(new Listing("testTitle2", "testDescription2",
-//                3, item, "testUser",
+//                3, item, "testUser2",
 //                500, 600, 100, 0,
 //                new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()),
 //                new Date(System.currentTimeMillis()), "cash", "personal"));
-//
+
 //        for (Listing listing : database.getListings("testUser")) {
 //            for(Picture picture: listing.getItem().getPictures()){
 //                byte[] dataToWrite = picture.getData();
@@ -743,9 +747,10 @@ public class Database {
 //                }
 //            }
 //        }
+//        Process process = null;
 //        try {
-//            Process process = new ProcessBuilder("clusterService.exe").start();
-//            Thread.sleep(40000);
+//             process = new ProcessBuilder("clusterService.exe").start();
+//            Thread.sleep(60000);
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
@@ -761,5 +766,9 @@ public class Database {
 //        for (Map.Entry<String, Integer> disp: dispersion.entrySet()){
 //            System.out.println("key: "+disp.getKey()+", value:"+disp.getValue());
 //        }
+//        process.destroyForcibly();
+        for (Listing listig: database.getListings("testUser2")){
+            System.out.println(listig.getExpirationDate().getTime());
+        }
     }
 }

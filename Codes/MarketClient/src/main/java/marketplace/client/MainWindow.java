@@ -18,6 +18,8 @@ public class MainWindow {
         GridPane gridPane = new GridPane();
 
         Label header = new Label("Új hirdetés");
+        titleField = new TextField();
+
         gridPane.add(header, 1, 0, 2, 1);
         gridPane.add(new Label("Cím:"), 0, 1);
         gridPane.add(titleField, 1, 1);

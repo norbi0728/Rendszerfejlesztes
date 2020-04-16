@@ -17,20 +17,23 @@ public class LoginController {
     }
 
     public void loginPressed() {
-        String name = loginScreen.nameField.getText();
-        String password = loginScreen.passwordField.getText();
-        String passwordHash = hash(password);
+        //For testing
+        startMainWindow();
 
-        new Thread(() -> {
-            String result = restClient.login(name, passwordHash);
-            Platform.runLater(() -> {
-                new Alert(Alert.AlertType.INFORMATION, result).show();
-                //if (result.equals("Correct"))
-                {
-                    startMainWindow();
-                }
-            });
-        }).start();
+//        String name = loginScreen.nameField.getText();
+//        String password = loginScreen.passwordField.getText();
+//        String passwordHash = hash(password);
+//
+//        new Thread(() -> {
+//            String result = restClient.login(name, passwordHash);
+//            Platform.runLater(() -> {
+//                new Alert(Alert.AlertType.INFORMATION, result).show();
+//                //if (result.equals("Correct"))
+//                {
+//                    startMainWindow();
+//                }
+//            });
+//        }).start();
     }
 
     public void registerPressed() {

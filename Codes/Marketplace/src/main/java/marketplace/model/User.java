@@ -10,6 +10,7 @@ public class User {
     private Statistics statistics;
     private List<Listing> listings;
 
+    //must have because of serialization
     public User() {
     }
 

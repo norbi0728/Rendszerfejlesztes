@@ -1,15 +1,13 @@
 package marketplace.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import marketplace.model.User;
-import org.json.JSONObject;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -23,17 +21,22 @@ public class PersonalisedOfferServiceClient {
         Map<String, Integer> dispersion = new HashMap<>();
         stat = user.getStatistics().getStats();
 
-        JSONObject json = new JSONObject(stat);
-
-        Response response = client.target(REST_URI).request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON).post(Entity.json(json.toString()));
-
-        JSONObject resp = new JSONObject(response.readEntity(String.class));
-        Iterator<String> keys = resp.keys();
-        for(int i = 0; i < resp.length(); i++){
-            String key = keys.next();
-            dispersion.put(key, resp.getInt(key));
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(stat);
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        Response response = client.target(REST_URI).request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).post(Entity.json(json));
+
+        try {
+            dispersion = mapper.readValue(response.readEntity(String.class), Map.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         int counter = 0;
         for(Integer val: dispersion.values()){
             counter += val;

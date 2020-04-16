@@ -9,6 +9,8 @@ public class Statistics {
     private List<String> categories;
     private Map<String, Double> stat;
 
+
+
     public Statistics() {
         stat = new HashMap<>();
         categories = new ArrayList<>();

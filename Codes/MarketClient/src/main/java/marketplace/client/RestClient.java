@@ -3,7 +3,6 @@ package marketplace.client;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.concurrent.Callable;
 
 public class RestClient {
     private Client client = ClientBuilder.newClient();
@@ -33,5 +32,22 @@ public class RestClient {
 
         Response response = invocationBuilder.post(null);
         return response.readEntity(String.class);
+    }
+
+    public void addNewListing(Listing listing) {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("registration")
+                .queryParam("username", name)
+                .queryParam("passwordHash", passwordHash)
+                .request(MediaType.TEXT_PLAIN_TYPE);
+        WebTarget newListingWebTarget
+                = webTarget.path("addlisting");
+
+        Invocation.Builder invocationBuilder
+                = newListingWebTarget.request(MediaType.APPLICATION_JSON);
+        Response response
+                = invocationBuilder
+                .post(Entity.entity(listing, MediaType.APPLICATION_JSON);
     }
 }
