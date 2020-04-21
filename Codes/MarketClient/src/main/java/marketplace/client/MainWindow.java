@@ -10,9 +10,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainWindow {
-    MainController controller = new MainController(this);
-    BorderPane root;
-    TextField titleField;
+    private MainController controller = new MainController(this);
+    private RestClient restClient;
+    private BorderPane root;
+    private TextField titleField;
 
     public void openNewListingForm() {
         GridPane gridPane = new GridPane();
@@ -46,7 +47,8 @@ public class MainWindow {
         root.setLeft(menuButtons);
     }
 
-    void start() {
+    void start(RestClient restClient) {
+        this.restClient = restClient;
         setUp();
         Stage stage = new Stage();
         stage.setTitle("Piac");

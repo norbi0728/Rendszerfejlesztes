@@ -3,11 +3,12 @@ package marketplace.client;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 public class RestClient {
     private Client client = ClientBuilder.newClient();
     WebTarget webTarget = client.target("http://localhost:7000");
-    private String token;
+    private String securityKey;
 
     public String login(String name, String passwordHash) {
         Invocation.Builder invocationBuilder
@@ -18,7 +19,7 @@ public class RestClient {
                 .request(MediaType.TEXT_PLAIN_TYPE);
 
         Response response = invocationBuilder.post(null);
-        token = response.readEntity(String.class);
+        securityKey = response.readEntity(String.class);
         return (String) response.getHeaders().get("Server-Response").get(0);
     }
 
@@ -34,20 +35,18 @@ public class RestClient {
         return response.readEntity(String.class);
     }
 
-    public void addNewListing(Listing listing) {
+    public void addListing(Listing listing) {
         Invocation.Builder invocationBuilder
                 = webTarget
-                .path("registration")
-                .queryParam("username", name)
-                .queryParam("passwordHash", passwordHash)
-                .request(MediaType.TEXT_PLAIN_TYPE);
-        WebTarget newListingWebTarget
-                = webTarget.path("addlisting");
+                .path("addlListing")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
 
-        Invocation.Builder invocationBuilder
-                = newListingWebTarget.request(MediaType.APPLICATION_JSON);
-        Response response
-                = invocationBuilder
-                .post(Entity.entity(listing, MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.post(Entity.entity(listing, MediaType.APPLICATION_JSON));
+    }
+
+    public List<Listing> getUserListings() {
+
+        return null;
     }
 }
