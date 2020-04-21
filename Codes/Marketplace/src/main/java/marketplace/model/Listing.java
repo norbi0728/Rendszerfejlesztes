@@ -1,6 +1,8 @@
 package marketplace.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Listing {
     private int id;
@@ -18,6 +20,7 @@ public class Listing {
     private Date removeDate;
     private String paymentMethod;
     private String shippingMethod;
+    private List<Bid> bids;
 
     public Listing() {
     }
@@ -26,7 +29,7 @@ public class Listing {
                    int quantity, Item item, String advertiser,
                    int increment, int maximumBid, int startingBid,
                    int fixedPrice, Date expirationDate, Date creationDate,
-                   Date removeDate, String paymentMethod, String shippingMethod) {
+                   Date removeDate, String paymentMethod, String shippingMethod, List<Bid> bids) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -42,6 +45,7 @@ public class Listing {
         this.removeDate = removeDate;
         this.paymentMethod = paymentMethod;
         this.shippingMethod = shippingMethod;
+        this.bids = bids;
     }
 
     public Listing(String title, String description,
@@ -63,6 +67,18 @@ public class Listing {
         this.removeDate = removeDate;
         this.paymentMethod = paymentMethod;
         this.shippingMethod = shippingMethod;
+        this.bids = new ArrayList<>();
+    }
+    public Bid getMostRecentBid(){
+        bids.sort((o1, o2) -> {
+            return o2.value - o1.value;
+        });
+
+        return bids.get(0);
+    }
+
+    public void bid(String userName, int value, Date date){
+        bids.add(new Bid(userName, value, id, date));
     }
 
     public int getId() {
@@ -183,5 +199,9 @@ public class Listing {
 
     public void setShippingMethod(String shippingMethod) {
         this.shippingMethod = shippingMethod;
+    }
+
+    public List<Bid> getBids() {
+        return bids;
     }
 }

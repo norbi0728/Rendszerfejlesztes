@@ -4,6 +4,7 @@ import marketplace.model.*;
 import marketplace.service.PersonalisedOfferServiceClient;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class Database {
         );
     }
 
+    /**USER RELATED STUFF*/
+
     public boolean userExists(String name) {
         return (getPasswordHash(name) != null);
     }
@@ -46,41 +49,66 @@ public class Database {
     /**
      * You need to make sure that no such user exists yet.
      */
-    public void removeListing(int id){
-        Item item = getListingByID(id).getItem();
-        List<Picture> itemPictures = item.getPictures();
+
+    private Statistics getStatistics(String userName) {
+        Statistics statistics = new Statistics();
+        ResultSet statResultSet;
         try {
-            for (Picture picture: itemPictures){
-                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
-                connection.createStatement().execute(sql);
+            statResultSet = connection.createStatement().executeQuery(
+                    "SELECT C.NAME, VALUE " +
+                            "FROM USERS U " +
+                            "JOIN USER_STATS US on U.NAME = US.USER_NAME " +
+                            "JOIN CATEGORIES C on US.CATEGORY_ID = C.ID " +
+                            "WHERE U.NAME = '" + userName + "'"
+            );
+            while (statResultSet.next()) {
+                statistics.getStats().put(statResultSet.getString("NAME"),
+                        statResultSet.getDouble("VALUE"));
             }
-            String sqlListing = "DELETE FROM LISTINGS WHERE ID = " + id;
-            String sqlItem = "DELETE FROM ITEMS WHERE ID = " + item.getId();
-            connection.createStatement().execute(sqlListing);
-            connection.createStatement().execute(sqlItem);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
-
+        return statistics;
     }
-    public Listing getListingByID(int id){
-        String userName;
-        try {
-            String sql = "SELECT USER_NAME FROM LISTINGS WHERE ID = " + id;
-            ResultSet listingResultSet = connection.createStatement().executeQuery(sql);
-            listingResultSet.first();
-            userName = listingResultSet.getString("USER_NAME");
 
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+    public User getUser(String userName){
+        User user = null;
+        try {
+            ResultSet userResultSet = connection.createStatement().executeQuery(
+                    "SELECT PASSWORD_HASH" +
+                            " FROM USERS" +
+                            " WHERE NAME = '" + userName + "'");
+            userResultSet.first();
+            String passwordHash = userResultSet.getString("PASSWORD_HASH");
+            user = new User(userName, passwordHash, getPersonalInformation(userName),
+                    getStatistics(userName),getListings(userName));
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        for (Listing listing: getListings(userName)){
-            if(listing.getId() == id)
-                return listing;
+
+        return user;
+    }
+
+    public ArrayList<User> getUsers() {
+        ArrayList<User> resultList = new ArrayList<>();
+
+        try {
+            ResultSet userResultSet = connection.createStatement().executeQuery(
+                    "SELECT *" +
+                            " FROM USERS");
+            while (userResultSet.next()) {
+
+                String userName = userResultSet.getString("NAME");
+                String passwordHash = userResultSet.getString("PASSWORD_HASH");
+                resultList.add(new User(userName, passwordHash, getPersonalInformation(userName),
+                        getStatistics(userName), getListings(userName)));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        return null;
+
+        return resultList;
     }
     public void updateUserStatistics(User user){
         try {
@@ -145,164 +173,6 @@ public class Database {
         }
     }
 
-    //this function maps the feature ids to the item features
-    //we only store the feature name in the Item class
-    private Map<String, Integer> getFeatureIDs() {
-        Map<String, Integer> features = new HashMap<>();
-        try {
-            ResultSet resultSet = connection.createStatement().executeQuery(
-                    "SELECT ID, NAME " +
-                            "FROM FEATURES"
-            );
-            while (resultSet.next()) {
-                features.put(resultSet.getString("NAME"), resultSet.getInt("ID"));
-            }
-
-        } catch (SQLException e) {
-            e.getErrorCode();
-        }
-        return features;
-    }
-
-    private int getCategoryID(String category) {
-        int categoryID = 0;
-        try {
-            ResultSet resultSet = connection.createStatement().executeQuery(
-                    "SELECT ID FROM CATEGORIES WHERE NAME = '" + category + "'"
-            );
-            resultSet.first();
-            categoryID = resultSet.getInt("ID");
-        } catch (SQLException e) {
-            e.getErrorCode();
-        }
-        return categoryID;
-    }
-
-    //to add the dynamically created features
-    public void addFeature(String featureName) {
-        try {
-            String sql = "INSERT INTO FEATURES (NAME)" +
-                    " VALUES(?)";
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, featureName);
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    //this function adds the dynamic features to the item
-    private void addItemFeatures(Item item) {
-        Map<String, Integer> featureIDs = getFeatureIDs();
-        String sql = "UPDATE ITEMS " +
-                " SET FEATURE_ID = ?," +
-                "FEATURE_VALUE = ? " +
-                "WHERE ID = " + item.getId();
-        try {
-            for (Map.Entry<String, String> feature : item.getFeatures().entrySet()) {
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-                preparedStatement.setInt(1, featureIDs.get(feature.getKey()));
-                preparedStatement.setString(2, feature.getValue());
-
-                preparedStatement.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void addItemCategory(String category) {
-        try {//first only the category and the name
-            String sql = "INSERT INTO CATEGORIES (NAME)" +
-                    " VALUES(?)";
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, category);
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void addItem(Item item) {
-        try {//first only the category and the name
-            String sql = "INSERT INTO ITEMS (ID, CATEGORY_ID, NAME)" +
-                    " VALUES(?, ?, ?)";
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setInt(1, item.getId());
-            preparedStatement.setInt(2, getCategoryID(item.getCategory()));
-            preparedStatement.setString(3, item.getName());
-
-            preparedStatement.executeUpdate();
-            //then get all the features and pictures
-            addItemFeatures(item);
-            addItemPictures(item);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void addItemPictures(Item item) {
-        String sql = "INSERT INTO ITEM_PICTURES (ITEM_ID, PICTURE) " +
-                "VALUES (?, ?)";
-        for (Picture pic : item.getPictures()) {
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-                preparedStatement.setInt(1, item.getId());
-                preparedStatement.setBytes(2, pic.getData());
-
-                preparedStatement.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void addListing(Listing listing) {
-        try {
-            String sql = "INSERT INTO LISTINGS (TITLE, QUANTITY," +
-                    " DESCRIPTION, ITEM_ID, USER_NAME, INCREMENT," +
-                    " MAXIMUM_BID, STARTING_BID, FIXED_PRICE, EXPIRATION_DATE," +
-                    " CREATED_ON, REMOVED_ON, PAYMENT_METHOD, SHIPPING_METHOD)" +
-                    " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            addItem(listing.getItem());
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, listing.getTitle());
-            preparedStatement.setInt(2, listing.getQuantity());
-            preparedStatement.setString(3, listing.getDescription()); //username
-            preparedStatement.setInt(4, listing.getItem().getId());
-            preparedStatement.setString(5, listing.getAdvertiser());
-            preparedStatement.setInt(6, listing.getIncrement());
-            preparedStatement.setInt(7, listing.getMaximumBid());
-            preparedStatement.setInt(8, listing.getStartingBid());
-            preparedStatement.setInt(9, listing.getFixedPrice());
-            preparedStatement.setDate(10, new java.sql.Date(listing.getExpirationDate().getTime()));
-            preparedStatement.setDate(11, new java.sql.Date(listing.getCreationDate().getTime()));
-            preparedStatement.setDate(12, new java.sql.Date(listing.getRemoveDate().getTime()));
-            preparedStatement.setString(13, listing.getPaymentMethod());
-            preparedStatement.setString(14, listing.getShippingMethod());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
     /**
      * @return null, if no such user
      */
@@ -318,89 +188,6 @@ public class Database {
             return null;
         }
         return result;
-    }
-
-    private List<Picture> getItemPictures(int itemID) {
-        List<Picture> pictures = new ArrayList<>();
-        try {
-            ResultSet pictureResultSet = connection.createStatement().executeQuery(
-                    "SELECT IP.ID, PICTURE " +
-                            "FROM ITEMS I " +
-                            "JOIN ITEM_PICTURES IP on IP.ITEM_ID = I.ID " +
-                            "WHERE ITEM_ID = " + itemID
-            );
-
-            while (pictureResultSet.next()) {
-                int pictureID = pictureResultSet.getInt("ID");
-                byte[] pictureData = pictureResultSet.getBytes("PICTURE");
-                pictures.add(new Picture(pictureID, pictureData));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return pictures;
-    }
-
-    private Map<String, String> getItemFeatures(int itemID) {
-        Map<String, String> features = new HashMap<>();
-        try {
-            ResultSet featureResultSet = connection.createStatement().executeQuery(
-                    "SELECT F.NAME, FEATURE_VALUE " +
-                            "FROM ITEMS I " +
-                            "JOIN FEATURES F on I.FEATURE_ID = F.ID " +
-                            "WHERE I.ID = " + itemID
-            );
-
-            while (featureResultSet.next()) {
-                String name = featureResultSet.getString("NAME");
-                String value = featureResultSet.getString("FEATURE_VALUE");
-                features.put(name, value);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return features;
-    }
-
-    private String getItemCategory(int itemID) {
-        String category = "";
-        ResultSet categoryResultSet;
-        try {
-            categoryResultSet = connection.createStatement().executeQuery(
-                    "SELECT C.NAME " +
-                            "FROM CATEGORIES C " +
-                            "JOIN ITEMS I ON I.CATEGORY_ID = C.ID " +
-                            "WHERE I.ID = " + itemID
-            );
-            categoryResultSet.first();
-            category = categoryResultSet.getString("NAME");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return category;
-    }
-
-    private Item getItem(int id) {
-        Map<String, String> features = new HashMap<>();
-        List<Picture> pictures = new ArrayList<>();
-        String category = "";
-        String name = "";
-        ResultSet itemResultSet;
-        try {
-            itemResultSet = connection.createStatement().executeQuery(
-                    "SELECT * " +
-                            "FROM ITEMS " +
-                            "WHERE ID = " + id
-            );
-            itemResultSet.first();
-            name = itemResultSet.getString("NAME");
-            features = getItemFeatures(id);
-            pictures = getItemPictures(id);
-            category = getItemCategory(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new Item(id, name, features, pictures, category);
     }
 
     private PersonalInformation getPersonalInformation(String userName) {
@@ -429,6 +216,8 @@ public class Database {
 
         return new PersonalInformation(firstName, lastName, address, phone, email);
     }
+
+    /**LISTING RELATED STUFF*/
 
     public List<Listing> getListings(String userName) {
         List<Listing> listings = new ArrayList<>();
@@ -471,7 +260,7 @@ public class Database {
 
                 listings.add(new Listing(id, title, description, quantity, getItem(itemID), userName,
                         increment, maximumBid, startingBid, fixedPrice, expirationDate,
-                        creationDate, removeDate, paymentMethod, shippingMethod));
+                        creationDate, removeDate, paymentMethod, shippingMethod, getBids(id)));
             }
 
         } catch (Exception e) {
@@ -522,7 +311,7 @@ public class Database {
 
                 listings.add(new Listing(id, title, description, quantity, getItem(itemID), userName,
                         increment, maximumBid, startingBid, fixedPrice, expirationDate,
-                        creationDate, removeDate, paymentMethod, shippingMethod));
+                        creationDate, removeDate, paymentMethod, shippingMethod, getBids(id)));
             }
 
         } catch (Exception e) {
@@ -532,67 +321,354 @@ public class Database {
         return listings;
     }
 
-    private Statistics getStatistics(String userName) {
-        Statistics statistics = new Statistics();
-        ResultSet statResultSet;
+    public void addListing(Listing listing) {
         try {
-            statResultSet = connection.createStatement().executeQuery(
-                    "SELECT C.NAME, VALUE " +
-                            "FROM USERS U " +
-                            "JOIN USER_STATS US on U.NAME = US.USER_NAME " +
-                            "JOIN CATEGORIES C on US.CATEGORY_ID = C.ID " +
-                            "WHERE U.NAME = '" + userName + "'"
+            String sql = "INSERT INTO LISTINGS (TITLE, QUANTITY," +
+                    " DESCRIPTION, ITEM_ID, USER_NAME, INCREMENT," +
+                    " MAXIMUM_BID, STARTING_BID, FIXED_PRICE, EXPIRATION_DATE," +
+                    " CREATED_ON, REMOVED_ON, PAYMENT_METHOD, SHIPPING_METHOD)" +
+                    " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            addItem(listing.getItem());
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, listing.getTitle());
+            preparedStatement.setInt(2, listing.getQuantity());
+            preparedStatement.setString(3, listing.getDescription()); //username
+            preparedStatement.setInt(4, listing.getItem().getId());
+            preparedStatement.setString(5, listing.getAdvertiser());
+            preparedStatement.setInt(6, listing.getIncrement());
+            preparedStatement.setInt(7, listing.getMaximumBid());
+            preparedStatement.setInt(8, listing.getStartingBid());
+            preparedStatement.setInt(9, listing.getFixedPrice());
+            preparedStatement.setDate(10, new java.sql.Date(listing.getExpirationDate().getTime()));
+            preparedStatement.setDate(11, new java.sql.Date(listing.getCreationDate().getTime()));
+            preparedStatement.setDate(12, new java.sql.Date(listing.getRemoveDate().getTime()));
+            preparedStatement.setString(13, listing.getPaymentMethod());
+            preparedStatement.setString(14, listing.getShippingMethod());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeListing(int id){
+        Item item = getListingByID(id).getItem();
+        List<Picture> itemPictures = item.getPictures();
+        List<Bid> bids = getListingByID(id).getBids();
+        try {
+            for (Picture picture: itemPictures){
+                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
+                connection.createStatement().execute(sql);
+            }
+            for (Bid bid: bids){
+                String sql = "DELETE FROM SALE WHERE BID_ID = " + bid.getId();
+                connection.createStatement().execute(sql);
+            }
+
+            String sqlBid = "DELETE FROM BIDS WHERE LISTING_ID = " + id;
+            connection.createStatement().execute(sqlBid);
+
+            String sqlListing = "DELETE FROM LISTINGS WHERE ID = " + id;
+            String sqlItem = "DELETE FROM ITEMS WHERE ID = " + item.getId();
+            connection.createStatement().execute(sqlListing);
+            connection.createStatement().execute(sqlItem);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public Listing getListingByID(int id){
+        String userName;
+        try {
+            String sql = "SELECT USER_NAME FROM LISTINGS WHERE ID = " + id;
+            ResultSet listingResultSet = connection.createStatement().executeQuery(sql);
+            listingResultSet.first();
+            userName = listingResultSet.getString("USER_NAME");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        for (Listing listing: getListings(userName)){
+            if(listing.getId() == id)
+                return listing;
+        }
+        return null;
+    }
+
+    public void addBid(Bid bid){
+        try {
+            String sql = "INSERT INTO BIDS (VALUE, USER_NAME, LISTING_ID, DATE) " +
+                         "VALUES(?, ?, ?, ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, bid.getValue());
+            preparedStatement.setString(2, bid.getUserName());
+            preparedStatement.setInt(3, bid.getListingID());
+            preparedStatement.setDate(4,
+                    new java.sql.Date(bid.getDate().getTime()));
+            preparedStatement.executeUpdate();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public List<Bid> getBids(int listingID){
+        List<Bid> bids = new ArrayList<>();
+        String userName = "";
+        int value = 0;
+        int id = 0;
+        Date date = null;
+
+        try {
+            ResultSet bidResultSet = connection.createStatement().executeQuery(
+                    "SELECT ID, VALUE, USER_NAME, DATE " +
+                            "FROM BIDS WHERE LISTING_ID = " + listingID
             );
-            while (statResultSet.next()) {
-                statistics.getStats().put(statResultSet.getString("NAME"),
-                        statResultSet.getDouble("VALUE"));
+
+            while (bidResultSet.next()){
+                userName = bidResultSet.getString("USER_NAME");
+                value = bidResultSet.getInt("VALUE");
+                id = bidResultSet.getInt("ID");
+                date = bidResultSet.getDate("DATE");
+
+                bids.add(new Bid(id, userName, value, listingID, date));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return bids;
+    }
+    public void addSale(int bidID){
+        try {
+            String sql = "INSERT INTO SALE(BID_ID) VALUES(?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, bidID);
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+        /**ITEM RELATED STUFF*/
+
+    private Item getItem(int id) {
+        Map<String, String> features = new HashMap<>();
+        List<Picture> pictures = new ArrayList<>();
+        String category = "";
+        String name = "";
+        ResultSet itemResultSet;
+        try {
+            itemResultSet = connection.createStatement().executeQuery(
+                    "SELECT * " +
+                            "FROM ITEMS " +
+                            "WHERE ID = " + id
+            );
+            itemResultSet.first();
+            name = itemResultSet.getString("NAME");
+            features = getItemFeatures(id);
+            pictures = getItemPictures(id);
+            category = getItemCategory(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Item(id, name, features, pictures, category);
+    }
+
+    private void addItem(Item item) {
+        try {
+            /*first only the category and the name*/
+            String sql = "INSERT INTO ITEMS (ID, CATEGORY_ID, NAME)" +
+                    " VALUES(?, ?, ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, item.getId());
+            preparedStatement.setInt(2, getCategoryID(item.getCategory()));
+            preparedStatement.setString(3, item.getName());
+
+            preparedStatement.executeUpdate();
+            /*then get all the features and pictures*/
+            addItemFeatures(item);
+            addItemPictures(item);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+    /*this function maps the feature ids to the item features
+    we only store the feature name in the Item class*/
+    private Map<String, Integer> getFeatureIDs() {
+        Map<String, Integer> features = new HashMap<>();
+        try {
+            ResultSet resultSet = connection.createStatement().executeQuery(
+                    "SELECT ID, NAME " +
+                            "FROM FEATURES"
+            );
+            while (resultSet.next()) {
+                features.put(resultSet.getString("NAME"), resultSet.getInt("ID"));
+            }
+
+        } catch (SQLException e) {
+            e.getErrorCode();
+        }
+        return features;
+    }
+
+    private int getCategoryID(String category) {
+        int categoryID = 0;
+        try {
+            ResultSet resultSet = connection.createStatement().executeQuery(
+                    "SELECT ID FROM CATEGORIES WHERE NAME = '" + category + "'"
+            );
+            resultSet.first();
+            categoryID = resultSet.getInt("ID");
+        } catch (SQLException e) {
+            e.getErrorCode();
+        }
+        return categoryID;
+    }
+
+    /*to add the dynamically created features*/
+    public void addFeature(String featureName) {
+        try {
+            String sql = "INSERT INTO FEATURES (NAME)" +
+                    " VALUES(?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, featureName);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*this function adds the dynamic features to the item*/
+    private void addItemFeatures(Item item) {
+        Map<String, Integer> featureIDs = getFeatureIDs();
+        String sql = "UPDATE ITEMS " +
+                " SET FEATURE_ID = ?," +
+                "FEATURE_VALUE = ? " +
+                "WHERE ID = " + item.getId();
+        try {
+            for (Map.Entry<String, String> feature : item.getFeatures().entrySet()) {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+                preparedStatement.setInt(1, featureIDs.get(feature.getKey()));
+                preparedStatement.setString(2, feature.getValue());
+
+                preparedStatement.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addItemCategory(String category) {
+        try {
+            /*first only the category and the name*/
+            String sql = "INSERT INTO CATEGORIES (NAME)" +
+                    " VALUES(?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, category);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void addItemPictures(Item item) {
+        String sql = "INSERT INTO ITEM_PICTURES (ITEM_ID, PICTURE) " +
+                "VALUES (?, ?)";
+        for (Picture pic : item.getPictures()) {
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+                preparedStatement.setInt(1, item.getId());
+                preparedStatement.setBytes(2, pic.getData());
+
+                preparedStatement.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private Map<String, String> getItemFeatures(int itemID) {
+        Map<String, String> features = new HashMap<>();
+        try {
+            ResultSet featureResultSet = connection.createStatement().executeQuery(
+                    "SELECT F.NAME, FEATURE_VALUE " +
+                            "FROM ITEMS I " +
+                            "JOIN FEATURES F on I.FEATURE_ID = F.ID " +
+                            "WHERE I.ID = " + itemID
+            );
+
+            while (featureResultSet.next()) {
+                String name = featureResultSet.getString("NAME");
+                String value = featureResultSet.getString("FEATURE_VALUE");
+                features.put(name, value);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return statistics;
+        return features;
     }
 
-    public User getUser(String userName){
-        User user = null;
+    private String getItemCategory(int itemID) {
+        String category = "";
+        ResultSet categoryResultSet;
         try {
-            ResultSet userResultSet = connection.createStatement().executeQuery(
-                    "SELECT PASSWORD_HASH" +
-                            " FROM USERS" +
-                            " WHERE NAME = '" + userName + "'");
-            userResultSet.first();
-            String passwordHash = userResultSet.getString("PASSWORD_HASH");
-            user = new User(userName, passwordHash, getPersonalInformation(userName),
-                    getStatistics(userName),getListings(userName));
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            categoryResultSet = connection.createStatement().executeQuery(
+                    "SELECT C.NAME " +
+                            "FROM CATEGORIES C " +
+                            "JOIN ITEMS I ON I.CATEGORY_ID = C.ID " +
+                            "WHERE I.ID = " + itemID
+            );
+            categoryResultSet.first();
+            category = categoryResultSet.getString("NAME");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return user;
+        return category;
     }
 
-    public ArrayList<User> getUsers() {
-        ArrayList<User> resultList = new ArrayList<>();
-
+    private List<Picture> getItemPictures(int itemID) {
+        List<Picture> pictures = new ArrayList<>();
         try {
-            ResultSet userResultSet = connection.createStatement().executeQuery(
-                    "SELECT *" +
-                            " FROM USERS");
-            while (userResultSet.next()) {
+            ResultSet pictureResultSet = connection.createStatement().executeQuery(
+                    "SELECT IP.ID, PICTURE " +
+                            "FROM ITEMS I " +
+                            "JOIN ITEM_PICTURES IP on IP.ITEM_ID = I.ID " +
+                            "WHERE ITEM_ID = " + itemID
+            );
 
-                String userName = userResultSet.getString("NAME");
-                String passwordHash = userResultSet.getString("PASSWORD_HASH");
-                resultList.add(new User(userName, passwordHash, getPersonalInformation(userName),
-                        getStatistics(userName), getListings(userName)));
+            while (pictureResultSet.next()) {
+                int pictureID = pictureResultSet.getInt("ID");
+                byte[] pictureData = pictureResultSet.getBytes("PICTURE");
+                pictures.add(new Picture(pictureID, pictureData));
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return resultList;
+        return pictures;
     }
-
+    /*TABLE CREATION*/
     private final void createTablesIfNotExists() throws SQLException {
         connection.createStatement().execute(
                 "CREATE TABLE IF NOT EXISTS USERS("
@@ -767,8 +843,23 @@ public class Database {
 //            System.out.println("key: "+disp.getKey()+", value:"+disp.getValue());
 //        }
 //        process.destroyForcibly();
-        for (Listing listig: database.getListings("testUser2")){
-            System.out.println(listig.getExpirationDate().getTime());
-        }
+//        for (Listing listing: database.getListings("testUser2")){
+//            listig.bid("Bela", 300, new Date(System.currentTimeMillis()));
+//            database.addBid(new Bid("Bela", 300, listing.getId(), new Date(System.currentTimeMillis())));
+//        }
+//        for (Listing listig: database.getListings("testUser2")){
+//            database.addSale(listig.getMostRecentBid().getId());
+//        }
+
+//        for (Listing listig: database.getListings("testUser2")){
+//            database.removeListing(listig.getId());
+//        }
+//        Listing listing = database.getListingByID(43);
+//        for(int i = 0; i < 4; i++){
+//            listing.bid("Bela", 300 + i, new Date(System.currentTimeMillis()));
+//            database.addBid(listing.getMostRecentBid());
+//        }
+//        Listing listing = database.getListingByID(43);
+//        database.addSale(listing.getMostRecentBid().getId());
     }
 }
