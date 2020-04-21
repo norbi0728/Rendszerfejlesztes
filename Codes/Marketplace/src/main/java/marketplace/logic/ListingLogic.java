@@ -17,19 +17,9 @@ public class ListingLogic {
     /**
      *Uploads the advertise if the user hasn't reached their limit yet.
      */
-    public String create(String title, String description,
-                  int quantity, String name, Map<String, String> features, List<Picture> pictures, String category, String advertiser,
-                  int increment, int maximumBid, int startingBid,
-                  int fixedPrice, Date expirationDate, Date creationDate,
-                  Date removeDate, String paymentMethod, String shippingMethod){
+    public String create(String advertiser,Listing listing){
         List<Listing> lists = Database.getDatabase().getListings(advertiser);
         if(!lists.isEmpty() && lists.size() < 10) {
-            Item item = new Item(name, features, pictures, category);
-            Listing listing = new Listing(title, description,
-                    quantity, item, advertiser,
-                    increment, maximumBid, startingBid,
-                    fixedPrice, expirationDate, creationDate,
-                    removeDate, paymentMethod, shippingMethod);
             Database.getDatabase().addListing(listing);
             return "Done";
         } else {
@@ -51,10 +41,18 @@ public class ListingLogic {
         Map<String, String> features = new HashMap<String, String>();
         List<Picture> pictures = null;
         Date date = new Date();
-        temp.create("title", "try", 1, "try",
-                features, pictures, "somewich", "me",
+        Item item = new Item("try", features, pictures, "somewich");
+        Listing listing = new Listing("title", "try",
+                1, item, "me",
                 10000, 9999999, 0, 10,
                 date, date, date, "VatikaniValuta", "Teleport");
+        temp.create("me", listing);
+        item = new Item("try", features, pictures, "Electrical");
+        listing = new Listing("title", "try",
+                1, item, "me",
+                10000, 9999999, 0, 10,
+                date, date, date, "cash", "personal");
+        temp.create("me", listing);
         temp.listListings("me");
         temp.remove();
     }
