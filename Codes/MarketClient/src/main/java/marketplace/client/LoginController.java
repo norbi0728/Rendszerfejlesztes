@@ -1,7 +1,11 @@
 package marketplace.client;
 
 import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class LoginController {
     private LoginScreen loginScreen;
@@ -13,16 +17,23 @@ public class LoginController {
     }
 
     public void loginPressed() {
-        String name = loginScreen.nameField.getText();
-        String password = loginScreen.passwordField.getText();
-        String passwordHash = hash(password);
+        //For testing
+        startMainWindow();
 
-        new Thread(() -> {
-            String result = restClient.login(name, passwordHash);
-            Platform.runLater(() -> {
-                new Alert(Alert.AlertType.INFORMATION, result).show();
-            });
-        }).start();
+//        String name = loginScreen.nameField.getText();
+//        String password = loginScreen.passwordField.getText();
+//        String passwordHash = hash(password);
+//
+//        new Thread(() -> {
+//            String result = restClient.login(name, passwordHash);
+//            Platform.runLater(() -> {
+//                new Alert(Alert.AlertType.INFORMATION, result).show();
+//                //if (result.equals("Correct"))
+//                {
+//                    startMainWindow();
+//                }
+//            });
+//        }).start();
     }
 
     public void registerPressed() {
@@ -36,6 +47,11 @@ public class LoginController {
                 new Alert(Alert.AlertType.INFORMATION, result).show();
             });
         }).start();
+    }
+
+    private void startMainWindow() {
+        new MainWindow().start(restClient);
+        loginScreen.scene.getWindow().hide();
     }
 
     private String hash(String s) {

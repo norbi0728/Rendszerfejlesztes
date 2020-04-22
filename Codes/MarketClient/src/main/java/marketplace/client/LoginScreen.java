@@ -15,6 +15,8 @@ import java.beans.PropertyVetoException;
 public class LoginScreen extends Application {
     private LoginController controller = new LoginController(this);
 
+    Scene scene;
+
     TextField nameField;
     TextField passwordField;
     Button loginButton;
@@ -63,7 +65,7 @@ public class LoginScreen extends Application {
         Pane root = new Pane();
         root.getChildren().addAll(labelBox, inputFieldBox, loginButton, registerButton);
 
-        Scene scene = new Scene(root, 400, 250);
+        scene = new Scene(root, 400, 250);
         scene.getStylesheets().add("my_style.css");
 
         primaryStage.setTitle("Belépés a piacra");
