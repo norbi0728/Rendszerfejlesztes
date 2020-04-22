@@ -1,12 +1,14 @@
 package marketplace.currencyexchange;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.eclipse.jetty.server.Response;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+import javax.xml.ws.Response;
+import java.io.IOException;
 
 
 public class CurrencyExchange
@@ -15,11 +17,12 @@ public class CurrencyExchange
         double newPrice = 0;
 
         final String REST_URI = "https://api.exchangeratesapi.io/latest";
-
-        Response response = client.target(REST_URI).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get;
-
+        Client client = ClientBuilder.newClient();
         ObjectMapper mapper = new ObjectMapper();
-        CurrencyExchangeData exchangeRates = mapper.readValue(response.readEntity(String.class), CurrencyExchangeData.class);
+
+        Response response = (Response) client.target(REST_URI).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+
+        CurrencyExchangeData exchangeRates = mapper.readValue((JsonParser) response, CurrencyExchangeData.class);
 
         switch (currency)
         {

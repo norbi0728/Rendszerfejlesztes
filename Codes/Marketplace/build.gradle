@@ -21,4 +21,5 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.3'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3']
     )
+    compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
 }
