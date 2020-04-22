@@ -14,6 +14,7 @@ import java.beans.PropertyVetoException;
 
 public class LoginScreen extends Application {
     private LoginController controller = new LoginController(this);
+    MarketClientApp app;
 
     Scene scene;
 
@@ -21,6 +22,10 @@ public class LoginScreen extends Application {
     TextField passwordField;
     Button loginButton;
     Button registerButton;
+
+    LoginScreen(MarketClientApp app) {
+        this.app = app;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -66,7 +71,7 @@ public class LoginScreen extends Application {
         root.getChildren().addAll(labelBox, inputFieldBox, loginButton, registerButton);
 
         scene = new Scene(root, 400, 250);
-        scene.getStylesheets().add("my_style.css");
+        scene.getStylesheets().add("login_style.css");
 
         primaryStage.setTitle("Belépés a piacra");
         primaryStage.initStyle(StageStyle.DECORATED);
@@ -80,9 +85,5 @@ public class LoginScreen extends Application {
                 nameField.setText(oldValue);
             }
         });
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

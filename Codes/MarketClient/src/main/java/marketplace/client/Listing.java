@@ -5,23 +5,35 @@ import java.util.Map;
 public class Listing {
     private String title;
     private String description;
-    private Map<String, String> features;
+    private Item item;
 
-    public Listing(String title, String description, Map<String, String> features) {
+    public Listing(String title, String description, Item item) {
         this.title = title;
         this.description = description;
-        this.features = features;
+        this.item = item;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    public Map<String, String> getFeatures() {
-        return features;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 }

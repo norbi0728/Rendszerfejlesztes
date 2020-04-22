@@ -1,12 +1,16 @@
 package marketplace.client;
 
 public class MainController {
-    private MainWindow mainWindow;
-    public MainController(MainWindow mainWindow) {
-        this.mainWindow = mainWindow;
+    private MarketClientApp app;
+    public MainController(MarketClientApp app) {
+        this.app = app;
     }
 
     public void newListingButtonClicked() {
-        mainWindow.openNewListingForm();
+        app.openNewListingForm();
+    }
+
+    public void userListingsButtonClicked() {
+        app.openUserListingsPane();
     }
 }

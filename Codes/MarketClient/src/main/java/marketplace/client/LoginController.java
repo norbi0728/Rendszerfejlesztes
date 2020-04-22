@@ -50,7 +50,7 @@ public class LoginController {
     }
 
     private void startMainWindow() {
-        new MainWindow().start(restClient);
+        loginScreen.app.stage.show();
         loginScreen.scene.getWindow().hide();
     }
 
