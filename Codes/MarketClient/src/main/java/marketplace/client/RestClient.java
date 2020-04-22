@@ -46,7 +46,13 @@ public class RestClient {
     }
 
     public List<Listing> getUserListings() {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("getUserListings")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
 
-        return null;
+        Response response = invocationBuilder.post(null);
+        return (List<Listing>) response.readEntity(List.class);
     }
 }
