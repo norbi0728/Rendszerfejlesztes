@@ -5,10 +5,7 @@ import marketplace.model.Item;
 import marketplace.model.Listing;
 import marketplace.model.Picture;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class ListingLogic {
@@ -25,6 +22,48 @@ public class ListingLogic {
         } else {
             return "This user has too many advertises";
         }
+    }
+
+    public List<Listing> listByCategory(List<String> categories){
+        Database db = Database.getDatabase();
+        List<Listing> allListings = db.getAllListing();
+        List<Listing> matchingListings = new ArrayList<Listing>();
+        allListings.forEach(temp -> {
+            if(categories.contains(temp.getItem().getCategory())){
+                matchingListings.add(temp);
+            }
+        });
+        return matchingListings;
+    }
+
+    public List<Listing> listByBidOrNot(int bidOrNot){  //If bid -> 1 if not ->0
+        Database db = Database.getDatabase();
+        List<Listing> allListings = db.getAllListing();
+        List<Listing> matchingListings = new ArrayList<Listing>();
+        allListings.forEach(temp -> {
+            if(temp.getMaximumBid() + 1 >= bidOrNot){
+                matchingListings.add(temp);
+            }
+        });
+        return matchingListings;
+    }
+
+    public List<Listing> listByPrice(Integer min, Integer max){
+        Database db = Database.getDatabase();
+        List<Listing> allListings = db.getAllListing();
+        List<Listing> matchingListings = new ArrayList<Listing>();
+        allListings.forEach(temp -> {
+            if((temp.getFixedPrice() < max && temp.getFixedPrice() > min) || (temp.getMostRecentBid().getValue() < max && temp.getMostRecentBid().getValue() > min)){
+                matchingListings.add(temp);
+            }
+        });
+        return matchingListings;
+    }
+
+    public List<Listing> listByUser(String username){
+        Database db = Database.getDatabase();
+        List<Listing> matchingListings = db.getListings(username);
+        return matchingListings;
     }
 
     public List<Listing> listListings(String useName){
