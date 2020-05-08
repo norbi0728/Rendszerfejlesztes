@@ -19,7 +19,7 @@ public class ListingLogic {
      */
     public String create(String advertiser,Listing listing){
         List<Listing> lists = Database.getDatabase().getListings(advertiser);
-        if(!lists.isEmpty() && lists.size() < 10) {
+        if(/*!lists.isEmpty() &&*/ lists.size() < 10) {
             Database.getDatabase().addListing(listing);
             return "Done";
         } else {
