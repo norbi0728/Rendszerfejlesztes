@@ -3,6 +3,7 @@ package marketplace.service;
 import io.javalin.Javalin;
 import marketplace.logic.ListingLogic;
 import marketplace.logic.LoginReg;
+import marketplace.model.Listing;
 import marketplace.security.AuthenticationService;
 
 import java.util.HashMap;
@@ -47,15 +48,15 @@ public class Service {
                ctx.header("Server-Response", "Invalid security key");
         });
 
-//        app.post("/addListing", ctx -> {
-//            String securityKey = ctx.queryParam("securityKey");
-//            if(authenticationService.validateKey(securityKey)){
-//                Listing listing = ctx.bodyAsClass(Listing.class);
-//                ctx.header("Server-Response", listingLogic.create(listing));
-//            }
-//            else
-//                ctx.header("Server-Response", "Invalid security key");
-//        });
+        app.post("/addListing", ctx -> {
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                Listing listing = ctx.bodyAsClass(Listing.class);
+                ctx.header("Server-Response", listingLogic.create(users.get(securityKey),listing));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
 //        app.post("removeListing",ctx -> {
 //            String securityKey = ctx.queryParam("securityKey");
 //            if(authenticationService.validateKey(securityKey)){
