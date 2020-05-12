@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class MarketClientApp extends Application {
-    private Stage stage;
+    Stage stage;
     private Scene scene;
     private BorderPane root;
     private MainController controller;
