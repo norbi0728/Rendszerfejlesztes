@@ -57,7 +57,7 @@ public class NewListingForm extends VBox {
         getChildren().add(titleLabel);
 
         GridPane gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
+        //gridPane.setGridLinesVisible(true);
 
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setPadding(new Insets(40, 40, 40, 40));
@@ -212,42 +212,42 @@ public class NewListingForm extends VBox {
             throw new RuntimeException(e);
         }
     }
-}
 
-class FeatureLines extends VBox {
-    private List<Pair<TextField, TextField>> featureLines = new ArrayList<>();
+    class FeatureLines extends VBox {
+        private List<Pair<TextField, TextField>> featureLines = new ArrayList<>();
 
-    void addLine() {
-        HBox line = new HBox();
-        line.setSpacing(10);
+        void addLine() {
+            HBox line = new HBox();
+            line.setSpacing(10);
 
-        TextField propertyNameField = new TextField();
-        TextField propertyValueField = new TextField();
-        featureLines.add(new Pair<>(propertyNameField, propertyValueField));
+            TextField propertyNameField = new TextField();
+            TextField propertyValueField = new TextField();
+            featureLines.add(new Pair<>(propertyNameField, propertyValueField));
 
-        line.getChildren().add(new Label("Jellemzõ:"));
-        line.getChildren().add(propertyNameField);
-        line.getChildren().add(new Label("Érték:"));
-        line.getChildren().add(propertyValueField);
+            line.getChildren().add(new Label("Jellemzõ:"));
+            line.getChildren().add(propertyNameField);
+            line.getChildren().add(new Label("Érték:"));
+            line.getChildren().add(propertyValueField);
 
-        Button deleteButton = new Button("X");
-        deleteButton.setOnAction((event) -> {
-            getChildren().remove(line);
-            featureLines.remove(line);
-        });
-        line.getChildren().add(deleteButton);
+            Button deleteButton = new Button("X");
+            deleteButton.setOnAction((event) -> {
+                getChildren().remove(line);
+                featureLines.remove(line);
+            });
+            line.getChildren().add(deleteButton);
 
-        getChildren().add(line);
-    }
-
-    Map<String, String> features() {
-        Map<String, String> features = new HashMap<>();
-        for (Pair<TextField, TextField> featureLine : featureLines) {
-            if (!featureLine.getKey().getText().equals("")) {
-                features.put(featureLine.getKey().getText(), featureLine.getValue().getText());
-            }
+            getChildren().add(line);
         }
-        return features;
-    }
 
+        Map<String, String> features() {
+            Map<String, String> features = new HashMap<>();
+            for (Pair<TextField, TextField> featureLine : featureLines) {
+                if (!featureLine.getKey().getText().equals("")) {
+                    features.put(featureLine.getKey().getText(), featureLine.getValue().getText());
+                }
+            }
+            return features;
+        }
+
+    }
 }
