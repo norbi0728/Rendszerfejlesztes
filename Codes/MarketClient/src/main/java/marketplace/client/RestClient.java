@@ -1,6 +1,7 @@
 package marketplace.client;
 
 import javax.ws.rs.client.*;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -9,6 +10,17 @@ public class RestClient {
     private Client client = ClientBuilder.newClient();
     WebTarget webTarget = client.target("http://localhost:7000");
     private String securityKey;
+    public String name;
+    private static RestClient instance;
+
+    private RestClient() {}
+
+    public static RestClient getRestClient() {
+        if (instance == null) {
+            instance = new RestClient();
+        }
+        return instance;
+    }
 
     public String login(String name, String passwordHash) {
         Invocation.Builder invocationBuilder
@@ -35,20 +47,32 @@ public class RestClient {
         return response.readEntity(String.class);
     }
 
-    public void addListing(Listing listing) {
+    public String addListing(Listing listing) {
         Invocation.Builder invocationBuilder
                 = webTarget
-                .path("addlListing")
+                .path("addListing")
                 .queryParam("securityKey", securityKey)
                 .request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.post(Entity.entity(listing, MediaType.APPLICATION_JSON));
+        return response.getHeaderString("Server-Response");
     }
 
     public List<Listing> getUserListings() {
         Invocation.Builder invocationBuilder
                 = webTarget
                 .path("getUserListings")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.post(null);
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+    }
+
+    public List<Listing> getAllListings() {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("getAllListings")
                 .queryParam("securityKey", securityKey)
                 .request(MediaType.APPLICATION_JSON);
 

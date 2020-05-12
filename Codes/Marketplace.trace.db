@@ -22,3 +22,12 @@ java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supporte
 2020-04-21 18:36:02 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
 select * from Users [42102-200]
+2020-05-08 18:41:51 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+SELECT * FROM users [42102-200]
+2020-05-08 18:45:07 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+SELECT * FROM users [42102-200]
+2020-05-08 18:46:08 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+select * from users [42102-200]

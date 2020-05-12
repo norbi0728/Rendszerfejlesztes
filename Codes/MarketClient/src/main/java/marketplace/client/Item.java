@@ -8,14 +8,16 @@ public class Item {
     private int id;
     private String name;
     private Map<String, String> features;
-    private String picture;
+    private List<Picture> pictures;
     private String category;
 
-    public Item(int id, String name, Map<String, String> features, String picture, String category) {
-        this.id = id;
+    public Item() {}
+
+    public Item(String name, Map<String, String> features, List<Picture> pictures, String category) {
+        this.id = new Random().nextInt(Integer.MAX_VALUE);
         this.name = name;
         this.features = features;
-        this.picture = picture;
+        this.pictures = pictures;
         this.category = category;
     }
 
@@ -43,12 +45,12 @@ public class Item {
         this.features = features;
     }
 
-    public String getPicture() {
-        return picture;
+    public List<Picture> getPictures() {
+        return pictures;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setPictures(List<Picture> pictures) {
+        this.pictures = pictures;
     }
 
     public String getCategory() {
