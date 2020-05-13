@@ -1,5 +1,7 @@
 package marketplace.client;
 
+import marketplace.client.model.Listing;
+
 import java.util.List;
 
 public class MainController {

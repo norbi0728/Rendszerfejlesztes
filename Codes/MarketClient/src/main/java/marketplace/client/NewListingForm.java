@@ -6,23 +6,22 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import marketplace.client.currencycomponents.CurrencyChanger;
+import marketplace.client.model.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class NewListingForm extends VBox {
@@ -51,13 +50,14 @@ public class NewListingForm extends VBox {
     }
 
     private void init() {
+
         Label titleLabel = new Label("Új hirdetés létrehozása");
         titleLabel.getStyleClass().add("title-label");
 
         getChildren().add(titleLabel);
 
         GridPane gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
+        //gridPane.setGridLinesVisible(true);
 
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setPadding(new Insets(40, 40, 40, 40));
@@ -113,6 +113,7 @@ public class NewListingForm extends VBox {
 
         gridPane.add(new Label("Fix ár:"), 3, 5);
         fixedPriceField = new TextField();
+        CurrencyChanger.getInstance().addTextField(fixedPriceField);
         gridPane.add(fixedPriceField, 4, 5);
 
         gridPane.add(new Label("Lejárati idõ:"), 0, 7);
@@ -131,8 +132,11 @@ public class NewListingForm extends VBox {
 
         gridPane.add(new Label("Lépésköz:"), 3, 8);
         incrementField = new TextField();
+        CurrencyChanger.getInstance().addTextField(incrementField);
         gridPane.add(incrementField, 4, 8);
-        gridPane.add(new Label("Ft"), 5, 8);
+        Label incrementCurrencyLabel = new Label("Ft");
+        CurrencyChanger.getInstance().addCurrencyLabel(incrementCurrencyLabel);
+        gridPane.add(incrementCurrencyLabel, 5, 8);
 
         gridPane.add(new Label("Fizetési mód:"), 0, 9);
         paymentMethodChoiceBox = new ChoiceBox<>();
@@ -212,42 +216,42 @@ public class NewListingForm extends VBox {
             throw new RuntimeException(e);
         }
     }
-}
 
-class FeatureLines extends VBox {
-    private List<Pair<TextField, TextField>> featureLines = new ArrayList<>();
+    class FeatureLines extends VBox {
+        private List<Pair<TextField, TextField>> featureLines = new ArrayList<>();
 
-    void addLine() {
-        HBox line = new HBox();
-        line.setSpacing(10);
+        void addLine() {
+            HBox line = new HBox();
+            line.setSpacing(10);
 
-        TextField propertyNameField = new TextField();
-        TextField propertyValueField = new TextField();
-        featureLines.add(new Pair<>(propertyNameField, propertyValueField));
+            TextField propertyNameField = new TextField();
+            TextField propertyValueField = new TextField();
+            featureLines.add(new Pair<>(propertyNameField, propertyValueField));
 
-        line.getChildren().add(new Label("Jellemzõ:"));
-        line.getChildren().add(propertyNameField);
-        line.getChildren().add(new Label("Érték:"));
-        line.getChildren().add(propertyValueField);
+            line.getChildren().add(new Label("Jellemzõ:"));
+            line.getChildren().add(propertyNameField);
+            line.getChildren().add(new Label("Érték:"));
+            line.getChildren().add(propertyValueField);
 
-        Button deleteButton = new Button("X");
-        deleteButton.setOnAction((event) -> {
-            getChildren().remove(line);
-            featureLines.remove(line);
-        });
-        line.getChildren().add(deleteButton);
+            Button deleteButton = new Button("X");
+            deleteButton.setOnAction((event) -> {
+                getChildren().remove(line);
+                featureLines.remove(line);
+            });
+            line.getChildren().add(deleteButton);
 
-        getChildren().add(line);
-    }
-
-    Map<String, String> features() {
-        Map<String, String> features = new HashMap<>();
-        for (Pair<TextField, TextField> featureLine : featureLines) {
-            if (!featureLine.getKey().getText().equals("")) {
-                features.put(featureLine.getKey().getText(), featureLine.getValue().getText());
-            }
+            getChildren().add(line);
         }
-        return features;
-    }
 
+        Map<String, String> features() {
+            Map<String, String> features = new HashMap<>();
+            for (Pair<TextField, TextField> featureLine : featureLines) {
+                if (!featureLine.getKey().getText().equals("")) {
+                    features.put(featureLine.getKey().getText(), featureLine.getValue().getText());
+                }
+            }
+            return features;
+        }
+
+    }
 }

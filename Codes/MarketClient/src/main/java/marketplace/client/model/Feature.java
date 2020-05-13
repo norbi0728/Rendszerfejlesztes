@@ -1,4 +1,4 @@
-package marketplace.client;
+package marketplace.client.model;
 
 public enum Feature {
     YEAR("Évjárat"),

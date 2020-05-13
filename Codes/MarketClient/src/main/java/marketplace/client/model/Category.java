@@ -1,4 +1,4 @@
-package marketplace.client;
+package marketplace.client.model;
 
 public enum Category {
     ELECTRICAL("Elektromos berendezések", "Electrical"),

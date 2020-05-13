@@ -1,4 +1,4 @@
-package marketplace.client;
+package marketplace.client.model;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
