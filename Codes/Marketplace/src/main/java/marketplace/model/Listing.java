@@ -69,10 +69,11 @@ public class Listing {
         this.shippingMethod = shippingMethod;
         this.bids = new ArrayList<>();
     }
-    public Bid getMostRecentBid(){
+    public Bid mostRecentBid(){
         bids.sort((o1, o2) -> {
             return o2.value - o1.value;
         });
+        
 
         return bids.get(0);
     }

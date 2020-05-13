@@ -13,27 +13,28 @@ public class LoginController {
 
     LoginController(LoginScreen loginScreen) {
         this.loginScreen = loginScreen;
-        this.restClient = new RestClient();
+        this.restClient = RestClient.getRestClient();
     }
 
     public void loginPressed() {
         //For testing
-        startMainWindow();
+//        startMainWindow();
 
-//        String name = loginScreen.nameField.getText();
-//        String password = loginScreen.passwordField.getText();
-//        String passwordHash = hash(password);
-//
-//        new Thread(() -> {
-//            String result = restClient.login(name, passwordHash);
-//            Platform.runLater(() -> {
-//                new Alert(Alert.AlertType.INFORMATION, result).show();
-//                //if (result.equals("Correct"))
-//                {
-//                    startMainWindow();
-//                }
-//            });
-//        }).start();
+        String name = loginScreen.nameField.getText();
+        String password = loginScreen.passwordField.getText();
+        String passwordHash = hash(password);
+
+        new Thread(() -> {
+            String result = restClient.login(name, passwordHash);
+            Platform.runLater(() -> {
+                if (result.equals("Correct")) {
+                    restClient.name = name;
+                    startMainWindow();
+                } else {
+                    new Alert(Alert.AlertType.INFORMATION, result).show();
+                }
+            });
+        }).start();
     }
 
     public void registerPressed() {
@@ -50,7 +51,7 @@ public class LoginController {
     }
 
     private void startMainWindow() {
-        new MainWindow().start(restClient);
+        loginScreen.app.stage.show();
         loginScreen.scene.getWindow().hide();
     }
 

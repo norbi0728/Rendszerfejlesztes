@@ -848,7 +848,7 @@ public class Database {
 //            database.addBid(new Bid("Bela", 300, listing.getId(), new Date(System.currentTimeMillis())));
 //        }
 //        for (Listing listig: database.getListings("testUser2")){
-//            database.addSale(listig.getMostRecentBid().getId());
+//            database.addSale(listig.mostRecentBid().getId());
 //        }
 
 //        for (Listing listig: database.getListings("testUser2")){
@@ -857,9 +857,9 @@ public class Database {
 //        Listing listing = database.getListingByID(43);
 //        for(int i = 0; i < 4; i++){
 //            listing.bid("Bela", 300 + i, new Date(System.currentTimeMillis()));
-//            database.addBid(listing.getMostRecentBid());
+//            database.addBid(listing.mostRecentBid());
 //        }
 //        Listing listing = database.getListingByID(43);
-//        database.addSale(listing.getMostRecentBid().getId());
+//        database.addSale(listing.mostRecentBid().getId());
     }
 }
