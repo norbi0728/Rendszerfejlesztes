@@ -1,5 +1,7 @@
 package marketplace.client;
 
+import marketplace.client.model.Listing;
+
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;

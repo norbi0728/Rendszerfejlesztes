@@ -6,23 +6,22 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import marketplace.client.currencycomponents.CurrencyChanger;
+import marketplace.client.model.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class NewListingForm extends VBox {
@@ -51,6 +50,7 @@ public class NewListingForm extends VBox {
     }
 
     private void init() {
+
         Label titleLabel = new Label("Új hirdetés létrehozása");
         titleLabel.getStyleClass().add("title-label");
 
@@ -113,6 +113,7 @@ public class NewListingForm extends VBox {
 
         gridPane.add(new Label("Fix ár:"), 3, 5);
         fixedPriceField = new TextField();
+        CurrencyChanger.getInstance().addTextField(fixedPriceField);
         gridPane.add(fixedPriceField, 4, 5);
 
         gridPane.add(new Label("Lejárati idõ:"), 0, 7);
@@ -131,8 +132,11 @@ public class NewListingForm extends VBox {
 
         gridPane.add(new Label("Lépésköz:"), 3, 8);
         incrementField = new TextField();
+        CurrencyChanger.getInstance().addTextField(incrementField);
         gridPane.add(incrementField, 4, 8);
-        gridPane.add(new Label("Ft"), 5, 8);
+        Label incrementCurrencyLabel = new Label("Ft");
+        CurrencyChanger.getInstance().addCurrencyLabel(incrementCurrencyLabel);
+        gridPane.add(incrementCurrencyLabel, 5, 8);
 
         gridPane.add(new Label("Fizetési mód:"), 0, 9);
         paymentMethodChoiceBox = new ChoiceBox<>();

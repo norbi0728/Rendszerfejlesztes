@@ -1,9 +1,8 @@
-package marketplace.client;
+package marketplace.client.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class Listing {
     private int id;
@@ -79,6 +78,13 @@ public class Listing {
         if (bids.size() > 0) {
             return bids.get(0);
         } else return null;
+    }
+
+    public int displayPrice() {
+        if (maximumBid > 0) return maximumBid + increment;
+        if (mostRecentBid() != null) return mostRecentBid().getValue();
+        if (fixedPrice > 0) return fixedPrice;
+        return 0;
     }
 
     public void bid(String userName, int value, Date date) {

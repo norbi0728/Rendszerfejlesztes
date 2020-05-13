@@ -6,14 +6,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
+import marketplace.client.currencycomponents.CurrencyChanger;
+import marketplace.client.model.Listing;
+import marketplace.client.currencycomponents.Currency;
 import java.util.List;
 
 public class MarketClientApp extends Application {
@@ -23,7 +25,7 @@ public class MarketClientApp extends Application {
     private MainController controller;
 
     private NewListingForm newListingForm;
-    private Pane userListingsPane;
+    private Region userListingsPane;
     private FlowPane allListingsPane;
     private Pane settingsPane;
 
@@ -31,6 +33,7 @@ public class MarketClientApp extends Application {
     public void init() throws Exception {
         controller = new MainController(this);
         root = new BorderPane();
+        root.setStyle("-fx-background-color: orange;");
         root.setLeft(createMenu());
     }
 
@@ -59,6 +62,7 @@ public class MarketClientApp extends Application {
         menu.getChildren().add(newListingButton);
         menu.getChildren().add(userListingsButton);
         menu.getChildren().add(allListingsButton);
+        menu.getChildren().add(settingsButton);
 
         return menu;
     }
@@ -73,7 +77,7 @@ public class MarketClientApp extends Application {
     }
 
     private void openSettingsPane() {
-        if (settingsPane != null) {
+        if (settingsPane == null) {
             settingsPane = createSettingsPane();
         }
         root.setCenter(settingsPane);
@@ -88,9 +92,7 @@ public class MarketClientApp extends Application {
         TextField addressField = new TextField();
         TextField phoneField = new TextField();
         TextField emailField = new TextField();
-
-
-
+        ChoiceBox<Currency> currencyChoiceBox;
 
         gridPane.add(new Label("Keresztnév:"), 0, 3);
         gridPane.add(firstNameField, 1, 3);
@@ -106,6 +108,15 @@ public class MarketClientApp extends Application {
 
         gridPane.add(new Label("E-mail:"), 0, 7);
         gridPane.add(emailField, 1, 7);
+
+        gridPane.add(new Label("Pénznem:"), 2, 3);
+        currencyChoiceBox = new ChoiceBox<>();
+        currencyChoiceBox.getItems().setAll(Currency.values());
+        currencyChoiceBox.setValue(CurrencyChanger.getInstance().currency);
+        currencyChoiceBox.setOnAction((event -> {
+            CurrencyChanger.getInstance().changeDisplayCurrency(currencyChoiceBox.getValue());
+        }));
+        gridPane.add(currencyChoiceBox, 3, 3);
 
         vBox.getChildren().add(gridPane);
         return vBox;
@@ -124,7 +135,9 @@ public class MarketClientApp extends Application {
 
     public void openUserListingsPane() {
         if (userListingsPane == null) userListingsPane = createUserListingsPanel();
+        userListingsPane.setStyle("-fx-background-color: purple;");
         root.setCenter(userListingsPane);
+        BorderPane.setAlignment(userListingsPane, Pos.CENTER);
     }
 
     public void openAllListingsPane() {
@@ -137,24 +150,33 @@ public class MarketClientApp extends Application {
         return flowPane;
     }
 
-    private Pane createUserListingsPanel() {
-        Pane pane = new Pane();
+    private Region createUserListingsPanel() {
         VBox vBox = new VBox();
-        vBox.getChildren().add(new Label("User Listings"));
+        //vBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        //vBox.setPrefSize(1000, 1000);
+        vBox.setStyle("-fx-background-color: green;");
+        //vBox.setPrefWidth(1000000);
+        vBox.getChildren().add(new Label("Saját hirdetések"));
         FlowPane flowPane = new FlowPane();
 
         new Thread(() -> {
             List<Listing> userListings = controller.getUserListings();
             Platform.runLater(() -> {
                 for (Listing userListing : userListings) {
-                    flowPane.getChildren().add(new SmallListingView(userListing));
+                    SmallListingView smallListingView = new SmallListingView(userListing);
+                    smallListingView.setPadding(new Insets(10, 10, 10, 10)); //TODO not here
+                    flowPane.getChildren().add(smallListingView);
                 }
             });
         }).start();
 
         vBox.getChildren().add(flowPane);
-        pane.getChildren().add(vBox);
-        return pane;
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(vBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        return scrollPane;
     }
 
     @Override

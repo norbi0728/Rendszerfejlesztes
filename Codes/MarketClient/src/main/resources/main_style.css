@@ -12,3 +12,9 @@
     -fx-font-size: 24;
     -fx-underline: true;
 }
+
+.small-listing-view {
+    -fx-background-color: cyan;
+    -fx-background-insets: 5;
+    -fx-alignment: center;
+}

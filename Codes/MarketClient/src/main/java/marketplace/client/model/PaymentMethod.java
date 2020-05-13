@@ -1,12 +1,12 @@
-package marketplace.client;
+package marketplace.client.model;
 
-public enum ShippingMethod {
-    PERSONAL("Személyes átvétel", "personal"),
-    POSTAL("Posta", "postal");
+public enum PaymentMethod {
+    CASH("Készpénz", "cash"),
+    TRANSFER("Átutalás", "transfer");
 
     private String hungarianName;
     private String englishName;
-    ShippingMethod(String hungarianName, String englishName) {
+    PaymentMethod(String hungarianName, String englishName) {
         this.hungarianName = hungarianName;
         this.englishName = englishName;
     }
