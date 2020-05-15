@@ -35,6 +35,6 @@ public class UserManagement {
     public static void main(String[] args) throws InterruptedException {
         Integer passHash = "P@ssw0rd".hashCode();
         PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail");
-        new User("Try", passHash.toString(), mine);
+        //new User("Try", passHash.toString(), mine);
     }
 }

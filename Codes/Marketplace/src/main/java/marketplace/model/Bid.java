@@ -27,7 +27,9 @@ public class Bid {
     public Date getDate() {
         return date;
     }
-
+    public void setValue(int value){
+        this.value = value;
+    }
     public String getUserName() {
         return userName;
     }

@@ -9,25 +9,28 @@ public class User {
     private PersonalInformation personalInformation;
     private Statistics statistics;
     private List<Listing> listings;
+    private String preferredCurrency;
 
     //must have because of serialization
     public User() {
     }
 
     public User(String name, String passwordHash, PersonalInformation personalInformation,
-                Statistics statistics, List<Listing> listings) {
+                Statistics statistics, List<Listing> listings, String preferredCurrency) {
         this.name = name;
         this.passwordHash = passwordHash;
         this.personalInformation = personalInformation;
         this.statistics = statistics;
         this.listings = listings;
+        this.preferredCurrency = preferredCurrency;
     }
     //use when it comes from registration
-    public User(String name, String passwordHash, PersonalInformation personalInformation) {
+    public User(String name, String passwordHash, PersonalInformation personalInformation, String preferredCurrency) {
         this.name = name;
         this.passwordHash = passwordHash;
         this.personalInformation = personalInformation;
         this.statistics = new Statistics();
+        this.preferredCurrency = preferredCurrency;
     }
 
     public String getName() {
@@ -56,5 +59,13 @@ public class User {
 
     public Statistics getStatistics() {
         return statistics;
+    }
+
+    public String getPreferredCurrency() {
+        return preferredCurrency;
+    }
+
+    public void setPreferredCurrency(String preferredCurrency) {
+        this.preferredCurrency = preferredCurrency;
     }
 }

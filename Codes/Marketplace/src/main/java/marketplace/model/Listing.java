@@ -74,6 +74,11 @@ public class Listing {
             return o2.value - o1.value;
         });
         
+        if(bids.size() == 0){
+            Bid bid = new Bid();
+            bid.setValue(0);
+            return bid;
+        }
 
         return bids.get(0);
     }

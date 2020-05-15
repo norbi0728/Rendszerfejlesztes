@@ -68,9 +68,9 @@ public class LoginReg {
         }
     }
 
-    public String registration(String userName, String passHash, String firstName, String lastName, String address, String phone, String email){
+    public String registration(String userName, String passHash, String firstName, String lastName, String address, String phone, String email, String preferredCurrency){
         PersonalInformation personalInformation = new PersonalInformation(firstName, lastName, address, phone, email);
-        User user = new User(userName, passHash, personalInformation);
+        User user = new User(userName, passHash, personalInformation, preferredCurrency);
         if(Database.getDatabase().userExists(user.getName())){
             return "Existing username";
         } else {

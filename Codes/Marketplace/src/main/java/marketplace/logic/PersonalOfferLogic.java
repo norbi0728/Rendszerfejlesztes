@@ -36,7 +36,7 @@ public class PersonalOfferLogic {
     public static void main(String[] args) throws InterruptedException {
         Integer passHash = "P@ssw0rd".hashCode();
         PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail");
-        List<Listing> myOffers = new PersonalOfferLogic().getPersonalisedOffer(new User("ItsMe", passHash.toString(), mine));
+        List<Listing> myOffers = new PersonalOfferLogic().getPersonalisedOffer(new User("ItsMe", passHash.toString(), mine, "HUF"));
         ki(myOffers);
     }
 }
