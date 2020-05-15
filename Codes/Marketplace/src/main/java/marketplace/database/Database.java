@@ -75,14 +75,13 @@ public class Database {
         User user = null;
         try {
             ResultSet userResultSet = connection.createStatement().executeQuery(
-                    "SELECT PASSWORD_HASH, PREFERRED_CURRENCY" +
+                    "SELECT PASSWORD_HASH " +
                             " FROM USERS" +
                             " WHERE NAME = '" + userName + "'");
             userResultSet.first();
             String passwordHash = userResultSet.getString("PASSWORD_HASH");
-            String preferredCurrency = userResultSet.getString("PREFERRED_CURRENCY");
             user = new User(userName, passwordHash, getPersonalInformation(userName),
-                    getStatistics(userName),getListings(userName), preferredCurrency);
+                    getStatistics(userName), getListings(userName));
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -102,9 +101,8 @@ public class Database {
 
                 String userName = userResultSet.getString("NAME");
                 String passwordHash = userResultSet.getString("PASSWORD_HASH");
-                String preferredCurrency = userResultSet.getString("PREFERRED_CURRENCY");
                 resultList.add(new User(userName, passwordHash, getPersonalInformation(userName),
-                        getStatistics(userName), getListings(userName), preferredCurrency));
+                        getStatistics(userName), getListings(userName)));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -119,7 +117,8 @@ public class Database {
                     "LAST_NAME = ?," +
                     "ADDRESS = ?, " +
                     "PHONE = ?, " +
-                    "EMAIL = ? " +
+                    "EMAIL = ?, " +
+                    "PREFERRED_CURRENCY = ? " +
                     "WHERE USER_NAME = '" + user.getName() + "'";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -128,6 +127,7 @@ public class Database {
             preparedStatement.setString(3, user.getPersonalInformation().getAddress());
             preparedStatement.setString(4, user.getPersonalInformation().getPhone());
             preparedStatement.setString(5, user.getPersonalInformation().getEmail());
+            preparedStatement.setString(6, user.getPersonalInformation().getPreferredCurrency());
 
             preparedStatement.executeUpdate();
         }catch (Exception e){
@@ -172,23 +172,24 @@ public class Database {
     }
     public void addUser(User user) {
         try {
-            String sql = "INSERT INTO USERS (NAME, PASSWORD_HASH, PREFERRED_CURRENCY) VALUES(?, ?);"
+            String sql = "INSERT INTO USERS (NAME, PASSWORD_HASH) VALUES(?, ?);"
                     + "INSERT INTO PERSONAL_INFORMATIONS (USER_NAME, FIRST_NAME," +
                     " LAST_NAME, ADDRESS," +
-                    " PHONE, EMAIL) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+                    " PHONE, EMAIL, PREFERRED_CURRENCY) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPasswordHash());
-            preparedStatement.setString(3, user.getPreferredCurrency());
 
-            preparedStatement.setString(4, user.getName()); //username
-            preparedStatement.setString(5, user.getPersonalInformation().getFirstName());
-            preparedStatement.setString(6, user.getPersonalInformation().getLastName());
-            preparedStatement.setString(7, user.getPersonalInformation().getAddress());
-            preparedStatement.setString(8, user.getPersonalInformation().getPhone());
-            preparedStatement.setString(9, user.getPersonalInformation().getEmail());
+
+            preparedStatement.setString(3, user.getName()); //username
+            preparedStatement.setString(4, user.getPersonalInformation().getFirstName());
+            preparedStatement.setString(5, user.getPersonalInformation().getLastName());
+            preparedStatement.setString(6, user.getPersonalInformation().getAddress());
+            preparedStatement.setString(7, user.getPersonalInformation().getPhone());
+            preparedStatement.setString(8, user.getPersonalInformation().getEmail());
+            preparedStatement.setString(9, user.getPersonalInformation().getPreferredCurrency());
 
             preparedStatement.executeUpdate();
             addUserStatistics(user);
@@ -222,6 +223,7 @@ public class Database {
         String address = "";
         String phone = "";
         String email = "";
+        String preferredCurrency = "";
         try {
             personalInformationResultSet = connection.createStatement().executeQuery(
                     "SELECT *" +
@@ -235,11 +237,12 @@ public class Database {
             address = personalInformationResultSet.getString("ADDRESS");
             phone = personalInformationResultSet.getString("PHONE");
             email = personalInformationResultSet.getString("EMAIL");
+            preferredCurrency = personalInformationResultSet.getString("PREFERRED_CURRENCY");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new PersonalInformation(firstName, lastName, address, phone, email);
+        return new PersonalInformation(firstName, lastName, address, phone, email, preferredCurrency);
     }
 
     /**LISTING RELATED STUFF*/

@@ -96,13 +96,9 @@ public class Service {
             if(authenticationService.validateKey(securityKey)){
                 User user = new User();
                 user.setName(users.get(securityKey));
-                user.setPersonalInformation(new PersonalInformation(
-                        ctx.queryParam("firstName"),
-                        ctx.queryParam("lastName"),
-                        ctx.queryParam("address"),
-                        ctx.queryParam("phone"),
-                        ctx.queryParam("email")
-                ));
+                user.setPersonalInformation(
+                        ctx.bodyAsClass(PersonalInformation.class)
+                );
                 ctx.header("Server-Response", userManagement.setPersonalInformations(user));
             }
         });
