@@ -385,10 +385,12 @@ public class Database {
         List<Picture> itemPictures = item.getPictures();
         List<Bid> bids = getListingByID(id).getBids();
         try {
-            for (Picture picture: itemPictures){
-                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
-                connection.createStatement().execute(sql);
-            }
+//            for (Picture picture: itemPictures){
+//                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
+//                connection.createStatement().execute(sql);
+//            }
+            String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + item.getId();
+            connection.createStatement().execute(deletePictures);
             for (Bid bid: bids){
                 String sql = "DELETE FROM SALE WHERE BID_ID = " + bid.getId();
                 connection.createStatement().execute(sql);
@@ -437,27 +439,30 @@ public class Database {
                 connection.createStatement().executeUpdate(featureUpdate);
             }
 
-            for(Picture picture: listing.getItem().getPictures()) {
-                boolean isAlreadyStored = false;
-                for (Picture oldPicture : getItemPictures(listing.getItem().getId())) {
-                    if (Arrays.equals(picture.getData(), oldPicture.getData())) {
-                        isAlreadyStored = true;
-                        break;
-                    }
-                }
-                if (!isAlreadyStored) {
-                    String pictureInsert = "INSERT INTO ITEM_PICTURES (ITEM_ID, PICTURE) " +
-                            "VALUES(?, ?)";
-                    PreparedStatement preparedStatement = connection.prepareStatement(pictureInsert);
+//            for(Picture picture: listing.getItem().getPictures()) {
+//                boolean isAlreadyStored = false;
+//                for (Picture oldPicture : getItemPictures(listing.getItem().getId())) {
+//                    if (Arrays.equals(picture.getData(), oldPicture.getData())) {
+//                        isAlreadyStored = true;
+//                        break;
+//                    }
+//                }
+//                if (!isAlreadyStored) {
+//                    String pictureInsert = "INSERT INTO ITEM_PICTURES (ITEM_ID, PICTURE) " +
+//                            "VALUES(?, ?)";
+//                    PreparedStatement preparedStatement = connection.prepareStatement(pictureInsert);
+//
+//                    preparedStatement.setInt(1, listing.getItem().getId());
+//                    preparedStatement.setBytes(2, picture.getData());
+//
+//                    preparedStatement.executeUpdate();
+//                }
+//            }
 
-                    preparedStatement.setInt(1, listing.getItem().getId());
-                    preparedStatement.setBytes(2, picture.getData());
-
-                    preparedStatement.executeUpdate();
-                }
-            }
-
-
+            String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + listing.getItem().getId();
+            connection.createStatement().executeUpdate(deletePictures);
+            System.out.println(getItemPictures(listing.getItem().getId()).size());
+            addItemPictures(listing.getItem());
             connection.createStatement().executeUpdate(itemUpdate);
             connection.createStatement().executeUpdate(listingUpdate);
         }catch (Exception e){
@@ -945,5 +950,7 @@ public class Database {
         listing.getItem().addPicture(picture3);
 
         database.updateListing(listing);
+
+
     }
 }
