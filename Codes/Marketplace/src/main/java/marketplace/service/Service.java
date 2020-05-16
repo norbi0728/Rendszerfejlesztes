@@ -1,10 +1,7 @@
 package marketplace.service;
 
 import io.javalin.Javalin;
-import marketplace.logic.BidLogic;
-import marketplace.logic.ListingLogic;
-import marketplace.logic.LoginReg;
-import marketplace.logic.UserManagement;
+import marketplace.logic.*;
 import marketplace.model.Listing;
 import marketplace.model.PersonalInformation;
 import marketplace.model.User;
@@ -14,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Service {
+    private PersonalOfferLogic personalOfferLogic;
     private BidLogic bidLogic;
     private UserManagement userManagement;
     private LoginReg loginReg;
@@ -22,6 +20,7 @@ public class Service {
     private Map<String, String> users;//we need to identify the users, so map their security key to their name
 
     public Service() {
+        this.personalOfferLogic = new PersonalOfferLogic();
         this.bidLogic = new BidLogic();
         this.userManagement = new UserManagement();
         this.listingLogic = new ListingLogic();
@@ -35,12 +34,17 @@ public class Service {
 
         app.post("/login", ctx -> {
             String username = ctx.queryParam("username");
-            String securityKey = authenticationService.createNewSecurityKey(10, 2);
-            users.put(securityKey, username);
-            ctx.header("Server-Response", loginReg.login(username, ctx.queryParam("passwordHash")));
-            ctx.result(securityKey);
-                }
-           );
+            String result = loginReg.login(username, ctx.queryParam("passwordHash"));
+            if (result.equals("Correct")) {
+                String securityKey = authenticationService.createNewSecurityKey(10, 2);
+                users.put(securityKey, username);
+                ctx.header("Server-Response", result);
+                ctx.result(securityKey);
+            }
+            else
+                ctx.header("Server-Response", result);
+        });
+
 
         app.post("/registration", ctx ->
                 ctx.result(loginReg.registration(ctx.queryParam("username"), ctx.queryParam("passwordHash"),
@@ -110,6 +114,17 @@ public class Service {
             else
                 ctx.header("Server-Response", "Invalid security key");
         });
+        app.post("/getPersonalOffer",ctx -> {
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                User user = new User();
+                user.setName(users.get(securityKey));
+                ctx.json(personalOfferLogic.getPersonalisedOffer(user));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
+
 
     }
 

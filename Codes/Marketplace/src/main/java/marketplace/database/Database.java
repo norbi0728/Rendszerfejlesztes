@@ -50,7 +50,7 @@ public class Database {
      * You need to make sure that no such user exists yet.
      */
 
-    private Statistics getStatistics(String userName) {
+    public Statistics getStatistics(String userName) {
         Statistics statistics = new Statistics();
         ResultSet statResultSet;
         try {
@@ -866,5 +866,7 @@ public class Database {
 //        user.setPersonalInformation(new PersonalInformation("testFirstName3", "testLastName3",
 //                "testAddress3", "06301111111", "test@mail.com"));
 //        database.updatePersonalInformations(user);
+
+        System.out.println("testPw2".hashCode());
     }
 }

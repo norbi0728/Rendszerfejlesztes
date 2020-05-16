@@ -55,7 +55,7 @@ public class ListingLogic {
         List<Listing> allListings = db.getAllListing();
         List<Listing> matchingListings = new ArrayList<Listing>();
         allListings.forEach(temp -> {
-            if(temp.getItem().getCategory() == category){
+            if(temp.getItem().getCategory().equals(category)){
                 matchingListings.add(temp);
             }
         });

@@ -38,5 +38,8 @@ public class PersonalOfferLogic {
         PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail", "HUF");
         List<Listing> myOffers = new PersonalOfferLogic().getPersonalisedOffer(new User("ItsMe", passHash.toString(), mine));
         ki(myOffers);
+        for(Listing l: myOffers){
+            System.out.println(l.getAdvertiser());
+        }
     }
 }
