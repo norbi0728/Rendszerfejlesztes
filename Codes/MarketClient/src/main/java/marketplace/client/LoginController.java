@@ -35,6 +35,8 @@ public class LoginController {
                 }
             });
         }).start();
+
+        loginScreen.app.createPersonalOfferPane();
     }
 
     public void registerPressed() {

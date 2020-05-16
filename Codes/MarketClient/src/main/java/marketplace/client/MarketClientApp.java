@@ -9,11 +9,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 public class MarketClientApp extends Application {
     Stage stage;
@@ -54,6 +57,29 @@ public class MarketClientApp extends Application {
         menu.getChildren().add(userListingsButton);
 
         return menu;
+    }
+
+    void createPersonalOfferPane(){
+        HBox hbox = new HBox();
+        ScrollPane scrollPane = new ScrollPane();
+        new Thread(() -> {
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            List<Listing> personalOffer = controller.getPersonalOffer();
+            Platform.runLater(() -> {
+                for (Listing userListing : personalOffer) {
+                    SmallListingView smallListingView = new SmallListingView(userListing);
+                    smallListingView.setOnMouseClicked(event -> System.out.println(userListing.getTitle()));
+                    hbox.getChildren().add(smallListingView);
+
+                }
+            });
+        }).start();
+        scrollPane.setContent(hbox);
+        root.setBottom(scrollPane);
     }
 
     private Button createMenuButton(String title, EventHandler<ActionEvent> handler) {

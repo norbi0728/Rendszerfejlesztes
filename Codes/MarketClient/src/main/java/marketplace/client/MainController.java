@@ -30,4 +30,9 @@ public class MainController {
         List<Listing> userListings = restClient.getUserListings();
         return userListings;
     }
+
+    public List<Listing> getPersonalOffer(){
+        List<Listing> personalOffer = restClient.getPersonalOffer();
+        return personalOffer;
+    }
 }
