@@ -50,7 +50,7 @@ public class Database {
      * You need to make sure that no such user exists yet.
      */
 
-    private Statistics getStatistics(String userName) {
+    public Statistics getStatistics(String userName) {
         Statistics statistics = new Statistics();
         ResultSet statResultSet;
         try {
@@ -75,13 +75,13 @@ public class Database {
         User user = null;
         try {
             ResultSet userResultSet = connection.createStatement().executeQuery(
-                    "SELECT PASSWORD_HASH" +
+                    "SELECT PASSWORD_HASH " +
                             " FROM USERS" +
                             " WHERE NAME = '" + userName + "'");
             userResultSet.first();
             String passwordHash = userResultSet.getString("PASSWORD_HASH");
             user = new User(userName, passwordHash, getPersonalInformation(userName),
-                    getStatistics(userName),getListings(userName));
+                    getStatistics(userName), getListings(userName));
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -109,6 +109,30 @@ public class Database {
         }
 
         return resultList;
+    }
+    public void updatePersonalInformations(User user){
+        try {
+            String sql = "UPDATE PERSONAL_INFORMATIONS " +
+                    "SET FIRST_NAME = ?," +
+                    "LAST_NAME = ?," +
+                    "ADDRESS = ?, " +
+                    "PHONE = ?, " +
+                    "EMAIL = ?, " +
+                    "PREFERRED_CURRENCY = ? " +
+                    "WHERE USER_NAME = '" + user.getName() + "'";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getPersonalInformation().getFirstName());
+            preparedStatement.setString(2, user.getPersonalInformation().getLastName());
+            preparedStatement.setString(3, user.getPersonalInformation().getAddress());
+            preparedStatement.setString(4, user.getPersonalInformation().getPhone());
+            preparedStatement.setString(5, user.getPersonalInformation().getEmail());
+            preparedStatement.setString(6, user.getPersonalInformation().getPreferredCurrency());
+
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void updateUserStatistics(User user){
         try {
@@ -151,12 +175,13 @@ public class Database {
             String sql = "INSERT INTO USERS (NAME, PASSWORD_HASH) VALUES(?, ?);"
                     + "INSERT INTO PERSONAL_INFORMATIONS (USER_NAME, FIRST_NAME," +
                     " LAST_NAME, ADDRESS," +
-                    " PHONE, EMAIL) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+                    " PHONE, EMAIL, PREFERRED_CURRENCY) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPasswordHash());
+
 
             preparedStatement.setString(3, user.getName()); //username
             preparedStatement.setString(4, user.getPersonalInformation().getFirstName());
@@ -164,6 +189,7 @@ public class Database {
             preparedStatement.setString(6, user.getPersonalInformation().getAddress());
             preparedStatement.setString(7, user.getPersonalInformation().getPhone());
             preparedStatement.setString(8, user.getPersonalInformation().getEmail());
+            preparedStatement.setString(9, user.getPersonalInformation().getPreferredCurrency());
 
             preparedStatement.executeUpdate();
             addUserStatistics(user);
@@ -197,6 +223,7 @@ public class Database {
         String address = "";
         String phone = "";
         String email = "";
+        String preferredCurrency = "";
         try {
             personalInformationResultSet = connection.createStatement().executeQuery(
                     "SELECT *" +
@@ -210,11 +237,12 @@ public class Database {
             address = personalInformationResultSet.getString("ADDRESS");
             phone = personalInformationResultSet.getString("PHONE");
             email = personalInformationResultSet.getString("EMAIL");
+            preferredCurrency = personalInformationResultSet.getString("PREFERRED_CURRENCY");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new PersonalInformation(firstName, lastName, address, phone, email);
+        return new PersonalInformation(firstName, lastName, address, phone, email, preferredCurrency);
     }
 
     /**LISTING RELATED STUFF*/
@@ -419,6 +447,14 @@ public class Database {
             e.printStackTrace();
         }
     }
+    public void removeBid(int bidID){
+        try {
+            connection.createStatement().execute("DELETE FROM BIDS WHERE ID = " + bidID);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public List<Bid> getBids(int listingID){
         List<Bid> bids = new ArrayList<>();
         String userName = "";
@@ -506,24 +542,6 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
-    /*this function maps the feature ids to the item features
-    we only store the feature name in the Item class*/
-    private Map<String, Integer> getFeatureIDs() {
-        Map<String, Integer> features = new HashMap<>();
-        try {
-            ResultSet resultSet = connection.createStatement().executeQuery(
-                    "SELECT ID, NAME " +
-                            "FROM FEATURES"
-            );
-            while (resultSet.next()) {
-                features.put(resultSet.getString("NAME"), resultSet.getInt("ID"));
-            }
-
-        } catch (SQLException e) {
-            e.getErrorCode();
-        }
-        return features;
-    }
 
     private int getCategoryID(String category) {
         int categoryID = 0;
@@ -539,34 +557,18 @@ public class Database {
         return categoryID;
     }
 
-    /*to add the dynamically created features*/
-    public void addFeature(String featureName) {
-        try {
-            String sql = "INSERT INTO FEATURES (NAME)" +
-                    " VALUES(?)";
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, featureName);
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /*this function adds the dynamic features to the item*/
     private void addItemFeatures(Item item) {
-        Map<String, Integer> featureIDs = getFeatureIDs();
         String sql = "UPDATE ITEMS " +
-                " SET FEATURE_ID = ?," +
+                " SET FEATURE = ?," +
                 "FEATURE_VALUE = ? " +
                 "WHERE ID = " + item.getId();
         try {
             for (Map.Entry<String, String> feature : item.getFeatures().entrySet()) {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-                preparedStatement.setInt(1, featureIDs.get(feature.getKey()));
+                preparedStatement.setString(1, feature.getKey());
                 preparedStatement.setString(2, feature.getValue());
 
                 preparedStatement.executeUpdate();
@@ -613,14 +615,13 @@ public class Database {
         Map<String, String> features = new HashMap<>();
         try {
             ResultSet featureResultSet = connection.createStatement().executeQuery(
-                    "SELECT F.NAME, FEATURE_VALUE " +
-                            "FROM ITEMS I " +
-                            "JOIN FEATURES F on I.FEATURE_ID = F.ID " +
-                            "WHERE I.ID = " + itemID
+                    "SELECT FEATURE, FEATURE_VALUE " +
+                            "FROM ITEMS " +
+                            "WHERE ID = " + itemID
             );
 
             while (featureResultSet.next()) {
-                String name = featureResultSet.getString("NAME");
+                String name = featureResultSet.getString("FEATURE");
                 String value = featureResultSet.getString("FEATURE_VALUE");
                 features.put(name, value);
             }
@@ -861,5 +862,11 @@ public class Database {
 //        }
 //        Listing listing = database.getListingByID(43);
 //        database.addSale(listing.mostRecentBid().getId());
+//        User user = database.getUser("testUser2");
+//        user.setPersonalInformation(new PersonalInformation("testFirstName3", "testLastName3",
+//                "testAddress3", "06301111111", "test@mail.com"));
+//        database.updatePersonalInformations(user);
+
+        System.out.println("testPw2".hashCode());
     }
 }

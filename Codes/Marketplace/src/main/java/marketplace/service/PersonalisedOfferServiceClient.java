@@ -1,6 +1,7 @@
 package marketplace.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import marketplace.database.Database;
 import marketplace.model.User;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,7 +20,7 @@ public class PersonalisedOfferServiceClient {
 
     public Map<String, Integer> getDispersion(User user){
         Map<String, Integer> dispersion = new HashMap<>();
-        stat = user.getStatistics().getStats();
+        stat = Database.getDatabase().getStatistics(user.getName()).getStats();
 
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
