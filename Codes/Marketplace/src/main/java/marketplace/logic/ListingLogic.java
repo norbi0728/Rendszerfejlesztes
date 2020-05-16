@@ -32,6 +32,10 @@ public class ListingLogic {
         return listings;
     }
 
+    public List<Listing> listListings(){
+        List<Listing> listings = Database.getDatabase().getAllListing();
+        return listings;
+    }
     /*
     * Return those listings which category contained in the categorise parameter list
     * */

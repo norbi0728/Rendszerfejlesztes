@@ -60,4 +60,13 @@ public class Item {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setFeature(String name, String value){
+        features.put(name, value);
+    }
+
+    public void addPicture(Picture picture){
+        if (!pictures.contains(picture))
+            pictures.add(picture);
+    }
 }

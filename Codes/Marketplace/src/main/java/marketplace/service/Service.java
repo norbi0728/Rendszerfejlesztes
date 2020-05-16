@@ -8,6 +8,7 @@ import marketplace.model.User;
 import marketplace.security.AuthenticationService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Service {
@@ -61,6 +62,43 @@ public class Service {
                ctx.header("Server-Response", "Invalid security key");
         });
 
+        app.post("/getAllListings", ctx ->{
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+               ctx.json(listingLogic.listListings());
+            }
+            else
+               ctx.header("Server-Response", "Invalid security key");
+        });
+
+        app.post("/getListingsByCategory", ctx ->{
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                List<String> categories = ctx.bodyAsClass(List.class);
+               ctx.json(listingLogic.listByCategories(categories));
+            }
+            else
+               ctx.header("Server-Response", "Invalid security key");
+        });
+
+        app.post("/getListingsByBidOrNot", ctx ->{
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                ctx.json(listingLogic.listByBidOrNot(Integer.valueOf(ctx.queryParam("bidOrNot"))));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
+
+        app.post("/getListingsByUser", ctx ->{
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                ctx.json(listingLogic.listByUser(ctx.queryParam("userName")));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
+
         app.post("/addListing", ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -78,6 +116,14 @@ public class Service {
                                 Integer.valueOf(ctx.queryParam("listingID"))));
             }
         });
+
+//        app.post("/updateListing",ctx -> {
+//            String securityKey = ctx.queryParam("securityKey");
+//            if(authenticationService.validateKey(securityKey)){
+//                listingLogic.updateListing(ctx.bodyAsClass(Listing.class));
+//            }
+//        });
+
 //        app.post("/removeBid",ctx -> {
 //            String securityKey = ctx.queryParam("securityKey");
 //            if(authenticationService.validateKey(securityKey)){
@@ -106,10 +152,18 @@ public class Service {
                 ctx.header("Server-Response", userManagement.setPersonalInformations(user));
             }
         });
-        app.post("/getPersonalInformation",ctx -> {
+        app.post("/getOwnPersonalInformation",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
                 ctx.json(userManagement.getPersonalInformations(users.get(securityKey)));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
+        app.post("/getPersonalInformation",ctx -> {
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                ctx.json(userManagement.getPersonalInformations(ctx.queryParam("userName")));
             }
             else
                 ctx.header("Server-Response", "Invalid security key");
