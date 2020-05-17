@@ -28,7 +28,7 @@ public class ListingEditor extends VBox {
     Listing listingToBeEdited;
     private Image image;
     private Stage stage;
-    private Consumer<Listing> onNewListingReady;
+    private Consumer<Listing> onSaveClicked;
 
     private TextField titleField;
     private TextField nameField;
@@ -59,7 +59,7 @@ public class ListingEditor extends VBox {
         getChildren().add(titleLabel);
 
         GridPane gridPane = new GridPane();
-        //gridPane.setGridLinesVisible(true);
+        gridPane.setGridLinesVisible(true);
 
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setPadding(new Insets(40, 40, 40, 40));
@@ -117,6 +117,9 @@ public class ListingEditor extends VBox {
         fixedPriceField = new TextField();
         CurrencyChanger.getInstance().addTextField(fixedPriceField);
         gridPane.add(fixedPriceField, 4, 5);
+        Label fixedPriceCurrencyLabel = new Label("Ft");
+        CurrencyChanger.getInstance().addCurrencyLabel(fixedPriceCurrencyLabel);
+        gridPane.add(fixedPriceCurrencyLabel, 5, 5);
 
         gridPane.add(new Label("Lejárati idõ:"), 0, 7);
         expirationDatePicker = new DatePicker();
@@ -129,8 +132,11 @@ public class ListingEditor extends VBox {
 
         gridPane.add(new Label("Kezdõár:"), 0, 8);
         startingBidField = new TextField();
+        CurrencyChanger.getInstance().addTextField(startingBidField);
         gridPane.add(startingBidField, 1, 8);
-        gridPane.add(new Label("Ft"), 2, 8);
+        Label startingBidCurrencyLabel = new Label("Ft");
+        CurrencyChanger.getInstance().addCurrencyLabel(startingBidCurrencyLabel);
+        gridPane.add(startingBidCurrencyLabel, 2, 8);
 
         gridPane.add(new Label("Lépésköz:"), 3, 8);
         incrementField = new TextField();
@@ -150,12 +156,12 @@ public class ListingEditor extends VBox {
         shippingMethodChoiceBox.getItems().setAll(ShippingMethod.values());
         gridPane.add(shippingMethodChoiceBox, 4, 9);
 
-        Button newListingOKButton = new Button("Új hirdetés feladása");
-        newListingOKButton.setOnAction((event) -> {
+        Button saveButton = new Button("Mentés");
+        saveButton.setOnAction((event) -> {
             Listing newListing = compileNewListing();
-            onNewListingReady.accept(newListing);
+            onSaveClicked.accept(newListing);
         });
-        gridPane.add(newListingOKButton, 0, 10);
+        gridPane.add(saveButton, 0, 10);
 
         getChildren().add(gridPane);
 
@@ -220,8 +226,8 @@ public class ListingEditor extends VBox {
         return newListing;
     }
 
-    public void setOnNewListingReady(Consumer<Listing> consumer) {
-        this.onNewListingReady = consumer;
+    public void setOnSaveClicked(Consumer<Listing> consumer) {
+        this.onSaveClicked = consumer;
     }
 
     private void chooseImage() {

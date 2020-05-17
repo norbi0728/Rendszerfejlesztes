@@ -1,6 +1,7 @@
 package marketplace.client;
 
 import marketplace.client.model.Listing;
+import marketplace.client.model.PersonalInformation;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
@@ -91,5 +92,27 @@ public class RestClient {
 
         Response response = invocationBuilder.post(null);
         return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+    }
+
+    public PersonalInformation getOwnPersonalInformation() {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("getOwnPersonalInformation")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.post(null);
+        return response.readEntity(PersonalInformation.class);
+    }
+
+    public String setPersonalInformation(PersonalInformation personalInformation) {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("setPersonalInformation")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.post(Entity.entity(personalInformation, MediaType.APPLICATION_JSON));
+        return response.getHeaderString("Server-Response");
     }
 }

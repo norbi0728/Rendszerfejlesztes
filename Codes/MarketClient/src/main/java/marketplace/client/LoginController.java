@@ -55,6 +55,7 @@ public class LoginController {
     private void startMainWindow() {
         loginScreen.app.stage.show();
         loginScreen.scene.getWindow().hide();
+        loginScreen.app.controller.setPreferredCurrency();
     }
 
     private String hash(String s) {

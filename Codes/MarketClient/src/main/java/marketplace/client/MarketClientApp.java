@@ -8,8 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -20,6 +18,8 @@ import marketplace.ManyListingsPane;
 import marketplace.client.currencycomponents.CurrencyChanger;
 import marketplace.client.model.Listing;
 import marketplace.client.currencycomponents.Currency;
+import marketplace.client.model.PersonalInformation;
+
 import java.util.List;
 
 import static java.lang.Thread.sleep;
@@ -28,7 +28,7 @@ public class MarketClientApp extends Application {
     Stage stage;
     private Scene scene;
     private BorderPane root;
-    private MainController controller;
+    public MainController controller;
 
     private ListingEditor listingEditor;
     private Region userListingsPane;
@@ -82,7 +82,7 @@ public class MarketClientApp extends Application {
 
     }
 
-    void createPersonalOfferPane(){
+    void createPersonalOfferPane() {
         HBox hbox = new HBox();
         ScrollPane scrollPane = new ScrollPane();
         new Thread(() -> {
@@ -124,6 +124,7 @@ public class MarketClientApp extends Application {
     private Pane createSettingsPane() {
         VBox vBox = new VBox();
         GridPane gridPane = new GridPane();
+        gridPane.setGridLinesVisible(true);
 
         TextField firstNameField = new TextField();
         TextField lastNameField = new TextField();
@@ -131,6 +132,7 @@ public class MarketClientApp extends Application {
         TextField phoneField = new TextField();
         TextField emailField = new TextField();
         ChoiceBox<Currency> currencyChoiceBox;
+        Button saveButton;
 
         gridPane.add(new Label("Keresztnév:"), 0, 3);
         gridPane.add(firstNameField, 1, 3);
@@ -156,6 +158,22 @@ public class MarketClientApp extends Application {
         }));
         gridPane.add(currencyChoiceBox, 3, 3);
 
+        saveButton = new Button("Mentés");
+        saveButton.setOnAction(event -> {
+            PersonalInformation newPersonalInformation = new PersonalInformation(
+                    firstNameField.getText(),
+                    lastNameField.getText(),
+                    addressField.getText(),
+                    phoneField.getText(),
+                    emailField.getText(),
+                    currencyChoiceBox.getValue().toString()
+            );
+            new Thread(() -> {
+                controller.setPersonalInformation(newPersonalInformation);
+            }).start();
+        });
+        gridPane.add(saveButton, 0, 8);
+
         vBox.getChildren().add(gridPane);
         return vBox;
     }
@@ -164,7 +182,7 @@ public class MarketClientApp extends Application {
         if (listingEditor == null) {
             listingEditor = new ListingEditor(stage, null);
             listingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
-            listingEditor.setOnNewListingReady((newListing) -> {
+            listingEditor.setOnSaveClicked((newListing) -> {
                 controller.addListing(newListing);
             });
         }
@@ -174,7 +192,7 @@ public class MarketClientApp extends Application {
     public void openListingForEditing(Listing listing) {
         listingEditor = new ListingEditor(stage, listing);
         listingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
-        listingEditor.setOnNewListingReady((newListing) -> {
+        listingEditor.setOnSaveClicked((newListing) -> {
             controller.updateListing(newListing);
         });
         root.setCenter(listingEditor);

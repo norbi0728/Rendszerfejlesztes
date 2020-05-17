@@ -1,12 +1,17 @@
 package marketplace.client;
 
+import javafx.application.Platform;
+import marketplace.client.currencycomponents.Currency;
+import marketplace.client.currencycomponents.CurrencyChanger;
 import marketplace.client.model.Listing;
+import marketplace.client.model.PersonalInformation;
 
 import java.util.List;
 
 public class MainController {
     private MarketClientApp app;
     private RestClient restClient = RestClient.getRestClient();
+
     public MainController(MarketClientApp app) {
         this.app = app;
     }
@@ -40,8 +45,28 @@ public class MainController {
     public void updateListing(Listing newListing) {
         // TODO Call api
     }
-    public List<Listing> getPersonalOffer(){
+
+    public List<Listing> getPersonalOffer() {
         List<Listing> personalOffer = restClient.getPersonalOffer();
         return personalOffer;
+    }
+
+    public void setPersonalInformation(PersonalInformation newPersonalInformation) {
+        restClient.setPersonalInformation(newPersonalInformation);
+    }
+
+    public PersonalInformation getOwnPersonalInformation() {
+        return restClient.getOwnPersonalInformation();
+    }
+
+    public void setPreferredCurrency() {
+        new Thread(() -> {
+            PersonalInformation ownPersonalInformation = getOwnPersonalInformation();
+            Currency preferredCurrency = Currency.forName(ownPersonalInformation.getPreferredCurrency());
+            if (preferredCurrency == null) return;
+            Platform.runLater(() -> {
+                CurrencyChanger.getInstance().changeDisplayCurrency(preferredCurrency);
+            });
+        }).start();
     }
 }
