@@ -36,4 +36,8 @@ public class MainController {
     public void updateListing(Listing newListing) {
         // TODO Call api
     }
+    public List<Listing> getPersonalOffer(){
+        List<Listing> personalOffer = restClient.getPersonalOffer();
+        return personalOffer;
+    }
 }
