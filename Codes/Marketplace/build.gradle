@@ -9,6 +9,10 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://mvnrepository.com/artifact/javax.activation/activation"
+    }
+
 }
 
 dependencies {
@@ -21,5 +25,8 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.3'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3']
     )
-    compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
+    compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
+    compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.6'
+    compile group: 'javax.activation', name: 'activation', version: '1.1.1'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
 }
