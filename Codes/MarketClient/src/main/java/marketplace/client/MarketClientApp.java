@@ -21,6 +21,8 @@ import marketplace.client.currencycomponents.Currency;
 import marketplace.client.model.PersonalInformation;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static java.lang.Thread.sleep;
 
@@ -34,6 +36,7 @@ public class MarketClientApp extends Application {
     private Region userListingsPane;
     private Region allListingsPane;
     private Pane settingsPane;
+    private ScrollPane ongoingAuctionsPane;
 
     @Override
     public void init() throws Exception {
@@ -87,22 +90,77 @@ public class MarketClientApp extends Application {
         ScrollPane scrollPane = new ScrollPane();
         new Thread(() -> {
             try {
-                sleep(1000);
+                sleep(1200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             List<Listing> personalOffer = controller.getPersonalOffer();
             Platform.runLater(() -> {
-                for (Listing userListing : personalOffer) {
-                    SmallListingView smallListingView = new SmallListingView(userListing);
-                    smallListingView.setOnMouseClicked(event -> System.out.println(userListing.getTitle()));
+                for (Listing offer : personalOffer) {
+                    SmallListingView smallListingView = new SmallListingView(offer);
+                    smallListingView.setOnMouseClicked(event -> openListingDisplay(offer));
                     hbox.getChildren().add(smallListingView);
-
                 }
             });
         }).start();
+        //scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setContent(hbox);
         root.setBottom(scrollPane);
+    }
+    void refreshOngoingAuctions(){
+        TimerTask refreshOngoingAuctionsPane = new TimerTask() {
+            @Override
+            public void run() {
+                VBox vbox = new VBox();
+                Label title = new Label("Folyamatban lévõ aukciók");
+                title.getStyleClass().add("title-label");
+                vbox.getChildren().add(title);
+
+                new Thread(() -> {
+                    List<Listing> ongoingAuctions = controller.getOngoingAuctions();
+                    Platform.runLater(() -> {
+                        for (Listing ongoing : ongoingAuctions) {
+                            OngoingAuctionStateView ongoingAuctionStateView
+                                    = new OngoingAuctionStateView(ongoing);
+                            ongoingAuctionStateView.setOnMouseClicked(event -> openListingDisplay(ongoing));
+                            vbox.getChildren().add(ongoingAuctionStateView);
+                        }
+                        ongoingAuctionsPane.setContent(vbox);
+                    });
+                }).start();
+            }
+        };
+
+        Timer refreshTimer = new Timer();
+        refreshTimer.schedule(refreshOngoingAuctionsPane, 10000, 10000);
+    }
+    void createOngoingAuctionsPane(){
+        VBox vbox = new VBox();
+
+        Label title = new Label("Folyamatban lévõ aukciók");
+        title.getStyleClass().add("title-label");
+        vbox.getChildren().add(title);
+
+        ongoingAuctionsPane = new ScrollPane();
+
+        new Thread(() -> {
+            try {
+                sleep(1200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            List<Listing> ongoingAuctions = controller.getOngoingAuctions();
+            Platform.runLater(() -> {
+                for (Listing ongoing : ongoingAuctions) {
+                    OngoingAuctionStateView ongoingAuctionStateView
+                            = new OngoingAuctionStateView(ongoing);
+                    ongoingAuctionStateView.setOnMouseClicked(event -> openListingDisplay(ongoing));
+                    vbox.getChildren().add(ongoingAuctionStateView);
+                }
+            });
+        }).start();
+        ongoingAuctionsPane.setContent(vbox);
+        root.setRight(ongoingAuctionsPane);
     }
 
     private Button createMenuButton(String title, EventHandler<ActionEvent> handler) {

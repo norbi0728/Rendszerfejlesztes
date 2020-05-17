@@ -69,4 +69,8 @@ public class MainController {
             });
         }).start();
     }
+    public List<Listing> getOngoingAuctions(){
+        List<Listing> ongoingAuctions = restClient.getOngoingAuctions();
+        return ongoingAuctions;
+    }
 }

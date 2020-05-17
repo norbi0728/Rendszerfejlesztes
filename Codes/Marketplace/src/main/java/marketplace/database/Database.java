@@ -439,26 +439,6 @@ public class Database {
                 connection.createStatement().executeUpdate(featureUpdate);
             }
 
-//            for(Picture picture: listing.getItem().getPictures()) {
-//                boolean isAlreadyStored = false;
-//                for (Picture oldPicture : getItemPictures(listing.getItem().getId())) {
-//                    if (Arrays.equals(picture.getData(), oldPicture.getData())) {
-//                        isAlreadyStored = true;
-//                        break;
-//                    }
-//                }
-//                if (!isAlreadyStored) {
-//                    String pictureInsert = "INSERT INTO ITEM_PICTURES (ITEM_ID, PICTURE) " +
-//                            "VALUES(?, ?)";
-//                    PreparedStatement preparedStatement = connection.prepareStatement(pictureInsert);
-//
-//                    preparedStatement.setInt(1, listing.getItem().getId());
-//                    preparedStatement.setBytes(2, picture.getData());
-//
-//                    preparedStatement.executeUpdate();
-//                }
-//            }
-
             String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + listing.getItem().getId();
             connection.createStatement().executeUpdate(deletePictures);
             System.out.println(getItemPictures(listing.getItem().getId()).size());
@@ -468,6 +448,26 @@ public class Database {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public List<Listing> getOngoingAuctions(String username){
+        List<Listing> ongoing = new ArrayList<>();
+
+        try {
+            String queryOngoing = "SELECT LISTINGS.ID FROM LISTINGS " +
+                    "JOIN BIDS B on LISTINGS.ID = B.LISTING_ID " +
+                    "WHERE B.USER_NAME = '"+ username +"' and EXPIRATION_DATE > DATE";
+
+            ResultSet ongoingRS = connection.createStatement().executeQuery(queryOngoing);
+            while (ongoingRS.next()){
+                ongoing.add(getListingByID(ongoingRS.getInt("ID")));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return ongoing;
     }
 
     public Listing getListingByID(int id){
@@ -924,33 +924,36 @@ public class Database {
 //        user.setPersonalInformation(new PersonalInformation("testFirstName3", "testLastName3",
 //                "testAddress3", "06301111111", "test@mail.com"));
 //        database.updatePersonalInformations(user);
-        Listing listing = database.getListingByID(250);
-        listing.setDescription("subsequently modified2");
-        listing.getItem().setFeature("testFeatureName", "subsequently modified2");
-        File pic1 = new File("test.png");
-        File pic2 = new File("test2.png");
-        File pic3 = new File("white.png");
-        byte[] data1 = new byte[1000];
-        byte[] data2 = new byte[1000];
-        byte[] data3 = new byte[1000];
-        try {
-            data1 = Files.readAllBytes(pic1.toPath());
-            data2 = Files.readAllBytes(pic2.toPath());
-            data3 = Files.readAllBytes(pic3.toPath());
-        }catch (Exception e){
-            e.printStackTrace();
+//        Listing listing = database.getListingByID(250);
+//        listing.setDescription("subsequently modified2");
+//        listing.getItem().setFeature("testFeatureName", "subsequently modified2");
+//        File pic1 = new File("test.png");
+//        File pic2 = new File("test2.png");
+//        File pic3 = new File("white.png");
+//        byte[] data1 = new byte[1000];
+//        byte[] data2 = new byte[1000];
+//        byte[] data3 = new byte[1000];
+//        try {
+//            data1 = Files.readAllBytes(pic1.toPath());
+//            data2 = Files.readAllBytes(pic2.toPath());
+//            data3 = Files.readAllBytes(pic3.toPath());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+//        Picture picture1 = new Picture(data1);
+//        Picture picture2 = new Picture(data2);
+//        Picture picture3 = new Picture(data3);
+//
+//        listing.getItem().addPicture(picture1);
+//        listing.getItem().addPicture(picture2);
+//        listing.getItem().addPicture(picture3);
+//
+//        database.updateListing(listing);
+
+        for (Listing l:database.getOngoingAuctions("testUser2")){
+            System.out.println(l.getCreationDate());
         }
-
-        Picture picture1 = new Picture(data1);
-        Picture picture2 = new Picture(data2);
-        Picture picture3 = new Picture(data3);
-
-        listing.getItem().addPicture(picture1);
-        listing.getItem().addPicture(picture2);
-        listing.getItem().addPicture(picture3);
-
-        database.updateListing(listing);
-
 
     }
 }
