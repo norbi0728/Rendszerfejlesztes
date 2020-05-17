@@ -6,10 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -24,7 +24,7 @@ public class MarketClientApp extends Application {
     private BorderPane root;
     private MainController controller;
 
-    private NewListingForm newListingForm;
+    private ListingEditor listingEditor;
     private Region userListingsPane;
     private FlowPane allListingsPane;
     private Pane settingsPane;
@@ -33,7 +33,7 @@ public class MarketClientApp extends Application {
     public void init() throws Exception {
         controller = new MainController(this);
         root = new BorderPane();
-        root.setStyle("-fx-background-color: orange;");
+        //root.setStyle("-fx-background-color: orange;");
         root.setLeft(createMenu());
     }
 
@@ -123,19 +123,28 @@ public class MarketClientApp extends Application {
     }
 
     public void openNewListingForm() {
-        if (newListingForm == null) {
-            newListingForm = new NewListingForm(stage);
-            newListingForm.setAlignment(Pos.TOP_CENTER);
-            newListingForm.setOnNewListingReady((newListing) -> {
+        if (listingEditor == null) {
+            listingEditor = new ListingEditor(stage, null);
+            listingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
+            listingEditor.setOnNewListingReady((newListing) -> {
                 controller.addListing(newListing);
             });
         }
-        root.setCenter(newListingForm);
+        root.setCenter(listingEditor);
+    }
+
+    public void openListingForEditing(Listing listing) {
+        listingEditor = new ListingEditor(stage, listing);
+        listingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
+        listingEditor.setOnNewListingReady((newListing) -> {
+            controller.updateListing(newListing);
+        });
+        root.setCenter(listingEditor);
     }
 
     public void openUserListingsPane() {
         if (userListingsPane == null) userListingsPane = createUserListingsPanel();
-        userListingsPane.setStyle("-fx-background-color: purple;");
+        //userListingsPane.setStyle("-fx-background-color: purple;");
         root.setCenter(userListingsPane);
         BorderPane.setAlignment(userListingsPane, Pos.CENTER);
     }
@@ -152,11 +161,10 @@ public class MarketClientApp extends Application {
 
     private Region createUserListingsPanel() {
         VBox vBox = new VBox();
-        //vBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        //vBox.setPrefSize(1000, 1000);
-        vBox.setStyle("-fx-background-color: green;");
-        //vBox.setPrefWidth(1000000);
-        vBox.getChildren().add(new Label("Saját hirdetések"));
+        //vBox.setStyle("-fx-background-color: green;");
+        HBox hBox = new HBox();
+        hBox.getChildren().add(new Label("Saját hirdetések"));
+        vBox.getChildren().add(hBox);
         FlowPane flowPane = new FlowPane();
 
         new Thread(() -> {
@@ -165,6 +173,9 @@ public class MarketClientApp extends Application {
                 for (Listing userListing : userListings) {
                     SmallListingView smallListingView = new SmallListingView(userListing);
                     smallListingView.setPadding(new Insets(10, 10, 10, 10)); //TODO not here
+                    smallListingView.setOnMouseClicked((event) -> {
+                        openListingDisplay(userListing);
+                    });
                     flowPane.getChildren().add(smallListingView);
                 }
             });
@@ -177,6 +188,12 @@ public class MarketClientApp extends Application {
         scrollPane.setFitToHeight(true);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         return scrollPane;
+    }
+
+    private void openListingDisplay(Listing listing) {
+        ListingDisplay listingDisplay = new ListingDisplay(listing);
+        listingDisplay.setAlignment(Pos.TOP_CENTER);
+        root.setCenter(listingDisplay);
     }
 
     @Override

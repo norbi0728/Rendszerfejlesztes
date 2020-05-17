@@ -36,7 +36,6 @@ public class SmallListingView extends VBox {
         priceField.setDisable(true);
         CurrencyChanger.getInstance().addTextField(priceField);
         checkBox = new CheckBox();
-
         getChildren().add(titleLabel);
         getChildren().add(imageView);
 
@@ -59,5 +58,9 @@ public class SmallListingView extends VBox {
         }
         int displayPrice = listing.displayPrice();
         priceField.setText(String.valueOf(CurrencyChanger.getInstance().inChosenCurrency(displayPrice)));
+    }
+
+    public boolean isChecked() {
+        return checkBox.isSelected();
     }
 }

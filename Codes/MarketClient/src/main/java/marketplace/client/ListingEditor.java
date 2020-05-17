@@ -24,7 +24,8 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class NewListingForm extends VBox {
+public class ListingEditor extends VBox {
+    Listing listingToBeEdited;
     private Image image;
     private Stage stage;
     private Consumer<Listing> onNewListingReady;
@@ -44,8 +45,9 @@ public class NewListingForm extends VBox {
     private ChoiceBox<ShippingMethod> shippingMethodChoiceBox;
 
 
-    public NewListingForm(Stage stage) {
+    public ListingEditor(Stage stage, Listing listingToBeEdited) {
         this.stage = stage;
+        this.listingToBeEdited = listingToBeEdited;
         Platform.runLater(() -> init());
     }
 
@@ -156,6 +158,30 @@ public class NewListingForm extends VBox {
         gridPane.add(newListingOKButton, 0, 10);
 
         getChildren().add(gridPane);
+
+        if (listingToBeEdited != null) {
+            fillInFields(listingToBeEdited);
+        }
+    }
+
+    private void fillInFields(Listing listing) {
+        titleField.setText(listing.getTitle());
+        nameField.setText(listing.getItem().getName());
+        descriptionArea.setText(listing.getDescription());
+        imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        quantityField.setText(String.valueOf(listing.getQuantity()));
+        expirationDatePicker.setValue(listing.getExpirationDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate());
+        categoryChoiceBox.setValue(Category.forName(listing.getItem().getCategory()));
+        for (Map.Entry<String, String> feature : listing.getItem().getFeatures().entrySet()) {
+            featureLines.addLine(feature.getKey(), feature.getValue());
+        }
+        startingBidField.setText(String.valueOf(listing.getStartingBid()));
+        incrementField.setText(String.valueOf(listing.getIncrement()));
+        fixedPriceField.setText(String.valueOf(listing.getFixedPrice()));
+        paymentMethodChoiceBox.setValue(PaymentMethod.valueOf(listing.getPaymentMethod()));
+        shippingMethodChoiceBox.setValue(ShippingMethod.valueOf(listing.getShippingMethod()));
     }
 
     private Listing compileNewListing() {
@@ -221,11 +247,15 @@ public class NewListingForm extends VBox {
         private List<Pair<TextField, TextField>> featureLines = new ArrayList<>();
 
         void addLine() {
+            addLine("", "");
+        }
+
+        void addLine(String name, String value) {
             HBox line = new HBox();
             line.setSpacing(10);
 
-            TextField propertyNameField = new TextField();
-            TextField propertyValueField = new TextField();
+            TextField propertyNameField = new TextField(name);
+            TextField propertyValueField = new TextField(value);
             featureLines.add(new Pair<>(propertyNameField, propertyValueField));
 
             line.getChildren().add(new Label("Jellemzõ:"));

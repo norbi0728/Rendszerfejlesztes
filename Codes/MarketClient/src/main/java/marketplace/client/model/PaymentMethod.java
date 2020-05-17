@@ -15,6 +15,13 @@ public enum PaymentMethod {
         return englishName;
     }
 
+    public static PaymentMethod forName(String name) {
+        for (PaymentMethod myEnum : PaymentMethod.values()) {
+            if (myEnum.englishName.equals(name)) return myEnum;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return hungarianName;

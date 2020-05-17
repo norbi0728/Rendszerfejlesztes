@@ -25,11 +25,15 @@ public class MainController {
 
     public void addListing(Listing listing) {
         String serverResponse = restClient.addListing(listing);
-        System.out.println("addListing(): " + serverResponse);
+        //System.out.println("addListing(): " + serverResponse);
     }
 
     public List<Listing> getUserListings() {
         List<Listing> userListings = restClient.getUserListings();
         return userListings;
+    }
+
+    public void updateListing(Listing newListing) {
+        // TODO Call api
     }
 }

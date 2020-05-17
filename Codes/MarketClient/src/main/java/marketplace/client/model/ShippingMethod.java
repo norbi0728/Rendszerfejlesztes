@@ -15,6 +15,13 @@ public enum ShippingMethod {
         return englishName;
     }
 
+    public static ShippingMethod forName(String name) {
+        for (ShippingMethod myEnum : ShippingMethod.values()) {
+            if (myEnum.englishName.equals(name)) return myEnum;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return hungarianName;
