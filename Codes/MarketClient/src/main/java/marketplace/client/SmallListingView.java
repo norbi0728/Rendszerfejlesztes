@@ -19,6 +19,9 @@ public class SmallListingView extends VBox {
     private Label currencyLabel;
     private CheckBox checkBox;
 
+    private Runnable onSelected;
+    private Runnable onDeselected;
+
     public SmallListingView(Listing listing) {
         this.listing = listing;
         Platform.runLater(() -> init());
@@ -44,6 +47,15 @@ public class SmallListingView extends VBox {
         currencyLabel = new Label();
         CurrencyChanger.getInstance().addCurrencyLabel(currencyLabel);
         bottomLine.getChildren().add(currencyLabel);
+        checkBox.setOnAction(event -> {
+            if (checkBox.isSelected()) {
+                Listing.selected.push(listing);
+                onSelected.run();
+            } else {
+                Listing.selected.remove(listing);
+                onDeselected.run();
+            }
+        });
         bottomLine.getChildren().add(checkBox);
         getChildren().add(bottomLine);
 
@@ -58,6 +70,14 @@ public class SmallListingView extends VBox {
         }
         int displayPrice = listing.displayPrice();
         priceField.setText(String.valueOf(CurrencyChanger.getInstance().inChosenCurrency(displayPrice)));
+    }
+
+    public void setOnSelected(Runnable onSelected) {
+        this.onSelected = onSelected;
+    }
+
+    public void setOnDeselected(Runnable onDeselected) {
+        this.onDeselected = onDeselected;
     }
 
     public boolean isChecked() {

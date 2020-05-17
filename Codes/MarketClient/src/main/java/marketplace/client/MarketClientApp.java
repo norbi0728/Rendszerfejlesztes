@@ -14,7 +14,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import marketplace.ManyListingsPane;
 import marketplace.client.currencycomponents.CurrencyChanger;
 import marketplace.client.model.Listing;
 import marketplace.client.currencycomponents.Currency;
@@ -82,7 +81,7 @@ public class MarketClientApp extends Application {
     }
 
     void openComparisonPanel() {
-
+        
     }
 
     void createPersonalOfferPane() {

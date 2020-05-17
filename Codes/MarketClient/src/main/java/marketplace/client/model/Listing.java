@@ -2,6 +2,7 @@ package marketplace.client.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Listing {
@@ -21,6 +22,8 @@ public class Listing {
     private String paymentMethod;
     private String shippingMethod;
     private List<Bid> bids;
+
+    public static LinkedList<Listing> selected = new LinkedList<>();
 
     public Listing() {
     }
