@@ -16,6 +16,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import marketplace.ManyListingsPane;
 import marketplace.client.currencycomponents.CurrencyChanger;
 import marketplace.client.model.Listing;
 import marketplace.client.currencycomponents.Currency;
@@ -31,7 +32,7 @@ public class MarketClientApp extends Application {
 
     private ListingEditor listingEditor;
     private Region userListingsPane;
-    private FlowPane allListingsPane;
+    private Region allListingsPane;
     private Pane settingsPane;
 
     @Override
@@ -64,12 +65,21 @@ public class MarketClientApp extends Application {
             openSettingsPane();
         });
 
+        Button compareButton = createMenuButton(("Összehasonlítás"), event -> {
+            openComparisonPanel();
+        });
+
         menu.getChildren().add(newListingButton);
         menu.getChildren().add(userListingsButton);
         menu.getChildren().add(allListingsButton);
         menu.getChildren().add(settingsButton);
+        menu.getChildren().add(compareButton);
 
         return menu;
+    }
+
+    void openComparisonPanel() {
+
     }
 
     void createPersonalOfferPane(){
@@ -179,15 +189,39 @@ public class MarketClientApp extends Application {
 
     public void openAllListingsPane() {
         if (allListingsPane == null) allListingsPane = createAllListingsPanel();
+        root.setCenter(allListingsPane);
+        BorderPane.setAlignment(allListingsPane, Pos.CENTER);
     }
 
-    private FlowPane createAllListingsPanel() {
-        FlowPane flowPane = new FlowPane();
-
-        return flowPane;
+    private VBox createAllListingsPanel() {
+        ManyListingsPane allListingsPanel = new ManyListingsPane(("Minden hirdetés"));
+        new Thread(() -> {
+            List<Listing> allListings = controller.getAllListings();
+            Platform.runLater(() -> {
+                allListingsPanel.setOnListingClicked(listing -> {
+                    openListingDisplay(listing);
+                });
+                allListingsPanel.addListings(allListings);
+            });
+        }).start();
+        return allListingsPanel;
     }
 
-    private Region createUserListingsPanel() {
+    private VBox createUserListingsPanel() {
+        ManyListingsPane userListingsPanel = new ManyListingsPane("Saját hirdetések");
+        new Thread(() -> {
+            List<Listing> userListings = controller.getUserListings();
+            Platform.runLater(() -> {
+                userListingsPanel.setOnListingClicked(listing -> {
+                    openListingForEditing(listing);
+                });
+                userListingsPanel.addListings(userListings);
+            });
+        }).start();
+        return userListingsPanel;
+    }
+
+    private Region createUserListingsPanel_() {
         VBox vBox = new VBox();
         //vBox.setStyle("-fx-background-color: green;");
         HBox hBox = new HBox();

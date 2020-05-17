@@ -79,7 +79,7 @@ public class RestClient {
                 .request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.post(null);
-        return (List<Listing>) response.readEntity(List.class);
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
     }
 
     public List<Listing> getPersonalOffer() {

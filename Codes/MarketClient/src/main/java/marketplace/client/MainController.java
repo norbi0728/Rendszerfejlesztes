@@ -33,6 +33,10 @@ public class MainController {
         return userListings;
     }
 
+    public List<Listing> getAllListings() {
+        return restClient.getAllListings();
+    }
+
     public void updateListing(Listing newListing) {
         // TODO Call api
     }
