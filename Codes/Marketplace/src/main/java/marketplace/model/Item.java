@@ -1,5 +1,6 @@
 package marketplace.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -59,5 +60,19 @@ public class Item {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setFeature(String name, String value){
+        features.put(name, value);
+    }
+
+    public void addPicture(Picture picture){
+        boolean isAlreadyAdded = false;
+        for (Picture picture1: pictures){
+            if (Arrays.equals(picture.getData(), picture1.getData()))
+                isAlreadyAdded = true;
+        }
+        if (!isAlreadyAdded)
+            pictures.add(picture);
     }
 }

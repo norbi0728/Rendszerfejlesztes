@@ -57,4 +57,5 @@ public class User {
     public Statistics getStatistics() {
         return statistics;
     }
+
 }

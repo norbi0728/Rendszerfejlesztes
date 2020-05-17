@@ -7,11 +7,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
+import java.sql.Date;
+import java.util.*;
+
 
 public class Database {
     public static Database database = null;
@@ -50,7 +48,7 @@ public class Database {
      * You need to make sure that no such user exists yet.
      */
 
-    private Statistics getStatistics(String userName) {
+    public Statistics getStatistics(String userName) {
         Statistics statistics = new Statistics();
         ResultSet statResultSet;
         try {
@@ -75,13 +73,13 @@ public class Database {
         User user = null;
         try {
             ResultSet userResultSet = connection.createStatement().executeQuery(
-                    "SELECT PASSWORD_HASH" +
+                    "SELECT PASSWORD_HASH " +
                             " FROM USERS" +
                             " WHERE NAME = '" + userName + "'");
             userResultSet.first();
             String passwordHash = userResultSet.getString("PASSWORD_HASH");
             user = new User(userName, passwordHash, getPersonalInformation(userName),
-                    getStatistics(userName),getListings(userName));
+                    getStatistics(userName), getListings(userName));
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -109,6 +107,30 @@ public class Database {
         }
 
         return resultList;
+    }
+    public void updatePersonalInformations(User user){
+        try {
+            String sql = "UPDATE PERSONAL_INFORMATIONS " +
+                    "SET FIRST_NAME = ?," +
+                    "LAST_NAME = ?," +
+                    "ADDRESS = ?, " +
+                    "PHONE = ?, " +
+                    "EMAIL = ?, " +
+                    "PREFERRED_CURRENCY = ? " +
+                    "WHERE USER_NAME = '" + user.getName() + "'";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getPersonalInformation().getFirstName());
+            preparedStatement.setString(2, user.getPersonalInformation().getLastName());
+            preparedStatement.setString(3, user.getPersonalInformation().getAddress());
+            preparedStatement.setString(4, user.getPersonalInformation().getPhone());
+            preparedStatement.setString(5, user.getPersonalInformation().getEmail());
+            preparedStatement.setString(6, user.getPersonalInformation().getPreferredCurrency());
+
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void updateUserStatistics(User user){
         try {
@@ -151,12 +173,13 @@ public class Database {
             String sql = "INSERT INTO USERS (NAME, PASSWORD_HASH) VALUES(?, ?);"
                     + "INSERT INTO PERSONAL_INFORMATIONS (USER_NAME, FIRST_NAME," +
                     " LAST_NAME, ADDRESS," +
-                    " PHONE, EMAIL) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+                    " PHONE, EMAIL, PREFERRED_CURRENCY) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPasswordHash());
+
 
             preparedStatement.setString(3, user.getName()); //username
             preparedStatement.setString(4, user.getPersonalInformation().getFirstName());
@@ -164,6 +187,7 @@ public class Database {
             preparedStatement.setString(6, user.getPersonalInformation().getAddress());
             preparedStatement.setString(7, user.getPersonalInformation().getPhone());
             preparedStatement.setString(8, user.getPersonalInformation().getEmail());
+            preparedStatement.setString(9, user.getPersonalInformation().getPreferredCurrency());
 
             preparedStatement.executeUpdate();
             addUserStatistics(user);
@@ -197,6 +221,7 @@ public class Database {
         String address = "";
         String phone = "";
         String email = "";
+        String preferredCurrency = "";
         try {
             personalInformationResultSet = connection.createStatement().executeQuery(
                     "SELECT *" +
@@ -210,11 +235,12 @@ public class Database {
             address = personalInformationResultSet.getString("ADDRESS");
             phone = personalInformationResultSet.getString("PHONE");
             email = personalInformationResultSet.getString("EMAIL");
+            preferredCurrency = personalInformationResultSet.getString("PREFERRED_CURRENCY");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new PersonalInformation(firstName, lastName, address, phone, email);
+        return new PersonalInformation(firstName, lastName, address, phone, email, preferredCurrency);
     }
 
     /**LISTING RELATED STUFF*/
@@ -359,10 +385,12 @@ public class Database {
         List<Picture> itemPictures = item.getPictures();
         List<Bid> bids = getListingByID(id).getBids();
         try {
-            for (Picture picture: itemPictures){
-                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
-                connection.createStatement().execute(sql);
-            }
+//            for (Picture picture: itemPictures){
+//                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
+//                connection.createStatement().execute(sql);
+//            }
+            String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + item.getId();
+            connection.createStatement().execute(deletePictures);
             for (Bid bid: bids){
                 String sql = "DELETE FROM SALE WHERE BID_ID = " + bid.getId();
                 connection.createStatement().execute(sql);
@@ -382,6 +410,64 @@ public class Database {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void updateListing(Listing listing){
+        try {
+            String listingUpdate = "UPDATE LISTINGS SET " +
+                    "TITLE = '" + listing.getTitle() + "', " +
+                    "QUANTITY = " + listing.getQuantity() + ", " +
+                    "DESCRIPTION = '" + listing.getDescription() + "', " +
+                    "INCREMENT = " + listing.getIncrement() + ", " +
+                    "MAXIMUM_BID = " + listing.getMaximumBid() + ", " +
+                    "STARTING_BID = " + listing.getStartingBid() + ", " +
+                    "FIXED_PRICE = " + listing.getFixedPrice() + ", " +
+                    "EXPIRATION_DATE = '" + listing.getExpirationDate() + "'," +
+                    "PAYMENT_METHOD = '" + listing.getPaymentMethod() + "', " +
+                    "SHIPPING_METHOD = '" + listing.getShippingMethod() + "' " +
+                    "WHERE ID = " + listing.getId();
+
+            String itemUpdate = "UPDATE ITEMS SET " +
+                    "NAME = '" + listing.getItem().getName() + "' " +
+                    "WHERE ID = " + listing.getItem().getId();
+
+            for (Map.Entry<String, String> feature: listing.getItem().getFeatures().entrySet()){
+                String featureUpdate = "UPDATE ITEMS SET " +
+                        "FEATURE_VALUE = '" + feature.getValue() + "' " +
+                        "WHERE FEATURE = '" + feature.getKey() + "' " +
+                        "AND ID = " + listing.getItem().getId();
+                connection.createStatement().executeUpdate(featureUpdate);
+            }
+
+//            for(Picture picture: listing.getItem().getPictures()) {
+//                boolean isAlreadyStored = false;
+//                for (Picture oldPicture : getItemPictures(listing.getItem().getId())) {
+//                    if (Arrays.equals(picture.getData(), oldPicture.getData())) {
+//                        isAlreadyStored = true;
+//                        break;
+//                    }
+//                }
+//                if (!isAlreadyStored) {
+//                    String pictureInsert = "INSERT INTO ITEM_PICTURES (ITEM_ID, PICTURE) " +
+//                            "VALUES(?, ?)";
+//                    PreparedStatement preparedStatement = connection.prepareStatement(pictureInsert);
+//
+//                    preparedStatement.setInt(1, listing.getItem().getId());
+//                    preparedStatement.setBytes(2, picture.getData());
+//
+//                    preparedStatement.executeUpdate();
+//                }
+//            }
+
+            String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + listing.getItem().getId();
+            connection.createStatement().executeUpdate(deletePictures);
+            System.out.println(getItemPictures(listing.getItem().getId()).size());
+            addItemPictures(listing.getItem());
+            connection.createStatement().executeUpdate(itemUpdate);
+            connection.createStatement().executeUpdate(listingUpdate);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public Listing getListingByID(int id){
@@ -416,6 +502,14 @@ public class Database {
             preparedStatement.executeUpdate();
 
         }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void removeBid(int bidID){
+        try {
+            connection.createStatement().execute("DELETE FROM BIDS WHERE ID = " + bidID);
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -506,24 +600,6 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
-    /*this function maps the feature ids to the item features
-    we only store the feature name in the Item class*/
-    private Map<String, Integer> getFeatureIDs() {
-        Map<String, Integer> features = new HashMap<>();
-        try {
-            ResultSet resultSet = connection.createStatement().executeQuery(
-                    "SELECT ID, NAME " +
-                            "FROM FEATURES"
-            );
-            while (resultSet.next()) {
-                features.put(resultSet.getString("NAME"), resultSet.getInt("ID"));
-            }
-
-        } catch (SQLException e) {
-            e.getErrorCode();
-        }
-        return features;
-    }
 
     private int getCategoryID(String category) {
         int categoryID = 0;
@@ -539,34 +615,18 @@ public class Database {
         return categoryID;
     }
 
-    /*to add the dynamically created features*/
-    public void addFeature(String featureName) {
-        try {
-            String sql = "INSERT INTO FEATURES (NAME)" +
-                    " VALUES(?)";
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, featureName);
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /*this function adds the dynamic features to the item*/
     private void addItemFeatures(Item item) {
-        Map<String, Integer> featureIDs = getFeatureIDs();
         String sql = "UPDATE ITEMS " +
-                " SET FEATURE_ID = ?," +
+                " SET FEATURE = ?," +
                 "FEATURE_VALUE = ? " +
                 "WHERE ID = " + item.getId();
         try {
             for (Map.Entry<String, String> feature : item.getFeatures().entrySet()) {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-                preparedStatement.setInt(1, featureIDs.get(feature.getKey()));
+                preparedStatement.setString(1, feature.getKey());
                 preparedStatement.setString(2, feature.getValue());
 
                 preparedStatement.executeUpdate();
@@ -613,14 +673,13 @@ public class Database {
         Map<String, String> features = new HashMap<>();
         try {
             ResultSet featureResultSet = connection.createStatement().executeQuery(
-                    "SELECT F.NAME, FEATURE_VALUE " +
-                            "FROM ITEMS I " +
-                            "JOIN FEATURES F on I.FEATURE_ID = F.ID " +
-                            "WHERE I.ID = " + itemID
+                    "SELECT FEATURE, FEATURE_VALUE " +
+                            "FROM ITEMS " +
+                            "WHERE ID = " + itemID
             );
 
             while (featureResultSet.next()) {
-                String name = featureResultSet.getString("NAME");
+                String name = featureResultSet.getString("FEATURE");
                 String value = featureResultSet.getString("FEATURE_VALUE");
                 features.put(name, value);
             }
@@ -861,5 +920,37 @@ public class Database {
 //        }
 //        Listing listing = database.getListingByID(43);
 //        database.addSale(listing.mostRecentBid().getId());
+//        User user = database.getUser("testUser2");
+//        user.setPersonalInformation(new PersonalInformation("testFirstName3", "testLastName3",
+//                "testAddress3", "06301111111", "test@mail.com"));
+//        database.updatePersonalInformations(user);
+        Listing listing = database.getListingByID(250);
+        listing.setDescription("subsequently modified2");
+        listing.getItem().setFeature("testFeatureName", "subsequently modified2");
+        File pic1 = new File("test.png");
+        File pic2 = new File("test2.png");
+        File pic3 = new File("white.png");
+        byte[] data1 = new byte[1000];
+        byte[] data2 = new byte[1000];
+        byte[] data3 = new byte[1000];
+        try {
+            data1 = Files.readAllBytes(pic1.toPath());
+            data2 = Files.readAllBytes(pic2.toPath());
+            data3 = Files.readAllBytes(pic3.toPath());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Picture picture1 = new Picture(data1);
+        Picture picture2 = new Picture(data2);
+        Picture picture3 = new Picture(data3);
+
+        listing.getItem().addPicture(picture1);
+        listing.getItem().addPicture(picture2);
+        listing.getItem().addPicture(picture3);
+
+        database.updateListing(listing);
+
+
     }
 }

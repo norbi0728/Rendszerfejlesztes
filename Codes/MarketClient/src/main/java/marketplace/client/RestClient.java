@@ -81,4 +81,15 @@ public class RestClient {
         Response response = invocationBuilder.post(null);
         return (List<Listing>) response.readEntity(List.class);
     }
+
+    public List<Listing> getPersonalOffer() {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("getPersonalOffer")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.post(null);
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+    }
 }
