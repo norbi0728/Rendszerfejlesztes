@@ -96,7 +96,7 @@ public class Service {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
                 listingLogic.listByPrice(Integer.valueOf(ctx.queryParam("min")),
-                        Integer.valueOf(ctx.queryParam("max")))
+                        Integer.valueOf(ctx.queryParam("max")));
             }
             else
                 ctx.header("Server-Response", "Invalid security key");
