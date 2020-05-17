@@ -195,6 +195,14 @@ public class Service {
             else
                 ctx.header("Server-Response", "Invalid security key");
         });
+        app.post("/getOngoingAuctions",ctx -> {
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                ctx.json(Database.getDatabase().getOngoingAuctions(users.get(securityKey)));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
 
 
     }

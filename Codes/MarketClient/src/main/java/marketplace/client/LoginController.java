@@ -37,6 +37,8 @@ public class LoginController {
         }).start();
 
         loginScreen.app.createPersonalOfferPane();
+        loginScreen.app.createOngoingAuctionsPane();
+        loginScreen.app.refreshOngoingAuctions();
     }
 
     public void registerPressed() {

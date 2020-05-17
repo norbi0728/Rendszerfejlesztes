@@ -40,4 +40,8 @@ public class MainController {
         List<Listing> personalOffer = restClient.getPersonalOffer();
         return personalOffer;
     }
+    public List<Listing> getOngoingAuctions(){
+        List<Listing> ongoingAuctions = restClient.getOngoingAuctions();
+        return ongoingAuctions;
+    }
 }

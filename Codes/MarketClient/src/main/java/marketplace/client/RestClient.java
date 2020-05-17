@@ -92,4 +92,15 @@ public class RestClient {
         Response response = invocationBuilder.post(null);
         return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
     }
+
+    public List<Listing> getOngoingAuctions() {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("getOngoingAuctions")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.post(null);
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+    }
 }
