@@ -1,12 +1,14 @@
 package marketplace.service;
 
 import io.javalin.Javalin;
+import marketplace.database.Database;
 import marketplace.logic.*;
 import marketplace.model.Listing;
 import marketplace.model.PersonalInformation;
 import marketplace.model.User;
 import marketplace.security.AuthenticationService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +92,16 @@ public class Service {
                 ctx.header("Server-Response", "Invalid security key");
         });
 
+        app.post("/getListingsByPrice", ctx ->{
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                listingLogic.listByPrice(Integer.valueOf(ctx.queryParam("min")),
+                        Integer.valueOf(ctx.queryParam("max")));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
+
         app.post("/getListingsByUser", ctx ->{
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -108,6 +120,7 @@ public class Service {
             else
                 ctx.header("Server-Response", "Invalid security key");
         });
+
         app.post("/removeListing",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -131,7 +144,7 @@ public class Service {
 //                        .removeBid(Integer.valueOf(ctx.queryParam("bidID"))));
 //            }
 //        });
-//        public String addBid(String userName, int value, int listingId){
+
         app.post("/addBid",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -141,6 +154,7 @@ public class Service {
                                 Integer.valueOf(ctx.queryParam("listingID"))));
             }
         });
+
         app.post("/setPersonalInformation",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -152,6 +166,7 @@ public class Service {
                 ctx.header("Server-Response", userManagement.setPersonalInformations(user));
             }
         });
+
         app.post("/getOwnPersonalInformation",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -160,6 +175,7 @@ public class Service {
             else
                 ctx.header("Server-Response", "Invalid security key");
         });
+
         app.post("/getPersonalInformation",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -168,6 +184,7 @@ public class Service {
             else
                 ctx.header("Server-Response", "Invalid security key");
         });
+        
         app.post("/getPersonalOffer",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
