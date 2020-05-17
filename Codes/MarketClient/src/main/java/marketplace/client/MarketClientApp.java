@@ -34,6 +34,10 @@ public class MarketClientApp extends Application {
     private FlowPane allListingsPane;
     private Pane settingsPane;
     private ScrollPane ongoingAuctionsPane;
+    private ListingComparatorDisplay listingComparatorDisplay;
+    //FOR TESTING
+    private Listing listing1;
+    private Listing listing2;
 
     @Override
     public void init() throws Exception {
@@ -62,7 +66,8 @@ public class MarketClientApp extends Application {
         });
 
         Button settingsButton = createMenuButton("Beállítás", event -> {
-            openSettingsPane();
+            //openSettingsPane();
+            openListingComparatorPane();
         });
 
         menu.getChildren().add(newListingButton);
@@ -83,6 +88,9 @@ public class MarketClientApp extends Application {
                 e.printStackTrace();
             }
             List<Listing> personalOffer = controller.getPersonalOffer();
+            List<Listing> userListings = controller.getUserListings();
+            listing1 = userListings.get(0);
+            listing2 = userListings.get(1);
             Platform.runLater(() -> {
                 for (Listing offer : personalOffer) {
                     SmallListingView smallListingView = new SmallListingView(offer);
@@ -133,7 +141,7 @@ public class MarketClientApp extends Application {
 
         new Thread(() -> {
             try {
-                sleep(1200);
+                sleep(1600);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -165,6 +173,13 @@ public class MarketClientApp extends Application {
             settingsPane = createSettingsPane();
         }
         root.setCenter(settingsPane);
+    }
+
+    private void openListingComparatorPane() {
+        if (listingComparatorDisplay == null) {
+            listingComparatorDisplay = new ListingComparatorDisplay(listing1, listing2);
+        }
+        root.setCenter(listingComparatorDisplay);
     }
 
     private Pane createSettingsPane() {

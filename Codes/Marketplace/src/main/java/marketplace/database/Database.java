@@ -618,16 +618,15 @@ public class Database {
 
     /*this function adds the dynamic features to the item*/
     private void addItemFeatures(Item item) {
-        String sql = "UPDATE ITEMS " +
-                " SET FEATURE = ?," +
-                "FEATURE_VALUE = ? " +
-                "WHERE ID = " + item.getId();
+        String sql = "INSERT INTO ITEM_FEATURES(ITEM_ID, NAME, VALUE) " +
+                "VALUES(?, ?, ?)";
         try {
             for (Map.Entry<String, String> feature : item.getFeatures().entrySet()) {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-                preparedStatement.setString(1, feature.getKey());
-                preparedStatement.setString(2, feature.getValue());
+                preparedStatement.setInt(1, item.getId());
+                preparedStatement.setString(2, feature.getKey());
+                preparedStatement.setString(3, feature.getValue());
 
                 preparedStatement.executeUpdate();
             }
@@ -673,14 +672,14 @@ public class Database {
         Map<String, String> features = new HashMap<>();
         try {
             ResultSet featureResultSet = connection.createStatement().executeQuery(
-                    "SELECT FEATURE, FEATURE_VALUE " +
-                            "FROM ITEMS " +
-                            "WHERE ID = " + itemID
+                    "SELECT NAME, VALUE " +
+                            "FROM ITEM_FEATURES " +
+                            "WHERE ITEM_ID = " + itemID
             );
 
             while (featureResultSet.next()) {
-                String name = featureResultSet.getString("FEATURE");
-                String value = featureResultSet.getString("FEATURE_VALUE");
+                String name = featureResultSet.getString("NAME");
+                String value = featureResultSet.getString("VALUE");
                 features.put(name, value);
             }
         } catch (Exception e) {
