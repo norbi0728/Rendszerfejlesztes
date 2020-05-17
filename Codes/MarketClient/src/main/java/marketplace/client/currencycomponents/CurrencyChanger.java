@@ -4,6 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import marketplace.currencyexchange.CurrencyExchange;
 import marketplace.currencyexchange.MockCurrencyExchange;
+import marketplace.currencyexchange.RealCurrencyExchange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class CurrencyChanger {
     private static CurrencyChanger instance;
 
     private CurrencyChanger() {
-        currencyExchange = new MockCurrencyExchange();
+        currencyExchange = new RealCurrencyExchange();
     }
 
     public void changeDisplayCurrency(Currency currency) {

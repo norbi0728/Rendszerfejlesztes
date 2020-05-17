@@ -1,13 +1,12 @@
 package marketplace.currencyexchange;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.Response;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 
@@ -20,9 +19,11 @@ public class RealCurrencyExchange implements CurrencyExchange
         Client client = ClientBuilder.newClient();
         ObjectMapper mapper = new ObjectMapper();
 
-        Response response = (Response) client.target(REST_URI).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+        Response response = client.target(REST_URI).request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
+        response.bufferEntity();
+        String s = response.readEntity(String.class);
 
-        CurrencyExchangeData exchangeRates = mapper.readValue((JsonParser) response, CurrencyExchangeData.class);
+        CurrencyExchangeData exchangeRates = mapper.readValue(s, CurrencyExchangeData.class);
 
         switch (currency)
         {
@@ -39,8 +40,10 @@ public class RealCurrencyExchange implements CurrencyExchange
         return newPrice;
     }
 
-    public static void main(String[] args) throws Exception {
-        RealCurrencyExchange currencyExchange = new RealCurrencyExchange();
-        System.out.println(currencyExchange.getExchangeRates(25, "EUR"));
+
+    public static void main(String[] args) throws Exception
+    {
+        CurrencyExchange currencyExchange = new RealCurrencyExchange();
+        System.out.println(currencyExchange.getExchangeRates(2500, "USD"));
     }
 }
