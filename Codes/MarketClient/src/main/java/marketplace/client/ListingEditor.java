@@ -29,6 +29,7 @@ public class ListingEditor extends VBox {
     private Image image;
     private Stage stage;
     private Consumer<Listing> onSaveClicked;
+    private Runnable onDeleteClicked;
 
     private TextField titleField;
     private TextField nameField;
@@ -163,6 +164,14 @@ public class ListingEditor extends VBox {
         });
         gridPane.add(saveButton, 0, 10);
 
+        if (listingToBeEdited != null) {
+            Button deleteButton = new Button("Hirdetés törlése");
+            deleteButton.setOnAction(event -> {
+                onDeleteClicked.run();
+            });
+            gridPane.add(deleteButton, 0, 11);
+        }
+
         getChildren().add(gridPane);
 
         if (listingToBeEdited != null) {
@@ -230,6 +239,10 @@ public class ListingEditor extends VBox {
 
     public void setOnSaveClicked(Consumer<Listing> consumer) {
         this.onSaveClicked = consumer;
+    }
+
+    public void setOnDeleteClicked(Runnable onDeleteClicked) {
+        this.onDeleteClicked = onDeleteClicked;
     }
 
     private void chooseImage() {

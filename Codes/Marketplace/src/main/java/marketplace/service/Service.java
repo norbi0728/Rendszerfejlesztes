@@ -130,12 +130,12 @@ public class Service {
             }
         });
 
-//        app.post("/updateListing",ctx -> {
-//            String securityKey = ctx.queryParam("securityKey");
-//            if(authenticationService.validateKey(securityKey)){
-//                listingLogic.updateListing(ctx.bodyAsClass(Listing.class));
-//            }
-//        });
+        app.post("/updateListing",ctx -> {
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                listingLogic.updateListing(ctx.bodyAsClass(Listing.class));
+            }
+        });
 
 //        app.post("/removeBid",ctx -> {
 //            String securityKey = ctx.queryParam("securityKey");
@@ -163,7 +163,7 @@ public class Service {
                 user.setPersonalInformation(
                         ctx.bodyAsClass(PersonalInformation.class)
                 );
-                ctx.header("Server-Response", userManagement.setPersonalInformations(user));
+                ctx.header("Server-Response", userManagement.setPersonalInformations(user.getName(), user.getPersonalInformation()));
             }
         });
 
@@ -198,7 +198,7 @@ public class Service {
         app.post("/getOngoingAuctions",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
-                ctx.json(Database.getDatabase().getOngoingAuctions(users.get(securityKey)));
+                ctx.json(listingLogic.getOngoingAuctions(users.get(securityKey)));
             }
             else
                 ctx.header("Server-Response", "Invalid security key");
