@@ -200,7 +200,7 @@ public class MarketClientApp extends Application {
                 new Alert(Alert.AlertType.INFORMATION, ret).show();
             });
         }
-        root.setCenter(newListingEditor);
+        root.setCenter(new ScrollPane(newListingEditor));
     }
 
     public void openListingForEditing(Listing listing) {
@@ -213,7 +213,7 @@ public class MarketClientApp extends Application {
             String ret = controller.delete(listing);
             new Alert(Alert.AlertType.INFORMATION, ret).show();
         });
-        root.setCenter(listingEditor);
+        root.setCenter(new ScrollPane(listingEditor));
     }
 
     public void openUserListingsPane() {
@@ -287,7 +287,7 @@ public class MarketClientApp extends Application {
             }
         });
 
-        root.setCenter(listingDisplay);
+        root.setCenter(new ScrollPane(listingDisplay));
     }
 
     @Override
