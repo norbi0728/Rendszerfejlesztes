@@ -1,5 +1,6 @@
 package marketplace.client.currencycomponents;
 
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import marketplace.currencyexchange.CurrencyExchange;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CurrencyChanger {
-    private CurrencyExchange currencyExchange;
+    private MockCurrencyExchange currencyExchange;
     private List<TextField> textFields = new ArrayList<>();
     private List<Label> labels = new ArrayList<>();
     public Currency currency = Currency.HUF;
@@ -18,6 +19,12 @@ public class CurrencyChanger {
 
     private CurrencyChanger() {
         currencyExchange = new MockCurrencyExchange(); //TODO real currency exchange is blocking the ui thread all over the place
+        new Thread(() -> {
+            currencyExchange.refreshRates();
+            Platform.runLater(() -> {
+                changeDisplayCurrency(currency);
+            });
+        }).start();
     }
 
     public void changeDisplayCurrency(Currency currency) {
@@ -53,7 +60,7 @@ public class CurrencyChanger {
         return String.valueOf(((double) (int) (newValue * 100)) / 100);
     }
 
-    private int inHUF(TextField textField) {
+    public int inHUF(TextField textField) {
         double value = Double.valueOf(textField.getText());
         double forints;
         if (currency == Currency.HUF) {
