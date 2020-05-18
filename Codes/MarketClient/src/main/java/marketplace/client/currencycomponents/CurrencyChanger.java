@@ -18,7 +18,7 @@ public class CurrencyChanger {
     private static CurrencyChanger instance;
 
     private CurrencyChanger() {
-        currencyExchange = new MockCurrencyExchange(); //TODO real currency exchange is blocking the ui thread all over the place
+        currencyExchange = new MockCurrencyExchange();
         new Thread(() -> {
             currencyExchange.refreshRates();
             Platform.runLater(() -> {

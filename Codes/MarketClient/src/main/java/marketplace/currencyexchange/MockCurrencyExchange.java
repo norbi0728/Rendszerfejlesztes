@@ -17,7 +17,7 @@ public class MockCurrencyExchange implements CurrencyExchange {
         switch (currency)
         {
             case "EUR":
-                newPrice = price / 350.88;
+                newPrice = price / 350.88; // TODO use the fields
                 break;
             case "USD":
                 newPrice = price / 323.23;
