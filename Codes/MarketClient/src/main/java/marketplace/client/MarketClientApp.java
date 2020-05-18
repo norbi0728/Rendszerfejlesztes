@@ -108,11 +108,13 @@ public class MarketClientApp extends Application {
                     SmallListingView smallListingView = new SmallListingView(offer);
                     smallListingView.setOnMouseClicked(event -> openListingDisplay(offer));
                     hbox.getChildren().add(smallListingView);
+                    scrollPane.setMinViewportHeight(smallListingView.getHeight() + 10);
                 }
             });
         }).start();
         //scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setContent(hbox);
+
         root.setBottom(scrollPane);
     }
 
