@@ -424,9 +424,11 @@ public class Database {
                     "SHIPPING_METHOD = '" + listing.getShippingMethod() + "' " +
                     "WHERE ID = " + listing.getId();
 
-            String delete = "UPDATE ITEM SET " +
+            String itemUpdate = "UPDATE ITEMS SET " +
                     "NAME = '" + listing.getItem().getName() + "' " +
                     "WHERE ID = " + listing.getItem().getId();
+
+            connection.createStatement().executeUpdate(itemUpdate);
 
             String deleteFeatures = "DELETE FROM ITEM_FEATURES WHERE ITEM_ID = " + listing.getItem().getId();
             connection.createStatement().executeUpdate(deleteFeatures);
@@ -446,7 +448,7 @@ public class Database {
         List<Listing> ongoing = new ArrayList<>();
 
         try {
-            String queryOngoing = "SELECT LISTINGS.ID FROM LISTINGS " +
+            String queryOngoing = "SELECT DISTINCT LISTINGS.ID FROM LISTINGS " +
                     "JOIN BIDS B on LISTINGS.ID = B.LISTING_ID " +
                     "WHERE B.USER_NAME = '"+ username +"' and EXPIRATION_DATE > DATE";
 
