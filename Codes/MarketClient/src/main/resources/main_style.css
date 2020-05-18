@@ -14,7 +14,10 @@
 }
 
 .small-listing-view {
-    -fx-background-color: cyan;
+    -fx-background-color: darksalmon;
     -fx-background-insets: 5;
+    -fx-background-radius: 5;
     -fx-alignment: center;
+    -fx-padding: 10;
 }
+

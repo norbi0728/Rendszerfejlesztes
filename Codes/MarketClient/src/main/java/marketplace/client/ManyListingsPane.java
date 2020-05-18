@@ -23,7 +23,9 @@ public class ManyListingsPane extends VBox {
     }
 
     private void init() {
-        getChildren().add(new Label(title));
+        Label titleLabel = new Label(title);
+        titleLabel.getStyleClass().add("title-label");
+        getChildren().add(titleLabel);
         flowPane = new FlowPane();
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(flowPane);

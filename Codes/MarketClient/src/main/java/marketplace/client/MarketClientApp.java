@@ -19,6 +19,7 @@ import marketplace.client.model.Listing;
 import marketplace.client.currencycomponents.Currency;
 import marketplace.client.model.PersonalInformation;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -68,7 +69,11 @@ public class MarketClientApp extends Application {
         });
 
         Button compareButton = createMenuButton(("Összehasonlítás"), event -> {
-            openComparisonPanel();
+            if (Listing.selected.size() >= 2) {
+                openComparisonPanel();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Ki kell jelölni két hirdetést").show();
+            }
         });
 
         menu.getChildren().add(newListingButton);
@@ -109,7 +114,8 @@ public class MarketClientApp extends Application {
         scrollPane.setContent(hbox);
         root.setBottom(scrollPane);
     }
-    void refreshOngoingAuctions(){
+
+    void refreshOngoingAuctions() {
         TimerTask refreshOngoingAuctionsPane = new TimerTask() {
             @Override
             public void run() {
@@ -136,7 +142,8 @@ public class MarketClientApp extends Application {
         Timer refreshTimer = new Timer();
         refreshTimer.schedule(refreshOngoingAuctionsPane, 10000, 10000);
     }
-    void createOngoingAuctionsPane(){
+
+    void createOngoingAuctionsPane() {
         VBox vbox = new VBox();
 
         Label title = new Label("Folyamatban lévõ aukciók");
@@ -213,7 +220,7 @@ public class MarketClientApp extends Application {
     }
 
     public void openAllListingsPane() {
-        if (allListingsPane == null) allListingsPane = createAllListingsPanel();
+        allListingsPane = createAllListingsPanel();
         root.setCenter(allListingsPane);
         BorderPane.setAlignment(allListingsPane, Pos.CENTER);
     }
@@ -250,6 +257,10 @@ public class MarketClientApp extends Application {
         ListingDisplay listingDisplay = new ListingDisplay(listing);
         listingDisplay.setAlignment(Pos.TOP_CENTER);
         listingDisplay.setOnBid(() -> {
+            if (listing.getExpirationDate().before(new Date())) {
+                new Alert(Alert.AlertType.WARNING, "Licit lejárt").show();
+                return;
+            }
             new Thread(() -> {
                 controller.addBid(listing);
                 try {

@@ -36,7 +36,7 @@ public class SmallListingView extends VBox {
         imageView.setFitWidth(150);
         imageView.setPreserveRatio(true);
         priceField = new TextField();
-        priceField.setDisable(true);
+        priceField.setEditable(false);
         CurrencyChanger.getInstance().addTextField(priceField);
         checkBox = new CheckBox();
         getChildren().add(titleLabel);
