@@ -85,4 +85,8 @@ public class MainController {
         }
         return restClient.addBid(value, listing);
     }
+
+    public void delete(Listing listing) {
+        restClient.delete(listing);
+    }
 }

@@ -38,7 +38,7 @@ public class ListingDisplay extends VBox {
     private TextField paymentMethodField;
     private TextField shippingMethodChoiceBox;
     private Button makeBidButton;
-    private Button buyForFixedPriceButton;
+    private Button sellerInformationButton;
 
 
     public ListingDisplay(Listing listing) {
@@ -120,7 +120,7 @@ public class ListingDisplay extends VBox {
         gridPane.add(expirationDatePicker, 1, 7);
 
         gridPane.add(new Label("Kategória:"), 3, 7);
-        categoryField = new TextField(listing.getItem().getCategory());
+        categoryField = new TextField(Category.forName(listing.getItem().getCategory()).toString());
         categoryField.setEditable(false);
         gridPane.add(categoryField, 4, 7);
 
@@ -144,13 +144,13 @@ public class ListingDisplay extends VBox {
         gridPane.add(new Label("Fizetési mód:"), 0, 9);
         paymentMethodField = new TextField();
         paymentMethodField.setEditable(false);
-        paymentMethodField.setText(listing.getPaymentMethod());
+        paymentMethodField.setText(PaymentMethod.forName(listing.getPaymentMethod()).toString());
         gridPane.add(paymentMethodField, 1, 9);
 
         gridPane.add(new Label("Szállítási mód:"), 3, 9);
         shippingMethodChoiceBox = new TextField();
         shippingMethodChoiceBox.setEditable(false);
-        shippingMethodChoiceBox.setText(listing.getShippingMethod());
+        shippingMethodChoiceBox.setText(ShippingMethod.forName(listing.getShippingMethod()).toString());
         gridPane.add(shippingMethodChoiceBox, 4, 9);
 
         makeBidButton = new Button("Licitálás");
@@ -159,14 +159,52 @@ public class ListingDisplay extends VBox {
         });
         gridPane.add(makeBidButton, 1, 10);
 
-        buyForFixedPriceButton = new Button("Megveszem a fix áron");
-        gridPane.add(buyForFixedPriceButton, 4, 10);
+        sellerInformationButton = new Button("Hirdetõ adatai");
+        sellerInformationButton.setOnAction(event -> {
+            sellerPopup();
+        });
+        gridPane.add(sellerInformationButton, 4, 10);
+
+        gridPane.add(new Label("Legmagasabb licit:"), 1, 11);
+        TextField highestBidField = new TextField();
+        if (listing.mostRecentBid() != null) {
+            highestBidField.setText(String.valueOf(listing.mostRecentBid().getValue()));
+        }
+        gridPane.add(highestBidField, 2, 11);
 
         getChildren().add(gridPane);
     }
 
+    private void sellerPopup() {
+        new Thread(() -> {
+            StringBuilder sellerDetails = new StringBuilder();
+            PersonalInformation sellerInformation = RestClient.getRestClient().getPersonalInformation(listing.getAdvertiser());
+            sellerDetails.append(sellerInformation.getLastName() + " " + sellerInformation.getFirstName() + "\n");
+            sellerDetails.append(sellerInformation.getAddress() + "\n");
+            sellerDetails.append(sellerInformation.getEmail() + "\n");
+            sellerDetails.append(sellerInformation.getPhone() + "\n");
+            Platform.runLater(() -> {
+                Alert popup = new Alert(Alert.AlertType.INFORMATION);
+                popup.setHeaderText("Hirdetõ adatai");
+                Label label = new Label(sellerDetails.toString());
+                label.setWrapText(true);
+                popup.getDialogPane().setContent(label);
+                popup.show();
+            });
+        }).start();
+    }
+
     public void setOnBid(Runnable onBid) {
         this.onBid = onBid;
+    }
+
+    public void refresh() {
+        new Thread(() -> {
+            Listing listing = RestClient.getRestClient().getListingById(this.listing.getId());
+            getChildren().remove(0, 1);
+            this.listing = listing;
+            init();
+        }).start();
     }
 
     class FeatureLines extends VBox {

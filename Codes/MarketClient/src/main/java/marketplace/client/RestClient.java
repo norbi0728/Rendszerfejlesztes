@@ -105,6 +105,18 @@ public class RestClient {
         return response.readEntity(PersonalInformation.class);
     }
 
+    public PersonalInformation getPersonalInformation(String userName) {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("getPersonalInformation")
+                .queryParam("securityKey", securityKey)
+                .queryParam("userName", userName)
+                .request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.post(null);
+        return response.readEntity(PersonalInformation.class);
+    }
+
     public String setPersonalInformation(PersonalInformation personalInformation) {
         Invocation.Builder invocationBuilder
                 = webTarget
@@ -139,5 +151,27 @@ public class RestClient {
 
         Response response = invocationBuilder.post(null);
         return (String) response.getHeaders().get("Server-Response").get(0);
+    }
+
+    public String delete(Listing listing) {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("removeListing")
+                .queryParam("securityKey", securityKey)
+                .queryParam("listingID", listing.getId())
+                .request(MediaType.TEXT_PLAIN_TYPE);
+
+        Response response = invocationBuilder.post(null);
+        return response.getHeaderString("Server-Response");
+    }
+
+    public Listing getListingById(int id) {
+        List<Listing> allListings = getAllListings();
+        for (Listing listing : allListings) {
+            if (listing.getId() == id) {
+                return listing;
+            }
+        }
+        return null;
     }
 }

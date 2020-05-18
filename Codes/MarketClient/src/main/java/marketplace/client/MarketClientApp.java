@@ -255,11 +255,14 @@ public class MarketClientApp extends Application {
         listingEditor.setOnSaveClicked((newListing) -> {
             controller.updateListing(newListing);
         });
+        listingEditor.setOnDeleteClicked(() -> {
+            controller.delete(listing);
+        });
         root.setCenter(listingEditor);
     }
 
     public void openUserListingsPane() {
-        if (userListingsPane == null) userListingsPane = createUserListingsPanel();
+        userListingsPane = createUserListingsPanel();
         //userListingsPane.setStyle("-fx-background-color: purple;");
         root.setCenter(userListingsPane);
         BorderPane.setAlignment(userListingsPane, Pos.CENTER);

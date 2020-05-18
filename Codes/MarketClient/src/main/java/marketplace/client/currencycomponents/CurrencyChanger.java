@@ -17,7 +17,7 @@ public class CurrencyChanger {
     private static CurrencyChanger instance;
 
     private CurrencyChanger() {
-        currencyExchange = new RealCurrencyExchange();
+        currencyExchange = new MockCurrencyExchange(); //TODO real currency exchange is blocking the ui thread all over the place
     }
 
     public void changeDisplayCurrency(Currency currency) {
