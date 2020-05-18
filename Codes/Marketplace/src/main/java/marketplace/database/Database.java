@@ -385,10 +385,7 @@ public class Database {
         List<Picture> itemPictures = item.getPictures();
         List<Bid> bids = getListingByID(id).getBids();
         try {
-//            for (Picture picture: itemPictures){
-//                String sql = "DELETE FROM ITEM_PICTURES WHERE ID = " + picture.getId();
-//                connection.createStatement().execute(sql);
-//            }
+
             String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + item.getId();
             connection.createStatement().execute(deletePictures);
             for (Bid bid: bids){
@@ -422,28 +419,23 @@ public class Database {
                     "MAXIMUM_BID = " + listing.getMaximumBid() + ", " +
                     "STARTING_BID = " + listing.getStartingBid() + ", " +
                     "FIXED_PRICE = " + listing.getFixedPrice() + ", " +
-                    "EXPIRATION_DATE = '" + listing.getExpirationDate() + "'," +
+                    "EXPIRATION_DATE = '" + new java.sql.Date(listing.getExpirationDate().getTime()) + "'," +
                     "PAYMENT_METHOD = '" + listing.getPaymentMethod() + "', " +
                     "SHIPPING_METHOD = '" + listing.getShippingMethod() + "' " +
                     "WHERE ID = " + listing.getId();
 
-            String itemUpdate = "UPDATE ITEMS SET " +
+            String delete = "UPDATE ITEM SET " +
                     "NAME = '" + listing.getItem().getName() + "' " +
                     "WHERE ID = " + listing.getItem().getId();
 
-            for (Map.Entry<String, String> feature: listing.getItem().getFeatures().entrySet()){
-                String featureUpdate = "UPDATE ITEMS SET " +
-                        "FEATURE_VALUE = '" + feature.getValue() + "' " +
-                        "WHERE FEATURE = '" + feature.getKey() + "' " +
-                        "AND ID = " + listing.getItem().getId();
-                connection.createStatement().executeUpdate(featureUpdate);
-            }
+            String deleteFeatures = "DELETE FROM ITEM_FEATURES WHERE ITEM_ID = " + listing.getItem().getId();
+            connection.createStatement().executeUpdate(deleteFeatures);
+            addItemFeatures(listing.getItem());
 
             String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + listing.getItem().getId();
             connection.createStatement().executeUpdate(deletePictures);
-            System.out.println(getItemPictures(listing.getItem().getId()).size());
             addItemPictures(listing.getItem());
-            connection.createStatement().executeUpdate(itemUpdate);
+
             connection.createStatement().executeUpdate(listingUpdate);
         }catch (Exception e){
             e.printStackTrace();
