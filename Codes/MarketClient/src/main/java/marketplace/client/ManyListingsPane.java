@@ -1,4 +1,4 @@
-package marketplace;
+package marketplace.client;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;

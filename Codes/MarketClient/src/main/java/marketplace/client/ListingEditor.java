@@ -53,13 +53,13 @@ public class ListingEditor extends VBox {
 
     private void init() {
 
-        Label titleLabel = new Label("Új hirdetés létrehozása");
+        Label titleLabel = new Label("Hirdetés szerkesztése");
         titleLabel.getStyleClass().add("title-label");
 
         getChildren().add(titleLabel);
 
         GridPane gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
+        //gridPane.setGridLinesVisible(true);
 
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setPadding(new Insets(40, 40, 40, 40));
@@ -174,7 +174,9 @@ public class ListingEditor extends VBox {
         titleField.setText(listing.getTitle());
         nameField.setText(listing.getItem().getName());
         descriptionArea.setText(listing.getDescription());
-        imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        if (listing.getItem().getPictures().size() > 0) {
+            imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        }
         quantityField.setText(String.valueOf(listing.getQuantity()));
         expirationDatePicker.setValue(listing.getExpirationDate().toInstant()
                 .atZone(ZoneId.systemDefault())
@@ -186,8 +188,8 @@ public class ListingEditor extends VBox {
         startingBidField.setText(String.valueOf(listing.getStartingBid()));
         incrementField.setText(String.valueOf(listing.getIncrement()));
         fixedPriceField.setText(String.valueOf(listing.getFixedPrice()));
-        paymentMethodChoiceBox.setValue(PaymentMethod.valueOf(listing.getPaymentMethod()));
-        shippingMethodChoiceBox.setValue(ShippingMethod.valueOf(listing.getShippingMethod()));
+        paymentMethodChoiceBox.setValue(PaymentMethod.forName(listing.getPaymentMethod()));
+        shippingMethodChoiceBox.setValue(ShippingMethod.forName(listing.getShippingMethod()));
     }
 
     private Listing compileNewListing() {

@@ -14,7 +14,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import marketplace.ManyListingsPane;
 import marketplace.client.currencycomponents.CurrencyChanger;
 import marketplace.client.model.Listing;
 import marketplace.client.currencycomponents.Currency;
@@ -32,7 +31,7 @@ public class MarketClientApp extends Application {
     private BorderPane root;
     public MainController controller;
 
-    private ListingEditor listingEditor;
+    private ListingEditor newListingEditor;
     private Region userListingsPane;
     private Region allListingsPane;
     private Pane settingsPane;
@@ -82,7 +81,10 @@ public class MarketClientApp extends Application {
     }
 
     void openComparisonPanel() {
-
+        Listing listing1 = Listing.selected.get(0);
+        Listing listing2 = Listing.selected.get(1);
+        ListingComparatorDisplay listingComparatorDisplay = new ListingComparatorDisplay(listing1, listing2);
+        root.setCenter(listingComparatorDisplay);
     }
 
     void createPersonalOfferPane() {
@@ -237,18 +239,18 @@ public class MarketClientApp extends Application {
     }
 
     public void openNewListingForm() {
-        if (listingEditor == null) {
-            listingEditor = new ListingEditor(stage, null);
-            listingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
-            listingEditor.setOnSaveClicked((newListing) -> {
+        if (newListingEditor == null) {
+            newListingEditor = new ListingEditor(stage, null);
+            newListingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
+            newListingEditor.setOnSaveClicked((newListing) -> {
                 controller.addListing(newListing);
             });
         }
-        root.setCenter(listingEditor);
+        root.setCenter(newListingEditor);
     }
 
     public void openListingForEditing(Listing listing) {
-        listingEditor = new ListingEditor(stage, listing);
+        ListingEditor listingEditor = new ListingEditor(stage, listing);
         listingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
         listingEditor.setOnSaveClicked((newListing) -> {
             controller.updateListing(newListing);
@@ -297,40 +299,15 @@ public class MarketClientApp extends Application {
         return userListingsPanel;
     }
 
-    private Region createUserListingsPanel_() {
-        VBox vBox = new VBox();
-        //vBox.setStyle("-fx-background-color: green;");
-        HBox hBox = new HBox();
-        hBox.getChildren().add(new Label("Saját hirdetések"));
-        vBox.getChildren().add(hBox);
-        FlowPane flowPane = new FlowPane();
-
-        new Thread(() -> {
-            List<Listing> userListings = controller.getUserListings();
-            Platform.runLater(() -> {
-                for (Listing userListing : userListings) {
-                    SmallListingView smallListingView = new SmallListingView(userListing);
-                    smallListingView.setPadding(new Insets(10, 10, 10, 10)); //TODO not here
-                    smallListingView.setOnMouseClicked((event) -> {
-                        openListingDisplay(userListing);
-                    });
-                    flowPane.getChildren().add(smallListingView);
-                }
-            });
-        }).start();
-
-        vBox.getChildren().add(flowPane);
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(vBox);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        return scrollPane;
-    }
-
     private void openListingDisplay(Listing listing) {
         ListingDisplay listingDisplay = new ListingDisplay(listing);
         listingDisplay.setAlignment(Pos.TOP_CENTER);
+        listingDisplay.setOnBid(() -> {
+            new Thread(() -> {
+                controller.addBid(listing);
+            }).start();
+        });
+
         root.setCenter(listingDisplay);
     }
 
