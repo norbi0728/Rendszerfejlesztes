@@ -29,9 +29,9 @@ public class MainController {
         app.openAllListingsPane();
     }
 
-    public void addListing(Listing listing) {
+    public String addListing(Listing listing) {
         String serverResponse = restClient.addListing(listing);
-        //System.out.println("addListing(): " + serverResponse);
+        return  serverResponse;
     }
 
     public List<Listing> getUserListings() {

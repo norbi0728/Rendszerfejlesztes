@@ -196,7 +196,8 @@ public class MarketClientApp extends Application {
             newListingEditor = new ListingEditor(stage, null);
             newListingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
             newListingEditor.setOnSaveClicked((newListing) -> {
-                controller.addListing(newListing);
+                String ret = controller.addListing(newListing);
+                new Alert(Alert.AlertType.INFORMATION, ret).show();
             });
         }
         root.setCenter(newListingEditor);
