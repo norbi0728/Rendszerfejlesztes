@@ -125,7 +125,7 @@ public class ListingLogic {
             db.updateListing(listing);
             return "Done";
         }
-        return "There was nochange in this listing";
+        return "There was no change in this listing";
     }
 
     /*
@@ -142,7 +142,7 @@ public class ListingLogic {
 
     public static void main(String[] args) throws InterruptedException {
         /*Integer passHash = "P@ssw0rd".hashCode();
-        PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail");
+        PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail", "HUF");
         Database.getDatabase().addUser(new User("ItsMe", passHash.toString(), mine));*/
 
         ListingLogic temp = new ListingLogic();
@@ -173,6 +173,9 @@ public class ListingLogic {
         ki(temp.create("ItsMe", listing));
         ki(temp.listByUser("ItsMe"));
         ki(temp.removeListing("ItsMe", Database.getDatabase().getListings("ItsMe").get(0).getId()));
+        ki(temp.listByUser("ItsMe"));
+        ki(Database.getDatabase().getListingByID(Database.getDatabase().getAllListing().get(0).getId()));
+        ki(temp.updateListing(Database.getDatabase().getListings("ItsMe").get(0)));
         ki(temp.listByUser("ItsMe"));
     }
 }
