@@ -20,16 +20,18 @@ public class UserManagement {
         return null;
     }
 
-    public String setPersonalInformations(User user){
+    public String setPersonalInformations(String userName, PersonalInformation personalInformations){
         Database db = Database.getDatabase();
-        if(!user.getPersonalInformation().equals(db.getUser(user.getName()).getPersonalInformation())){
-            if(user.getPersonalInformation().getAddress().equals(db.getUser(user.getName()).getPersonalInformation().getAddress())){
-                return "Setterek kellenek";
+        if(db.userExists(userName)) {
+            if (!personalInformations.equals(db.getUser(userName).getPersonalInformation())) {
+                User temp = db.getUser(userName);
+                temp.setPersonalInformation(personalInformations);
+                db.updatePersonalInformations(temp);
+                return "Done";
             }
-        } else {
             return "Nothing has changed";
         }
-        return "default";
+        return "The user does not exist!";
     }
 
     public static void main(String[] args) throws InterruptedException {
