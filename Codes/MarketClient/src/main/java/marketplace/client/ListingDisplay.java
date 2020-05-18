@@ -46,14 +46,15 @@ public class ListingDisplay extends VBox {
         Platform.runLater(() -> init());
     }
 
+    private GridPane gridPane;
+    private Label titleLabel;
     private void init() {
-
-        Label titleLabel = new Label(listing.getTitle());
+        titleLabel = new Label(listing.getTitle());
         titleLabel.getStyleClass().add("title-label");
 
         getChildren().add(titleLabel);
 
-        GridPane gridPane = new GridPane();
+        gridPane = new GridPane();
         //gridPane.setGridLinesVisible(true);
 
         gridPane.setAlignment(Pos.CENTER);
@@ -80,7 +81,9 @@ public class ListingDisplay extends VBox {
         gridPane.add(descriptionArea, 1, 2, 4, 1);
 
         imageView = new ImageView();
-        imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        if (listing.getItem().getPictures().size() > 0) {
+            imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        }
         imageView.setFitHeight(150);
         imageView.setFitWidth(150);
         imageView.setPreserveRatio(true);
@@ -203,9 +206,12 @@ public class ListingDisplay extends VBox {
     public void refresh() {
         new Thread(() -> {
             Listing listing = RestClient.getRestClient().getListingById(this.listing.getId());
-            getChildren().remove(0, 1);
-            this.listing = listing;
-            init();
+            Platform.runLater(() -> {
+                getChildren().remove(gridPane);
+                getChildren().remove(titleLabel);
+                this.listing = listing;
+                init();
+            });
         }).start();
     }
 

@@ -252,6 +252,14 @@ public class MarketClientApp extends Application {
         listingDisplay.setOnBid(() -> {
             new Thread(() -> {
                 controller.addBid(listing);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    listingDisplay.refresh();
+                });
             }).start();
         });
 
