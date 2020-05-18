@@ -194,9 +194,9 @@ public class ListingEditor extends VBox {
         for (Map.Entry<String, String> feature : listing.getItem().getFeatures().entrySet()) {
             featureLines.addLine(feature.getKey(), feature.getValue());
         }
-        startingBidField.setText(String.valueOf(listing.getStartingBid()));
-        incrementField.setText(String.valueOf(listing.getIncrement()));
-        fixedPriceField.setText(String.valueOf(listing.getFixedPrice()));
+        startingBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getStartingBid()));
+        incrementField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getIncrement()));
+        fixedPriceField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getFixedPrice()));
         paymentMethodChoiceBox.setValue(PaymentMethod.forName(listing.getPaymentMethod()));
         shippingMethodChoiceBox.setValue(ShippingMethod.forName(listing.getShippingMethod()));
     }
@@ -220,10 +220,10 @@ public class ListingEditor extends VBox {
                 Integer.valueOf(quantityField.getText()),
                 item,
                 RestClient.getRestClient().name,
-                Integer.valueOf(incrementField.getText()),
+                CurrencyChanger.getInstance().inHUF(incrementField),
                 -1,
-                Integer.valueOf(startingBidField.getText()),
-                Integer.valueOf(fixedPriceField.getText()),
+                CurrencyChanger.getInstance().inHUF(startingBidField),
+                CurrencyChanger.getInstance().inHUF(fixedPriceField),
                 Date.from(expirationDatePicker.getValue().atStartOfDay()
                         .atZone(ZoneId.systemDefault())
                         .toInstant()),

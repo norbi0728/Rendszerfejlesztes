@@ -92,6 +92,10 @@ public class SettingsPanel extends VBox {
         addressField.setText(ownPersonalInformation.getAddress());
         phoneField.setText(ownPersonalInformation.getPhone());
         emailField.setText(ownPersonalInformation.getEmail());
-        currencyChoiceBox.setValue(Currency.valueOf(ownPersonalInformation.getPreferredCurrency()));
+        if (ownPersonalInformation.getPreferredCurrency() != null) {
+            currencyChoiceBox.setValue(Currency.forName(ownPersonalInformation.getPreferredCurrency()));
+        } else {
+            currencyChoiceBox.setValue(Currency.HUF);
+        }
     }
 }
