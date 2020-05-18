@@ -20,6 +20,9 @@ import java.util.*;
 
 public class ListingDisplay extends VBox {
     private Listing listing;
+
+    private Runnable onBid;
+
     private Image image;
     private TextField titleField;
     private TextField nameField;
@@ -34,6 +37,8 @@ public class ListingDisplay extends VBox {
     private TextField fixedPriceField;
     private TextField paymentMethodField;
     private TextField shippingMethodChoiceBox;
+    private Button makeBidButton;
+    private Button buyForFixedPriceButton;
 
 
     public ListingDisplay(Listing listing) {
@@ -56,7 +61,7 @@ public class ListingDisplay extends VBox {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
-        gridPane.setGridLinesVisible(true);
+        //gridPane.setGridLinesVisible(true);
 
         nameField = new TextField();
         nameField.setEditable(false);
@@ -148,7 +153,20 @@ public class ListingDisplay extends VBox {
         shippingMethodChoiceBox.setText(listing.getShippingMethod());
         gridPane.add(shippingMethodChoiceBox, 4, 9);
 
+        makeBidButton = new Button("Licitálás");
+        makeBidButton.setOnAction(event -> {
+            onBid.run();
+        });
+        gridPane.add(makeBidButton, 1, 10);
+
+        buyForFixedPriceButton = new Button("Megveszem a fix áron");
+        gridPane.add(buyForFixedPriceButton, 4, 10);
+
         getChildren().add(gridPane);
+    }
+
+    public void setOnBid(Runnable onBid) {
+        this.onBid = onBid;
     }
 
     class FeatureLines extends VBox {

@@ -127,4 +127,17 @@ public class RestClient {
         Response response = invocationBuilder.post(null);
         return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
     }
+
+    public String addBid(int value, Listing listing) {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("addBid")
+                .queryParam("securityKey", securityKey)
+                .queryParam("value", value)
+                .queryParam("listingID", listing.getId())
+                .request(MediaType.TEXT_PLAIN_TYPE);
+
+        Response response = invocationBuilder.post(null);
+        return (String) response.getHeaders().get("Server-Response").get(0);
+    }
 }

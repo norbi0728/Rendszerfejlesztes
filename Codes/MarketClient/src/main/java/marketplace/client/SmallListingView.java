@@ -50,10 +50,10 @@ public class SmallListingView extends VBox {
         checkBox.setOnAction(event -> {
             if (checkBox.isSelected()) {
                 Listing.selected.push(listing);
-                onSelected.run();
+                if (onSelected != null) onSelected.run();
             } else {
                 Listing.selected.remove(listing);
-                onDeselected.run();
+                if (onDeselected != null) onDeselected.run();
             }
         });
         bottomLine.getChildren().add(checkBox);

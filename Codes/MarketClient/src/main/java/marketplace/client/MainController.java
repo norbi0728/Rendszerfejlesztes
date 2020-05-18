@@ -3,6 +3,7 @@ package marketplace.client;
 import javafx.application.Platform;
 import marketplace.client.currencycomponents.Currency;
 import marketplace.client.currencycomponents.CurrencyChanger;
+import marketplace.client.model.Bid;
 import marketplace.client.model.Listing;
 import marketplace.client.model.PersonalInformation;
 
@@ -72,5 +73,16 @@ public class MainController {
     public List<Listing> getOngoingAuctions(){
         List<Listing> ongoingAuctions = restClient.getOngoingAuctions();
         return ongoingAuctions;
+    }
+
+    public String addBid(Listing listing) {
+        int value;
+        Bid mostRecentBid = listing.mostRecentBid();
+        if (mostRecentBid != null) {
+            value = mostRecentBid.getValue() + listing.getIncrement();
+        } else {
+            value = listing.getStartingBid();
+        }
+        return restClient.addBid(value, listing);
     }
 }
