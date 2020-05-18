@@ -19,7 +19,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class ListingDisplay extends VBox {
-    private Listing listing;
+    public Listing listing;
 
     private Runnable onBid;
 
@@ -172,8 +172,9 @@ public class ListingDisplay extends VBox {
         TextField highestBidField = new TextField();
         Bid mostRecentBid = listing.mostRecentBid();
         if (mostRecentBid != null) {
-            String who = mostRecentBid.getUserName().equals(RestClient.getRestClient().name) ? " (saját)" : "(másé)";
-            highestBidField.setText(String.valueOf(listing.mostRecentBid().getValue()) + who);
+            String who = mostRecentBid.getUserName().equals(RestClient.getRestClient().name) ? " (saját)" : " (másé)";
+            String chosenCurrency = CurrencyChanger.getInstance().currency.toString();
+            highestBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.mostRecentBid().getValue()) + " " + chosenCurrency + who);
         }
         gridPane.add(highestBidField, 2, 11);
 

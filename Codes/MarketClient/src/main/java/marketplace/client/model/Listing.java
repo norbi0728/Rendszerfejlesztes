@@ -90,6 +90,17 @@ public class Listing {
         return 0;
     }
 
+    public int nextBidValue() {
+        int value;
+        Bid mostRecentBid = mostRecentBid();
+        if (mostRecentBid != null) {
+            value = mostRecentBid.getValue() + getIncrement();
+        } else {
+            value = getStartingBid();
+        }
+        return value;
+    }
+
     public void bid(String userName, int value, Date date) {
         bids.add(new Bid(userName, value, id, date));
     }

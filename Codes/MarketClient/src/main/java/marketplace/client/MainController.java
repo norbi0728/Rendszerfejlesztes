@@ -76,14 +76,7 @@ public class MainController {
     }
 
     public String addBid(Listing listing) {
-        int value;
-        Bid mostRecentBid = listing.mostRecentBid();
-        if (mostRecentBid != null) {
-            value = mostRecentBid.getValue() + listing.getIncrement();
-        } else {
-            value = listing.getStartingBid();
-        }
-        return restClient.addBid(value, listing);
+        return restClient.addBid(listing.nextBidValue(), listing);
     }
 
     public String delete(Listing listing) {

@@ -18,6 +18,7 @@ import marketplace.client.currencycomponents.CurrencyChanger;
 import marketplace.client.model.Listing;
 import marketplace.client.currencycomponents.Currency;
 import marketplace.client.model.PersonalInformation;
+import marketplace.currencyexchange.CurrencyExchange;
 
 import java.util.Date;
 import java.util.List;
@@ -257,21 +258,30 @@ public class MarketClientApp extends Application {
         ListingDisplay listingDisplay = new ListingDisplay(listing);
         listingDisplay.setAlignment(Pos.TOP_CENTER);
         listingDisplay.setOnBid(() -> {
-            if (listing.getExpirationDate().before(new Date())) {
+            if (listingDisplay.listing.getExpirationDate().before(new Date())) {
                 new Alert(Alert.AlertType.WARNING, "Licit lejárt").show();
                 return;
             }
-            new Thread(() -> {
-                controller.addBid(listing);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                Platform.runLater(() -> {
-                    listingDisplay.refresh();
-                });
-            }).start();
+
+            int nextBidValue = listingDisplay.listing.nextBidValue();
+            String nextBidValueInChosenCurrency = CurrencyChanger.getInstance().inChosenCurrency(nextBidValue);
+            String chosenCurrency = CurrencyChanger.getInstance().currency.toString();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Licitálás " + nextBidValueInChosenCurrency + " " + chosenCurrency + " értékben?",
+                    ButtonType.OK, ButtonType.CANCEL);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+                new Thread(() -> {
+                    controller.addBid(listingDisplay.listing);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Platform.runLater(() -> {
+                        listingDisplay.refresh();
+                    });
+                }).start();
+            }
         });
 
         root.setCenter(listingDisplay);
