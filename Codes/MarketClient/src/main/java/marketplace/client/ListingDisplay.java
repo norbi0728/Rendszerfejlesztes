@@ -80,7 +80,9 @@ public class ListingDisplay extends VBox {
         gridPane.add(descriptionArea, 1, 2, 4, 1);
 
         imageView = new ImageView();
-        imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        if (listing.getItem().getPictures().size() > 0) {
+            imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        }
         imageView.setFitHeight(150);
         imageView.setFitWidth(150);
         imageView.setPreserveRatio(true);
