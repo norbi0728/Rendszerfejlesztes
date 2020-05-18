@@ -119,6 +119,27 @@ public class ListingLogic {
         return "This listing doesn't exists";
     }
 
+    public String updateListing(Listing listing){
+        Database db = Database.getDatabase();
+        if(!listing.equals(db.getListingByID(listing.getId()))) {
+            db.updateListing(listing);
+            return "Done";
+        }
+        return "There was nochange in this listing";
+    }
+
+    /*
+    * Returns null if there is no such a user in the database
+    * */
+    public List<Listing> getOngoingAuctions(String userName){
+        Database db = Database.getDatabase();
+        if(db.userExists(userName)) {
+            List<Listing> temp = db.getOngoingAuctions(userName);
+            return temp;
+        }
+        return null;
+    }
+
     public static void main(String[] args) throws InterruptedException {
         /*Integer passHash = "P@ssw0rd".hashCode();
         PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail");
