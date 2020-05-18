@@ -213,6 +213,8 @@ public class ListingEditor extends VBox {
                 pictures,
                 categoryChoiceBox.getValue().getEnglishName()
         );
+        if (listingToBeEdited != null)
+            item.setId(listingToBeEdited.getItem().getId());
         Listing newListing = new Listing(
                 (listingToBeEdited != null) ? listingToBeEdited.getId() : -1,
                 titleField.getText(),
