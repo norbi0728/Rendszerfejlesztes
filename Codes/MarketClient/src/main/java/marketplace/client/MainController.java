@@ -44,7 +44,7 @@ public class MainController {
     }
 
     public void updateListing(Listing newListing) {
-        // TODO Call api
+        restClient.updateListing(newListing);
     }
 
     public List<Listing> getPersonalOffer() {
@@ -86,7 +86,7 @@ public class MainController {
         return restClient.addBid(value, listing);
     }
 
-    public void delete(Listing listing) {
-        restClient.delete(listing);
+    public String delete(Listing listing) {
+        return restClient.delete(listing);
     }
 }

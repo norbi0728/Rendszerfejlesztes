@@ -167,8 +167,10 @@ public class ListingDisplay extends VBox {
 
         gridPane.add(new Label("Legmagasabb licit:"), 1, 11);
         TextField highestBidField = new TextField();
-        if (listing.mostRecentBid() != null) {
-            highestBidField.setText(String.valueOf(listing.mostRecentBid().getValue()));
+        Bid mostRecentBid = listing.mostRecentBid();
+        if (mostRecentBid != null) {
+            String who = mostRecentBid.getUserName().equals(RestClient.getRestClient().name) ? " (saját)" : "(másé)";
+            highestBidField.setText(String.valueOf(listing.mostRecentBid().getValue()) + who);
         }
         gridPane.add(highestBidField, 2, 11);
 

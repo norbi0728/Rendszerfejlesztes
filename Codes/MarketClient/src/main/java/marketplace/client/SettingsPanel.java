@@ -35,7 +35,7 @@ public class SettingsPanel extends VBox {
 
     private void init() {
         GridPane gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
+        //gridPane.setGridLinesVisible(true);
 
         firstNameField = new TextField();
         lastNameField = new TextField();

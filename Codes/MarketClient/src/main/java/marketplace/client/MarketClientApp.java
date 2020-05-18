@@ -176,66 +176,9 @@ public class MarketClientApp extends Application {
 
     private void openSettingsPane() {
         if (settingsPane == null) {
-            settingsPane = createSettingsPane();
+            settingsPane = new SettingsPanel(controller);
         }
         root.setCenter(settingsPane);
-    }
-
-    private Pane createSettingsPane() {
-        VBox vBox = new VBox();
-        GridPane gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
-
-        TextField firstNameField = new TextField();
-        TextField lastNameField = new TextField();
-        TextField addressField = new TextField();
-        TextField phoneField = new TextField();
-        TextField emailField = new TextField();
-        ChoiceBox<Currency> currencyChoiceBox;
-        Button saveButton;
-
-        gridPane.add(new Label("Keresztnév:"), 0, 3);
-        gridPane.add(firstNameField, 1, 3);
-
-        gridPane.add(new Label("Családnév:"), 0, 4);
-        gridPane.add(lastNameField, 1, 4);
-
-        gridPane.add(new Label("Lakcím:"), 0, 5);
-        gridPane.add(addressField, 1, 5);
-
-        gridPane.add(new Label("Telefon:"), 0, 6);
-        gridPane.add(phoneField, 1, 6);
-
-        gridPane.add(new Label("E-mail:"), 0, 7);
-        gridPane.add(emailField, 1, 7);
-
-        gridPane.add(new Label("Pénznem:"), 2, 3);
-        currencyChoiceBox = new ChoiceBox<>();
-        currencyChoiceBox.getItems().setAll(Currency.values());
-        currencyChoiceBox.setValue(CurrencyChanger.getInstance().currency);
-        currencyChoiceBox.setOnAction((event -> {
-            CurrencyChanger.getInstance().changeDisplayCurrency(currencyChoiceBox.getValue());
-        }));
-        gridPane.add(currencyChoiceBox, 3, 3);
-
-        saveButton = new Button("Mentés");
-        saveButton.setOnAction(event -> {
-            PersonalInformation newPersonalInformation = new PersonalInformation(
-                    firstNameField.getText(),
-                    lastNameField.getText(),
-                    addressField.getText(),
-                    phoneField.getText(),
-                    emailField.getText(),
-                    currencyChoiceBox.getValue().toString()
-            );
-            new Thread(() -> {
-                controller.setPersonalInformation(newPersonalInformation);
-            }).start();
-        });
-        gridPane.add(saveButton, 0, 8);
-
-        vBox.getChildren().add(gridPane);
-        return vBox;
     }
 
     public void openNewListingForm() {
@@ -256,7 +199,8 @@ public class MarketClientApp extends Application {
             controller.updateListing(newListing);
         });
         listingEditor.setOnDeleteClicked(() -> {
-            controller.delete(listing);
+            String ret = controller.delete(listing);
+            new Alert(Alert.AlertType.INFORMATION, ret).show();
         });
         root.setCenter(listingEditor);
     }

@@ -214,7 +214,7 @@ public class ListingEditor extends VBox {
                 categoryChoiceBox.getValue().getEnglishName()
         );
         Listing newListing = new Listing(
-                -1,
+                (listingToBeEdited != null) ? listingToBeEdited.getId() : -1,
                 titleField.getText(),
                 descriptionArea.getText(),
                 Integer.valueOf(quantityField.getText()),

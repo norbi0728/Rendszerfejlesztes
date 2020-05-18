@@ -61,6 +61,17 @@ public class RestClient {
         return response.getHeaderString("Server-Response");
     }
 
+    public void updateListing(Listing listing) {
+        Invocation.Builder invocationBuilder
+                = webTarget
+                .path("updateListing")
+                .queryParam("securityKey", securityKey)
+                .request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.post(Entity.entity(listing, MediaType.APPLICATION_JSON));
+        //return response.getHeaderString("Server-Response");
+    }
+
     public List<Listing> getUserListings() {
         Invocation.Builder invocationBuilder
                 = webTarget
