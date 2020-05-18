@@ -34,6 +34,15 @@ public class UserManagement {
         return "The user does not exist!";
     }
 
+    public String updateUserStatistic(String userName){
+        Database db = Database.getDatabase();
+        if (db.userExists(userName)){
+            db.updateUserStatistics(db.getUser(userName));
+            return "Done";
+        }
+        return "There is no such a user in the database!";
+    }
+
     public static void main(String[] args) throws InterruptedException {
         Integer passHash = "P@ssw0rd".hashCode();
         PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail", "HUF");
