@@ -1,6 +1,8 @@
 package marketplace.client;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -43,8 +45,12 @@ public class SmallListingView extends VBox {
         getChildren().add(imageView);
 
         HBox bottomLine = new HBox();
+        VBox.setMargin(bottomLine, new Insets(10, 0, 0, 0));
+        HBox.setMargin(checkBox, new Insets(0, 0, 0, 30));
         bottomLine.getChildren().add(priceField);
         currencyLabel = new Label();
+        HBox.setMargin(currencyLabel, new Insets(0, 0, 0, 10));
+        currencyLabel.setAlignment(Pos.BOTTOM_CENTER);
         CurrencyChanger.getInstance().addCurrencyLabel(currencyLabel);
         bottomLine.getChildren().add(currencyLabel);
         checkBox.setOnAction(event -> {
