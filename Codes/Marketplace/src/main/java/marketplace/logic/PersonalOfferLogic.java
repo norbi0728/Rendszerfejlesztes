@@ -15,38 +15,43 @@ public class PersonalOfferLogic {
     }   //Lusta vagyok
     public List<Listing> getPersonalisedOffer(User user){
         Random rand = new Random();
-        Database db = Database.getDatabase();
+        ListingLogic lL = new ListingLogic();
         Map<String, Integer> dispersion = new PersonalisedOfferServiceClient().getDispersion(user);
-        List<Listing> offers = new ArrayList<Listing>();
-        List<Listing> mine = db.getListings(user.getName());
+        List<Listing> myOffers = new ArrayList<Listing>();
+        List<Listing> mine = lL.listByUser(user.getName());
         for(Map.Entry<String,Integer> entry : dispersion.entrySet()){
-            List<Integer> alreadyIn = new ArrayList<Integer>();
-            for(int i = 0; i < entry.getValue(); i++){
-                List<Listing> catOff = new ListingLogic().listByCategory(entry.getKey());
-                if(!catOff.isEmpty()) {
-                    Integer index = rand.nextInt(catOff.size());
-                    if (!alreadyIn.contains(index)) {
-                        if(!mine.contains(catOff.get(index))){
-                            offers.add(catOff.get(index));
-                        } else {
-                            i--;
-                        }
-                    } else {
-                        i--;
-                    }
+            List<Listing> listingsOfCategory = lL.listByCategory(entry.getKey());
+            List<Listing> notMyListingsOfCategory = new ArrayList<Listing>();
+            for(Listing listing : listingsOfCategory){
+                if(listing.getAdvertiser() != user.getName()){
+                    notMyListingsOfCategory.add(listing);
                 }
             }
+            Integer limit = entry.getValue();
+            if(notMyListingsOfCategory.size() < limit){
+                limit = notMyListingsOfCategory.size();
+            }
+            for(int i = 0; i < limit; i++) {
+                Integer index = rand.nextInt(notMyListingsOfCategory.size());
+                myOffers.add(notMyListingsOfCategory.get(index));
+                notMyListingsOfCategory.remove(index);
+            }
         }
-        return offers;
+        return myOffers;
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Integer passHash = "P@ssw0rd".hashCode();
+//        Integer passHash = "P@ssw0rd".hashCode();
+//        PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail", "HUF");
+//        List<Listing> myOffers = new PersonalOfferLogic().getPersonalisedOffer(new User("ItsMe", passHash.toString(), mine));
+        Integer passHash = "testPw2".hashCode();
         PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail", "HUF");
-        List<Listing> myOffers = new PersonalOfferLogic().getPersonalisedOffer(new User("ItsMe", passHash.toString(), mine));
+        List<Listing> myOffers = new PersonalOfferLogic().getPersonalisedOffer(new User("testUser2", passHash.toString(), mine));
         ki(myOffers);
+        ki(new ListingLogic().listByUser("testUser2"));
         for(Listing l: myOffers){
             System.out.println(l.getAdvertiser());
+            ki(l);
         }
     }
 }
