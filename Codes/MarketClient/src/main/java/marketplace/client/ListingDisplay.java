@@ -6,7 +6,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -23,8 +22,6 @@ public class ListingDisplay extends VBox {
 
     private Runnable onBid;
 
-    private Image image;
-    private TextField titleField;
     private TextField nameField;
     private TextArea descriptionArea;
     private ImageView imageView;
@@ -37,6 +34,7 @@ public class ListingDisplay extends VBox {
     private TextField fixedPriceField;
     private TextField paymentMethodField;
     private TextField shippingMethodChoiceBox;
+    private TextField highestBidField;
     private Button makeBidButton;
     private Button sellerInformationButton;
 
@@ -50,7 +48,7 @@ public class ListingDisplay extends VBox {
     private GridPane gridPane;
     private Label titleLabel;
     private void init() {
-        titleLabel = new Label(listing.getTitle());
+        titleLabel = new Label();
         titleLabel.getStyleClass().add("title-label");
 
         getChildren().add(titleLabel);
@@ -67,7 +65,6 @@ public class ListingDisplay extends VBox {
 
         nameField = new TextField();
         nameField.setEditable(false);
-        nameField.setText(listing.getItem().getName());
         gridPane.add(new Label("Cikk megnevezése:"), 0, 1);
         gridPane.add(nameField, 1, 1, 4, 1);
 
@@ -78,13 +75,9 @@ public class ListingDisplay extends VBox {
         descriptionArea = new TextArea();
         descriptionArea.setEditable(false);
         descriptionArea.setPrefRowCount(3);
-        descriptionArea.setText(listing.getDescription());
         gridPane.add(descriptionArea, 1, 2, 4, 1);
 
         imageView = new ImageView();
-        if (listing.getItem().getPictures().size() > 0) {
-            imageView.setImage(listing.getItem().getPictures().get(0).asImage());
-        }
         imageView.setFitHeight(150);
         imageView.setFitWidth(150);
         imageView.setPreserveRatio(true);
@@ -97,18 +90,15 @@ public class ListingDisplay extends VBox {
 
         featureLines = new FeatureLines();
         featureLines.setSpacing(10);
-        for (Map.Entry<String, String> feature : listing.getItem().getFeatures().entrySet()) {
-            featureLines.addLine(feature.getKey(), feature.getValue());
-        }
         gridPane.add(featureLines, 2, 4, 4, 1);
 
         gridPane.add(new Label("Darabszám:"), 0, 5);
-        quantityField = new TextField(String.valueOf(listing.getQuantity()));
+        quantityField = new TextField();
         quantityField.setEditable(false);
         gridPane.add(quantityField, 1, 5);
 
         gridPane.add(new Label("Fix ár:"), 3, 5);
-        fixedPriceField = new TextField(CurrencyChanger.getInstance().inChosenCurrency(listing.getFixedPrice()));
+        fixedPriceField = new TextField();
         fixedPriceField.setEditable(false);
         CurrencyChanger.getInstance().addTextField(fixedPriceField);
         gridPane.add(fixedPriceField, 4, 5);
@@ -117,19 +107,17 @@ public class ListingDisplay extends VBox {
         gridPane.add(fixedPriceCurrencyLabel, 5, 5);
 
         gridPane.add(new Label("Lejárati idõ:"), 0, 7);
-        expirationDatePicker = new DatePicker(listing.getExpirationDate().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate());
+        expirationDatePicker = new DatePicker();
         expirationDatePicker.setEditable(false);
         gridPane.add(expirationDatePicker, 1, 7);
 
         gridPane.add(new Label("Kategória:"), 3, 7);
-        categoryField = new TextField(Category.forName(listing.getItem().getCategory()).toString());
+        categoryField = new TextField();
         categoryField.setEditable(false);
         gridPane.add(categoryField, 4, 7);
 
         gridPane.add(new Label("Kezdõár:"), 0, 8);
-        startingBidField = new TextField(CurrencyChanger.getInstance().inChosenCurrency(listing.getStartingBid()));
+        startingBidField = new TextField();
         startingBidField.setEditable(false);
         gridPane.add(startingBidField, 1, 8);
         Label startingBidCurrencyLabel = new Label();
@@ -137,7 +125,7 @@ public class ListingDisplay extends VBox {
         gridPane.add(startingBidCurrencyLabel, 2, 8);
 
         gridPane.add(new Label("Lépésköz:"), 3, 8);
-        incrementField = new TextField(CurrencyChanger.getInstance().inChosenCurrency(listing.getIncrement()));
+        incrementField = new TextField();
         incrementField.setEditable(false);
         CurrencyChanger.getInstance().addTextField(incrementField);
         gridPane.add(incrementField, 4, 8);
@@ -148,13 +136,11 @@ public class ListingDisplay extends VBox {
         gridPane.add(new Label("Fizetési mód:"), 0, 9);
         paymentMethodField = new TextField();
         paymentMethodField.setEditable(false);
-        paymentMethodField.setText(PaymentMethod.forName(listing.getPaymentMethod()).toString());
         gridPane.add(paymentMethodField, 1, 9);
 
         gridPane.add(new Label("Szállítási mód:"), 3, 9);
         shippingMethodChoiceBox = new TextField();
         shippingMethodChoiceBox.setEditable(false);
-        shippingMethodChoiceBox.setText(ShippingMethod.forName(listing.getShippingMethod()).toString());
         gridPane.add(shippingMethodChoiceBox, 4, 9);
 
         makeBidButton = new Button("Licitálás");
@@ -170,13 +156,8 @@ public class ListingDisplay extends VBox {
         gridPane.add(sellerInformationButton, 4, 10);
 
         gridPane.add(new Label("Legmagasabb licit:"), 1, 11);
-        TextField highestBidField = new TextField();
-        Bid mostRecentBid = listing.mostRecentBid();
-        if (mostRecentBid != null) {
-            String who = mostRecentBid.getUserName().equals(RestClient.getRestClient().name) ? " (saját)" : " (másé)";
-            String chosenCurrency = CurrencyChanger.getInstance().currency.toString();
-            highestBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.mostRecentBid().getValue()) + " " + chosenCurrency + who);
-        }
+        highestBidField = new TextField();
+
         highestBidField.setEditable(false);
         gridPane.add(highestBidField, 2, 11);
 
@@ -186,7 +167,40 @@ public class ListingDisplay extends VBox {
         });
         gridPane.add(highestBidderButton, 2, 12);
 
+        fillInValues();
         getChildren().add(gridPane);
+    }
+
+    private void fillInValues() {
+        titleLabel.setText(listing.getTitle());
+        nameField.setText(listing.getItem().getName());
+        descriptionArea.setText(listing.getDescription());
+        if (listing.getItem().getPictures().size() > 0) {
+            imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+        }
+
+        featureLines.removeLines();
+        for (Map.Entry<String, String> feature : listing.getItem().getFeatures().entrySet()) {
+            featureLines.addLine(feature.getKey(), feature.getValue());
+        }
+
+        quantityField.setText(String.valueOf(listing.getQuantity()));
+        fixedPriceField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getFixedPrice()));
+        expirationDatePicker.setValue(listing.getExpirationDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate());
+        categoryField.setText(Category.forName(listing.getItem().getCategory()).toString());
+        startingBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getStartingBid()));
+        incrementField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getIncrement()));
+        paymentMethodField.setText(PaymentMethod.forName(listing.getPaymentMethod()).toString());
+        shippingMethodChoiceBox.setText(ShippingMethod.forName(listing.getShippingMethod()).toString());
+
+        Bid mostRecentBid = listing.mostRecentBid();
+        if (mostRecentBid != null) {
+            String who = mostRecentBid.getUserName().equals(RestClient.getRestClient().name) ? " (saját)" : " (másé)";
+            String chosenCurrency = CurrencyChanger.getInstance().currency.toString();
+            highestBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.mostRecentBid().getValue()) + " " + chosenCurrency + who);
+        }
     }
 
     private void sellerPopup() {
@@ -224,10 +238,11 @@ public class ListingDisplay extends VBox {
         new Thread(() -> {
             Listing listing = RestClient.getRestClient().getListingById(this.listing.getId());
             Platform.runLater(() -> {
-                getChildren().remove(gridPane);
-                getChildren().remove(titleLabel);
+//                getChildren().remove(gridPane);
+//                getChildren().remove(titleLabel);
                 this.listing = listing;
-                init();
+//                init();
+                fillInValues();
             });
         }).start();
     }
@@ -249,7 +264,15 @@ public class ListingDisplay extends VBox {
     }
 
     class FeatureLines extends VBox {
-        private List<Pair<TextField, TextField>> featureLines = new ArrayList<>();
+        private List<Pair<TextField, TextField>> featurePairs = new ArrayList<>();
+        private List<HBox> lines = new ArrayList<>();
+
+        void removeLines() {
+            for (HBox line : lines) {
+                getChildren().remove(line);
+            }
+            lines = new ArrayList<>();
+        }
 
         void addLine(String key, String value) {
             HBox line = new HBox();
@@ -259,12 +282,14 @@ public class ListingDisplay extends VBox {
             propertyNameField.setEditable(false);
             TextField propertyValueField = new TextField(value);
             propertyValueField.setEditable(false);
-            featureLines.add(new Pair<>(propertyNameField, propertyValueField));
+            featurePairs.add(new Pair<>(propertyNameField, propertyValueField));
 
             line.getChildren().add(new Label("Jellemzõ:"));
             line.getChildren().add(propertyNameField);
             line.getChildren().add(new Label("Érték:"));
             line.getChildren().add(propertyValueField);
+
+            lines.add(line);
 
             getChildren().add(line);
         }
