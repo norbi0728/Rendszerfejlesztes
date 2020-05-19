@@ -44,6 +44,7 @@ public class ListingDisplay extends VBox {
     public ListingDisplay(Listing listing) {
         this.listing = listing;
         Platform.runLater(() -> init());
+        refreshPeriodically();
     }
 
     private GridPane gridPane;
@@ -215,6 +216,22 @@ public class ListingDisplay extends VBox {
                 init();
             });
         }).start();
+    }
+
+    private void refreshPeriodically() {
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            Platform.runLater(() -> {
+                refresh();
+            });
+            refreshPeriodically();
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     class FeatureLines extends VBox {
