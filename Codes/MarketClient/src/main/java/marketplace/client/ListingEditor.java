@@ -159,8 +159,12 @@ public class ListingEditor extends VBox {
 
         Button saveButton = new Button("Mentés");
         saveButton.setOnAction((event) -> {
-            Listing newListing = compileNewListing();
-            onSaveClicked.accept(newListing);
+            try {
+                Listing newListing = compileNewListing();
+                onSaveClicked.accept(newListing);
+            } catch (RuntimeException e) {
+                new Alert(Alert.AlertType.ERROR, "Minden mezõt ki kell tölteni.").show();
+            }
         });
         gridPane.add(saveButton, 0, 10);
 
