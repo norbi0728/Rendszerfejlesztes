@@ -23,10 +23,13 @@ public class PersonalOfferLogic {
             List<Listing> listingsOfCategory = lL.listByCategory(entry.getKey());
             List<Listing> notMyListingsOfCategory = new ArrayList<Listing>();
             for(Listing listing : listingsOfCategory){
-                if(listing.getAdvertiser() != user.getName()){
+                if(!listing.getAdvertiser().equals(user.getName())){
                     notMyListingsOfCategory.add(listing);
                 }
             }
+//            for(Listing listing : notMyListingsOfCategory){
+//                ki(listing.getAdvertiser());
+//            }
             Integer limit = entry.getValue();
             if(notMyListingsOfCategory.size() < limit){
                 limit = notMyListingsOfCategory.size();
@@ -48,10 +51,9 @@ public class PersonalOfferLogic {
         PersonalInformation mine = new PersonalInformation("Norbert", "Radákovits", "Earth", "007", "@mail", "HUF");
         List<Listing> myOffers = new PersonalOfferLogic().getPersonalisedOffer(new User("testUser2", passHash.toString(), mine));
         ki(myOffers);
-        ki(new ListingLogic().listByUser("testUser2"));
+//        ki(new ListingLogic().listByUser("testUser2"));
         for(Listing l: myOffers){
             System.out.println(l.getAdvertiser());
-            ki(l);
         }
     }
 }
