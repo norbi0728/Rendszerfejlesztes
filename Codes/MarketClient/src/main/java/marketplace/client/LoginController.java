@@ -30,12 +30,15 @@ public class LoginController {
                 if (result.equals("Correct")) {
                     restClient.name = name;
                     startMainWindow();
+                    initPersonalOfferPane();
                 } else {
                     new Alert(Alert.AlertType.INFORMATION, result).show();
                 }
             });
         }).start();
+    }
 
+    private void initPersonalOfferPane() {
         loginScreen.app.createPersonalOfferPane();
         loginScreen.app.createOngoingAuctionsPane();
         loginScreen.app.refreshOngoingAuctions();
