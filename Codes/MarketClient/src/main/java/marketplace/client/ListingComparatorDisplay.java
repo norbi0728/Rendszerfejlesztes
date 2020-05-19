@@ -13,7 +13,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import marketplace.client.currencycomponents.CurrencyChanger;
+import marketplace.client.model.Category;
 import marketplace.client.model.Listing;
+import marketplace.client.model.PaymentMethod;
+import marketplace.client.model.ShippingMethod;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -136,7 +139,7 @@ public class ListingComparatorDisplay extends ScrollPane {
         expirationDateHbox.setSpacing(10);
         left.getChildren().add(expirationDateHbox);
 
-        categoryField1 = new TextField(listing1.getItem().getCategory());
+        categoryField1 = new TextField(Category.forName(listing1.getItem().getCategory()).toString());
         categoryField1.setEditable(false);
         HBox categoryHbox = new HBox(new Label("Kategória:"), categoryField1);
         categoryHbox.setSpacing(10);
@@ -166,7 +169,7 @@ public class ListingComparatorDisplay extends ScrollPane {
 
         paymentMethodField1 = new TextField();
         paymentMethodField1.setEditable(false);
-        paymentMethodField1.setText(listing1.getPaymentMethod());
+        paymentMethodField1.setText(PaymentMethod.forName(listing1.getPaymentMethod()).toString());
 
         HBox paymentMethodHbox = new HBox(new Label("Fizetési mód:"), paymentMethodField1);
         paymentMethodHbox.setSpacing(10);
@@ -174,7 +177,7 @@ public class ListingComparatorDisplay extends ScrollPane {
 
         shippingMethodChoiceBox1 = new TextField();
         shippingMethodChoiceBox1.setEditable(false);
-        shippingMethodChoiceBox1.setText(listing1.getShippingMethod());
+        shippingMethodChoiceBox1.setText(ShippingMethod.forName(listing1.getShippingMethod()).toString());
 
         HBox shippingMethodHbox = new HBox(new Label("Szállítási mód:"), shippingMethodChoiceBox1);
         shippingMethodHbox.setSpacing(10);
@@ -244,7 +247,7 @@ public class ListingComparatorDisplay extends ScrollPane {
         expirationDateHbox.setSpacing(10);
         right.getChildren().add(expirationDateHbox);
 
-        categoryField2 = new TextField(listing2.getItem().getCategory());
+        categoryField2 = new TextField(Category.forName(listing2.getItem().getCategory()).toString());
         categoryField2.setEditable(false);
 
         HBox categoryHbox = new HBox(new Label("Kategória:"), categoryField2);
@@ -274,7 +277,7 @@ public class ListingComparatorDisplay extends ScrollPane {
 
         paymentMethodField2 = new TextField();
         paymentMethodField2.setEditable(false);
-        paymentMethodField2.setText(listing2.getPaymentMethod());
+        paymentMethodField2.setText(PaymentMethod.forName(listing2.getPaymentMethod()).toString());
 
         HBox paymentMethodHbox = new HBox(new Label("Fizetési mód:"), paymentMethodField2);
         paymentMethodHbox.setSpacing(10);
@@ -282,7 +285,7 @@ public class ListingComparatorDisplay extends ScrollPane {
 
         shippingMethodChoiceBox2 = new TextField();
         shippingMethodChoiceBox2.setEditable(false);
-        shippingMethodChoiceBox2.setText(listing2.getShippingMethod());
+        shippingMethodChoiceBox2.setText(ShippingMethod.forName(listing2.getShippingMethod()).toString());
 
         HBox shippingMethodHbox = new HBox(new Label("Szállítási mód:"), shippingMethodChoiceBox2);
         shippingMethodHbox.setSpacing(10);

@@ -118,6 +118,7 @@ public class MarketClientApp extends Application {
                             scrollPane.setMinViewportHeight(smallListingView.getHeight() + 10);
                         }
                         scrollPane.setContent(hbox);
+                        root.setBottom(scrollPane);
                     });
                 }).start();
             }
