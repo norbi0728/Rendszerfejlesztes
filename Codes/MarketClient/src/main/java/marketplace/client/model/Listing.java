@@ -84,7 +84,7 @@ public class Listing {
     }
 
     public int displayPrice() {
-        int val = 0;
+        int val = startingBid + increment;
         if (mostRecentBid() != null) val = mostRecentBid().getValue() + increment;
         if (maximumBid > 0 && (maximumBid + increment) < val) val = maximumBid + increment;
         if (fixedPrice > 0 && fixedPrice < val) val = fixedPrice;
