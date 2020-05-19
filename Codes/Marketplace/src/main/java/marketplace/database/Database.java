@@ -448,9 +448,10 @@ public class Database {
         List<Listing> ongoing = new ArrayList<>();
 
         try {
-            String queryOngoing = "SELECT DISTINCT LISTINGS.ID FROM LISTINGS " +
+            String queryOngoing = "SELECT LISTINGS.ID, MAX(VALUE) FROM LISTINGS " +
                     "JOIN BIDS B on LISTINGS.ID = B.LISTING_ID " +
-                    "WHERE B.USER_NAME = '"+ username +"' and EXPIRATION_DATE > DATE";
+                    "WHERE B.USER_NAME = '"+ username +"' and EXPIRATION_DATE > DATE " +
+                    "GROUP BY LISTINGS.ID";
 
             ResultSet ongoingRS = connection.createStatement().executeQuery(queryOngoing);
             while (ongoingRS.next()){

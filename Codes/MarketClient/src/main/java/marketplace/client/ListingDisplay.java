@@ -176,6 +176,7 @@ public class ListingDisplay extends VBox {
             String chosenCurrency = CurrencyChanger.getInstance().currency.toString();
             highestBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.mostRecentBid().getValue()) + " " + chosenCurrency + who);
         }
+        highestBidField.setEditable(false);
         gridPane.add(highestBidField, 2, 11);
 
         getChildren().add(gridPane);
