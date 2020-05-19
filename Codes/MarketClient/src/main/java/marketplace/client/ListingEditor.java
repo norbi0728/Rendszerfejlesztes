@@ -184,7 +184,8 @@ public class ListingEditor extends VBox {
         nameField.setText(listing.getItem().getName());
         descriptionArea.setText(listing.getDescription());
         if (listing.getItem().getPictures().size() > 0) {
-            imageView.setImage(listing.getItem().getPictures().get(0).asImage());
+            image = listing.getItem().getPictures().get(0).asImage();
+            imageView.setImage(image);
         }
         quantityField.setText(String.valueOf(listing.getQuantity()));
         expirationDatePicker.setValue(listing.getExpirationDate().toInstant()
