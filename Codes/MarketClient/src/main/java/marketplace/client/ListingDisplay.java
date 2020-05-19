@@ -238,10 +238,7 @@ public class ListingDisplay extends VBox {
         new Thread(() -> {
             Listing listing = RestClient.getRestClient().getListingById(this.listing.getId());
             Platform.runLater(() -> {
-//                getChildren().remove(gridPane);
-//                getChildren().remove(titleLabel);
                 this.listing = listing;
-//                init();
                 fillInValues();
             });
         }).start();
