@@ -84,10 +84,11 @@ public class Listing {
     }
 
     public int displayPrice() {
-        if (maximumBid > 0) return maximumBid + increment;
-        if (mostRecentBid() != null) return mostRecentBid().getValue();
-        if (fixedPrice > 0) return fixedPrice;
-        return 0;
+        int val = 0;
+        if (mostRecentBid() != null) val = mostRecentBid().getValue() + increment;
+        if (maximumBid > 0 && (maximumBid + increment) < val) val = maximumBid + increment;
+        if (fixedPrice > 0 && fixedPrice < val) val = fixedPrice;
+        return val;
     }
 
     public int nextBidValue() {
