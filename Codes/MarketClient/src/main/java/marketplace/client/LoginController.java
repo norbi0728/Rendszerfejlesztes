@@ -42,6 +42,7 @@ public class LoginController {
         loginScreen.app.createPersonalOfferPane();
         loginScreen.app.createOngoingAuctionsPane();
         loginScreen.app.refreshOngoingAuctions();
+        loginScreen.app.refreshPersonalOffers();
     }
 
     public void registerPressed() {

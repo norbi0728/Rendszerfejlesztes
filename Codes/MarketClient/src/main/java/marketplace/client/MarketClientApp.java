@@ -93,6 +93,33 @@ public class MarketClientApp extends Application {
         root.setCenter(listingComparatorDisplay);
     }
 
+    void refreshPersonalOffers(){
+        TimerTask personalOfferRefresher = new TimerTask() {
+            @Override
+            public void run() {
+                HBox hbox = new HBox();
+                ScrollPane scrollPane = new ScrollPane();
+                new Thread(() -> {
+                    List<Listing> personalOffer = controller.getPersonalOffer();
+                    Platform.runLater(() -> {
+                        for (Listing offer : personalOffer) {
+                            SmallListingView smallListingView = new SmallListingView(offer);
+                            smallListingView.setOnMouseClicked(event -> {
+                                RestClient.getRestClient().updateStatistics(offer, "onClick");
+                                openListingDisplay(offer);
+                            });
+                            hbox.getChildren().add(smallListingView);
+                            scrollPane.setMinViewportHeight(smallListingView.getHeight() + 10);
+                        }
+                        scrollPane.setContent(hbox);
+                    });
+                }).start();
+            }
+        };
+        Timer refreshTimer = new Timer(true);
+        refreshTimer.schedule(personalOfferRefresher, 30000, 30000);
+    }
+
     void createPersonalOfferPane() {
         HBox hbox = new HBox();
         ScrollPane scrollPane = new ScrollPane();

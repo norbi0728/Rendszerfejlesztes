@@ -68,7 +68,6 @@ public class RestClient {
                 .path("updateListing")
                 .queryParam("securityKey", securityKey)
                 .request(MediaType.APPLICATION_JSON);
-        System.out.println(listing.getItem().getFeatures().size());
         Response response = invocationBuilder.post(Entity.entity(listing, MediaType.APPLICATION_JSON));
         //return response.getHeaderString("Server-Response");
     }
