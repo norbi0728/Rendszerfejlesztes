@@ -180,20 +180,34 @@ public class ListingDisplay extends VBox {
         highestBidField.setEditable(false);
         gridPane.add(highestBidField, 2, 11);
 
+        Button highestBidderButton = new Button("Lagmagasabb licitáló adatai");
+        highestBidderButton.setOnAction(event -> {
+            buyerPopup();
+        });
+        gridPane.add(highestBidderButton, 2, 12);
+
         getChildren().add(gridPane);
     }
 
     private void sellerPopup() {
+        personalInformationPopup(listing.getAdvertiser(), "Hirdetõ adatai");
+    }
+
+    private void buyerPopup() {
+        personalInformationPopup(listing.mostRecentBid().getUserName(), "Legmagasabb licitáló adatai");
+    }
+
+    private void personalInformationPopup(String name, String message) {
         new Thread(() -> {
             StringBuilder sellerDetails = new StringBuilder();
-            PersonalInformation sellerInformation = RestClient.getRestClient().getPersonalInformation(listing.getAdvertiser());
-            sellerDetails.append(sellerInformation.getLastName() + " " + sellerInformation.getFirstName() + "\n");
-            sellerDetails.append(sellerInformation.getAddress() + "\n");
-            sellerDetails.append(sellerInformation.getEmail() + "\n");
-            sellerDetails.append(sellerInformation.getPhone() + "\n");
+            PersonalInformation personalInformation = RestClient.getRestClient().getPersonalInformation(name);
+            sellerDetails.append(personalInformation.getLastName() + " " + personalInformation.getFirstName() + "\n");
+            sellerDetails.append(personalInformation.getAddress() + "\n");
+            sellerDetails.append(personalInformation.getEmail() + "\n");
+            sellerDetails.append(personalInformation.getPhone() + "\n");
             Platform.runLater(() -> {
                 Alert popup = new Alert(Alert.AlertType.INFORMATION);
-                popup.setHeaderText("Hirdetõ adatai");
+                popup.setHeaderText(message);
                 Label label = new Label(sellerDetails.toString());
                 label.setWrapText(true);
                 popup.getDialogPane().setContent(label);
