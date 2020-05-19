@@ -29,7 +29,7 @@ public class LoginController {
             Platform.runLater(() -> {
                 if (result.equals("Correct")) {
                     restClient.name = name;
-                    startMainWindow();
+                    startMainWindow(name);
                     initPersonalOfferPane();
                 } else {
                     new Alert(Alert.AlertType.INFORMATION, result).show();
@@ -57,7 +57,8 @@ public class LoginController {
         }).start();
     }
 
-    private void startMainWindow() {
+    private void startMainWindow(String name) {
+        loginScreen.app.stage.setTitle("Piac (" + name + ")");
         loginScreen.app.stage.show();
         loginScreen.scene.getWindow().hide();
         loginScreen.app.controller.setPreferredCurrency();

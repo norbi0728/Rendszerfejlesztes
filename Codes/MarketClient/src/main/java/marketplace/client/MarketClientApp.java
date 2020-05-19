@@ -143,7 +143,7 @@ public class MarketClientApp extends Application {
             }
         };
 
-        Timer refreshTimer = new Timer();
+        Timer refreshTimer = new Timer(true);
         refreshTimer.schedule(refreshOngoingAuctionsPane, 5000, 5000);
     }
 
