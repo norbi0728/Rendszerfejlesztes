@@ -16,7 +16,8 @@ public class RestClient {
     public String name;
     private static RestClient instance;
 
-    private RestClient() {}
+    private RestClient() {
+    }
 
     public static RestClient getRestClient() {
         if (instance == null) {
@@ -80,7 +81,8 @@ public class RestClient {
                 .request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.post(null);
-        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {
+        });
     }
 
     public List<Listing> getAllListings() {
@@ -91,7 +93,8 @@ public class RestClient {
                 .request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.post(null);
-        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {
+        });
     }
 
     public List<Listing> getPersonalOffer() {
@@ -102,7 +105,8 @@ public class RestClient {
                 .request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.post(null);
-        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {
+        });
     }
 
     public PersonalInformation getOwnPersonalInformation() {
@@ -148,7 +152,8 @@ public class RestClient {
                 .request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.post(null);
-        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {});
+        return (List<Listing>) response.readEntity(new GenericType<List<Listing>>() {
+        });
     }
 
     public String addBid(int value, Listing listing) {
@@ -174,6 +179,22 @@ public class RestClient {
 
         Response response = invocationBuilder.post(null);
         return response.getHeaderString("Server-Response");
+    }
+
+    public String updateStatistics(Listing listing, String event) {
+        new Thread(() -> {
+            Invocation.Builder invocationBuilder
+                    = webTarget
+                    .path("updateStatistics")
+                    .queryParam("securityKey", securityKey)
+                    .queryParam("category", listing.getItem().getCategory())
+                    .queryParam("event", event)
+                    .request(MediaType.TEXT_PLAIN_TYPE);
+
+            Response response = invocationBuilder.post(null);
+            response.getHeaderString("Server-Response");
+        }).start();
+        return null;
     }
 
     public Listing getListingById(int id) {
