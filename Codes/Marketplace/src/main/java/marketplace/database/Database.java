@@ -388,6 +388,8 @@ public class Database {
 
             String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + item.getId();
             connection.createStatement().execute(deletePictures);
+            String deleteFeatures = "DELETE FROM ITEM_FEATURES WHERE ITEM_ID = " + item.getId();
+            connection.createStatement().execute(deleteFeatures);
             for (Bid bid: bids){
                 String sql = "DELETE FROM SALE WHERE BID_ID = " + bid.getId();
                 connection.createStatement().execute(sql);
@@ -425,13 +427,14 @@ public class Database {
                     "WHERE ID = " + listing.getId();
 
             String itemUpdate = "UPDATE ITEMS SET " +
-                    "NAME = '" + listing.getItem().getName() + "' " +
-                    "WHERE ID = " + listing.getItem().getId();
+                    "NAME = '" + listing.getItem().getName() + "', " +
+                    "CATEGORY_ID = " + getCategoryID(listing.getItem().getCategory()) +
+                    " WHERE ID = " + listing.getItem().getId();
 
             connection.createStatement().executeUpdate(itemUpdate);
 
             String deleteFeatures = "DELETE FROM ITEM_FEATURES WHERE ITEM_ID = " + listing.getItem().getId();
-            connection.createStatement().executeUpdate(deleteFeatures);
+            connection.createStatement().executeUpdate(deleteFeatures);;
             addItemFeatures(listing.getItem());
 
             String deletePictures = "DELETE FROM ITEM_PICTURES WHERE ITEM_ID = " + listing.getItem().getId();

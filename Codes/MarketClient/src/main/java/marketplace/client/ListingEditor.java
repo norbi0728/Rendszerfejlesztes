@@ -294,7 +294,7 @@ public class ListingEditor extends VBox {
             Button deleteButton = new Button("X");
             deleteButton.setOnAction((event) -> {
                 getChildren().remove(line);
-                featureLines.remove(line);
+                featureLines.remove(new Pair(propertyNameField, propertyValueField));
             });
             line.getChildren().add(deleteButton);
 
