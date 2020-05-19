@@ -33,6 +33,7 @@ public class SmallListingView extends VBox {
         getStyleClass().add("small-listing-view");
 
         titleLabel = new Label();
+        titleLabel.setMaxWidth(100);
         imageView = new ImageView();
         imageView.setFitHeight(150);
         imageView.setFitWidth(150);

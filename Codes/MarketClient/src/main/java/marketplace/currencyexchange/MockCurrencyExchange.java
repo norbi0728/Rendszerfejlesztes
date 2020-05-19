@@ -20,13 +20,13 @@ public class MockCurrencyExchange implements CurrencyExchange {
                 newPrice = price;
                 break;
             case "EUR":
-                newPrice = price / 350.88; // TODO use the fields
+                newPrice = price / EURRate;
                 break;
             case "USD":
-                newPrice = price / 323.23;
+                newPrice = price / USDRate;
                 break;
             case "GBP":
-                newPrice = price / 396.86;
+                newPrice = price / GBPRate;
                 break;
         }
         return newPrice;

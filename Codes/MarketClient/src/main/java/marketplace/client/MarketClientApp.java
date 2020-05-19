@@ -123,6 +123,7 @@ public class MarketClientApp extends Application {
             @Override
             public void run() {
                 VBox vbox = new VBox();
+                vbox.getStyleClass().add("ongoing-auctions-panel");
                 Label title = new Label("Folyamatban lévõ aukciók");
                 title.getStyleClass().add("title-label");
                 vbox.getChildren().add(title);
@@ -143,12 +144,12 @@ public class MarketClientApp extends Application {
         };
 
         Timer refreshTimer = new Timer();
-        refreshTimer.schedule(refreshOngoingAuctionsPane, 10000, 10000);
+        refreshTimer.schedule(refreshOngoingAuctionsPane, 5000, 5000);
     }
 
     void createOngoingAuctionsPane() {
         VBox vbox = new VBox();
-
+        vbox.getStyleClass().add("ongoing-auctions-panel");
         Label title = new Label("Folyamatban lévõ aukciók");
         title.getStyleClass().add("title-label");
         vbox.getChildren().add(title);

@@ -27,4 +27,18 @@
     -fx-padding: 20;
 }
 
+.ongoing-auction-label {
+    -fx-font-size: 20;
+    -fx-background-color: darkseagreen;
+    -fx-background-radius: 7;
+    -fx-pref-width: 220;
+    -fx-padding: 5;
+}
+
+.ongoing-auctions-panel {
+    -fx-spacing: 10;
+    -fx-margin: 10;
+    -fx-padding: 10;
+}
+
 
