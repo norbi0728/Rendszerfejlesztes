@@ -106,7 +106,10 @@ public class MarketClientApp extends Application {
             Platform.runLater(() -> {
                 for (Listing offer : personalOffer) {
                     SmallListingView smallListingView = new SmallListingView(offer);
-                    smallListingView.setOnMouseClicked(event -> openListingDisplay(offer));
+                    smallListingView.setOnMouseClicked(event -> {
+                        RestClient.getRestClient().updateStatistics(offer, "onClick");
+                        openListingDisplay(offer);
+                    });
                     hbox.getChildren().add(smallListingView);
                     scrollPane.setMinViewportHeight(smallListingView.getHeight() + 10);
                 }
@@ -197,6 +200,7 @@ public class MarketClientApp extends Application {
             newListingEditor = new ListingEditor(stage, null);
             newListingEditor.setAlignment(Pos.TOP_CENTER); //TODO Not here
             newListingEditor.setOnSaveClicked((newListing) -> {
+                RestClient.getRestClient().updateStatistics(newListing, "onAddListing");
                 String ret = controller.addListing(newListing);
                 new Alert(Alert.AlertType.INFORMATION, ret).show();
             });
@@ -236,6 +240,7 @@ public class MarketClientApp extends Application {
             List<Listing> allListings = controller.getAllListings();
             Platform.runLater(() -> {
                 allListingsPanel.setOnListingClicked(listing -> {
+                    RestClient.getRestClient().updateStatistics(listing, "onClick");
                     openListingDisplay(listing);
                 });
                 allListingsPanel.addListings(allListings);
@@ -250,6 +255,7 @@ public class MarketClientApp extends Application {
             List<Listing> userListings = controller.getUserListings();
             Platform.runLater(() -> {
                 userListingsPanel.setOnListingClicked(listing -> {
+                    RestClient.getRestClient().updateStatistics(listing, "onClick");
                     openListingForEditing(listing);
                 });
                 userListingsPanel.addListings(userListings);
@@ -266,6 +272,8 @@ public class MarketClientApp extends Application {
                 new Alert(Alert.AlertType.WARNING, "Licit lejárt").show();
                 return;
             }
+
+            RestClient.getRestClient().updateStatistics(listing, "onBid");
 
             int nextBidValue = listingDisplay.listing.nextBidValue();
             String nextBidValueInChosenCurrency = CurrencyChanger.getInstance().inChosenCurrency(nextBidValue);
