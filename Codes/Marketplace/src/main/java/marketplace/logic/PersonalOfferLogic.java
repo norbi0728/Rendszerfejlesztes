@@ -1,7 +1,6 @@
 package marketplace.logic;
 
 
-import marketplace.database.Database;
 import marketplace.model.Listing;
 import marketplace.model.PersonalInformation;
 import marketplace.model.User;
@@ -20,6 +19,8 @@ public class PersonalOfferLogic {
         List<Listing> myOffers = new ArrayList<Listing>();
         List<Listing> mine = lL.listByUser(user.getName());
         for(Map.Entry<String,Integer> entry : dispersion.entrySet()){
+//            ki(entry.getKey());
+//            ki(entry.getValue());
             List<Listing> listingsOfCategory = lL.listByCategory(entry.getKey());
             List<Listing> notMyListingsOfCategory = new ArrayList<Listing>();
             for(Listing listing : listingsOfCategory){
@@ -28,16 +29,17 @@ public class PersonalOfferLogic {
                 }
             }
 //            for(Listing listing : notMyListingsOfCategory){
-//                ki(listing.getAdvertiser());
+//                ki(listing.getAdvertiser() + ": " + listing.getId());
 //            }
             Integer limit = entry.getValue();
             if(notMyListingsOfCategory.size() < limit){
                 limit = notMyListingsOfCategory.size();
             }
             for(int i = 0; i < limit; i++) {
-                Integer index = rand.nextInt(notMyListingsOfCategory.size());
+                int index = rand.nextInt(notMyListingsOfCategory.size());
                 myOffers.add(notMyListingsOfCategory.get(index));
                 notMyListingsOfCategory.remove(index);
+//                ki(notMyListingsOfCategory.size());
             }
         }
         return myOffers;
@@ -54,6 +56,8 @@ public class PersonalOfferLogic {
 //        ki(new ListingLogic().listByUser("testUser2"));
         for(Listing l: myOffers){
             System.out.println(l.getAdvertiser());
+//            ki(l.getId());
         }
+//        ki("Hirdetesek: " + new ListingLogic().listListings().size());
     }
 }
