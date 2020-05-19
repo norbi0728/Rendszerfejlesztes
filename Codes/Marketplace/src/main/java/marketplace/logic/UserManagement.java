@@ -66,12 +66,12 @@ public class UserManagement {
                         break;
                     case "onClick":
                         temp = me.getStatistics().getStats();
-                        temp.put(category, temp.get(category) + 0.2);
+                        temp.put(category, temp.get(category) + 30);
                         me.getStatistics().setStat(temp);
                         break;
                     case "onBid":
                         temp = me.getStatistics().getStats();
-                        temp.put(category, temp.get(category) + 0.4);
+                        temp.put(category, temp.get(category) + 50);
                         me.getStatistics().setStat(temp);
                         break;
                     case "onAddListing":

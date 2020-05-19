@@ -77,11 +77,17 @@ public class MarketClientApp extends Application {
             }
         });
 
+        Button logoutButton = createMenuButton(("Kijelentkezés"), event -> {
+                controller.logoutButtonClicked();
+        });
+
+
         menu.getChildren().add(newListingButton);
         menu.getChildren().add(userListingsButton);
         menu.getChildren().add(allListingsButton);
         menu.getChildren().add(settingsButton);
         menu.getChildren().add(compareButton);
+        menu.getChildren().add(logoutButton);
 
         return menu;
     }

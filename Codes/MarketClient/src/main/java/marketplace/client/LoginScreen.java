@@ -23,7 +23,7 @@ public class LoginScreen extends Application {
     Button loginButton;
     Button registerButton;
 
-    LoginScreen(MarketClientApp app) {
+    public LoginScreen(MarketClientApp app) {
         this.app = app;
     }
 

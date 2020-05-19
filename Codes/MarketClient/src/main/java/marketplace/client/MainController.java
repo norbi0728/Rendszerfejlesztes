@@ -1,6 +1,7 @@
 package marketplace.client;
 
 import javafx.application.Platform;
+import javafx.stage.Stage;
 import marketplace.client.currencycomponents.Currency;
 import marketplace.client.currencycomponents.CurrencyChanger;
 import marketplace.client.model.Bid;
@@ -10,6 +11,7 @@ import marketplace.client.model.PersonalInformation;
 import java.util.List;
 
 public class MainController {
+    private LoginScreen loginScreen;
     private MarketClientApp app;
     private RestClient restClient = RestClient.getRestClient();
 
@@ -27,6 +29,16 @@ public class MainController {
 
     public void allListingsButtonClicked() {
         app.openAllListingsPane();
+    }
+
+    public void logoutButtonClicked() {
+        app.stage.hide();
+        try {
+            new LoginScreen(app).start(new Stage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public String addListing(Listing listing) {
