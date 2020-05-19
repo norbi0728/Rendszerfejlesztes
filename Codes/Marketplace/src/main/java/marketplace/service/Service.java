@@ -137,14 +137,6 @@ public class Service {
             }
         });
 
-//        app.post("/removeBid",ctx -> {
-//            String securityKey = ctx.queryParam("securityKey");
-//            if(authenticationService.validateKey(securityKey)){
-//                ctx.header("Server-Response",listingLogic
-//                        .removeBid(Integer.valueOf(ctx.queryParam("bidID"))));
-//            }
-//        });
-
         app.post("/addBid",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
@@ -195,10 +187,22 @@ public class Service {
             else
                 ctx.header("Server-Response", "Invalid security key");
         });
+
         app.post("/getOngoingAuctions",ctx -> {
             String securityKey = ctx.queryParam("securityKey");
             if(authenticationService.validateKey(securityKey)){
                 ctx.json(listingLogic.getOngoingAuctions(users.get(securityKey)));
+            }
+            else
+                ctx.header("Server-Response", "Invalid security key");
+        });
+
+        app.post("/updateStatistics",ctx -> {
+            String securityKey = ctx.queryParam("securityKey");
+            if(authenticationService.validateKey(securityKey)){
+                ctx.header("Server-Response", userManagement.updateUserStatistic(
+                        users.get(securityKey), ctx.queryParam("category"), ctx.queryParam("event")
+                ));
             }
             else
                 ctx.header("Server-Response", "Invalid security key");
