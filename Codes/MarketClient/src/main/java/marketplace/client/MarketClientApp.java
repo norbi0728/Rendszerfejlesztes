@@ -87,7 +87,7 @@ public class MarketClientApp extends Application {
         menu.getChildren().add(allListingsButton);
         menu.getChildren().add(settingsButton);
         menu.getChildren().add(compareButton);
-        menu.getChildren().add(logoutButton);
+        //menu.getChildren().add(logoutButton); // No!
 
         return menu;
     }
