@@ -317,7 +317,10 @@ public class MarketClientApp extends Application {
             alert.showAndWait();
             if (alert.getResult() == ButtonType.OK) {
                 new Thread(() -> {
-                    controller.addBid(listingDisplay.listing);
+                    String ret = controller.addBid(listingDisplay.listing);
+                    if (!ret.equals("Done")) {
+                        Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, ret).show());
+                    }
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {

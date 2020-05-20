@@ -237,6 +237,14 @@ public class ListingDisplay extends VBox {
     public void refresh() {
         new Thread(() -> {
             Listing listing = RestClient.getRestClient().getListingById(this.listing.getId());
+            if (listing == null) {
+                Platform.runLater(() -> {
+                    getChildren().remove(titleLabel);
+                    getChildren().remove(gridPane);
+                    stop = true;
+                });
+                return;
+            }
             Platform.runLater(() -> {
                 this.listing = listing;
                 fillInValues();
@@ -244,7 +252,9 @@ public class ListingDisplay extends VBox {
         }).start();
     }
 
+    private boolean stop = false;
     private void refreshPeriodically() {
+        if (stop) return;
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(5000);
