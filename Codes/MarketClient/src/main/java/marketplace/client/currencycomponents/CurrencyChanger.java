@@ -34,7 +34,7 @@ public class CurrencyChanger {
             try {
                 textField.setText(transformValue(textField.getText(), lastCurrency, currency));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                // Normal behavior, execution should continue
             }
         }
 
