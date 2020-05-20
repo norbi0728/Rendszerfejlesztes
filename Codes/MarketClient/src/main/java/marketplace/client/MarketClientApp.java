@@ -249,8 +249,16 @@ public class MarketClientApp extends Application {
             controller.updateListing(newListing);
         });
         listingEditor.setOnDeleteClicked(() -> {
-            String ret = controller.delete(listing);
-            new Alert(Alert.AlertType.INFORMATION, ret).show();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Hirdetés törlése?",
+                    ButtonType.OK, ButtonType.CANCEL);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+                String ret = controller.delete(listing);
+                new Alert(Alert.AlertType.INFORMATION, ret).show();
+                if (ret.equals("Done")) {
+                    root.setCenter(null);
+                }
+            }
         });
         root.setCenter(new ScrollPane(listingEditor));
     }
