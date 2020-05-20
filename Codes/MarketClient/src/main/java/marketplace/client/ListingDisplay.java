@@ -37,6 +37,7 @@ public class ListingDisplay extends VBox {
     private TextField highestBidField;
     private Button makeBidButton;
     private Button sellerInformationButton;
+    private Button highestBidderButton;
 
 
     public ListingDisplay(Listing listing) {
@@ -161,7 +162,7 @@ public class ListingDisplay extends VBox {
         highestBidField.setEditable(false);
         gridPane.add(highestBidField, 2, 11);
 
-        Button highestBidderButton = new Button("Lagmagasabb licitáló adatai");
+        highestBidderButton = new Button("Lagmagasabb licitáló adatai");
         highestBidderButton.setOnAction(event -> {
             buyerPopup();
         });
@@ -191,6 +192,11 @@ public class ListingDisplay extends VBox {
                 .toLocalDate());
         categoryField.setText(Category.forName(listing.getItem().getCategory()).toString());
         startingBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getStartingBid()));
+        if (listing.getStartingBid() == 0) {
+            makeBidButton.setDisable(true);
+        } else {
+            makeBidButton.setDisable(false);
+        }
         incrementField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.getIncrement()));
         paymentMethodField.setText(PaymentMethod.forName(listing.getPaymentMethod()).toString());
         shippingMethodChoiceBox.setText(ShippingMethod.forName(listing.getShippingMethod()).toString());
@@ -200,6 +206,9 @@ public class ListingDisplay extends VBox {
             String who = mostRecentBid.getUserName().equals(RestClient.getRestClient().name) ? " (saját)" : " (másé)";
             String chosenCurrency = CurrencyChanger.getInstance().currency.toString();
             highestBidField.setText(CurrencyChanger.getInstance().inChosenCurrency(listing.mostRecentBid().getValue()) + " " + chosenCurrency + who);
+            highestBidderButton.setDisable(false);
+        } else {
+            highestBidderButton.setDisable(true);
         }
     }
 
